@@ -1,0 +1,45 @@
+"Occupancy ","Data for ","January 1, 2013 to ","March 24, 2013"
+"Room #",Bookings,Nights,Guests
+125,2,16,4
+126,0,0,0
+151,0,0,0
+152,0,0,0
+214,0,0,0
+215,0,0,0
+218,1,16,2
+223,1,16,1
+224,1,16,4
+231,1,16,2
+232,1,16,1
+233,1,0,2
+243,1,16,2
+244,1,16,2
+245,1,16,1
+250,1,16,3
+251,1,16,2
+252,1,16,1
+253,1,16,2
+254,0,0,0
+255,1,16,2
+unknown,0,0,0
+State/County,Bookings,Guests
+ME,1,1
+ME/Androscoggin,1,2
+ME/Cumberland,3,5
+ME/Kennebec,3,5
+ME/Oxford,2,6
+ME/Sagadahoc,1,2
+ME/York,5,10
+unknown,0,0
+"Patient Age",Bookings,Guests
+unknown,0,0
+0,13,28
+2,1,1
+17,1,1
+40,1,1
+Hospital,Bookings,Guests
+"Maine Medical Center/BBCH",3,5
+"Maine Medical Center/NICU",10,21
+"Maine Medical Center/Other",1,1
+"Maine Medical Center/SCU",2,4
+other,0,0

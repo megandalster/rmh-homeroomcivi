@@ -27,7 +27,6 @@ Database Initialization
 	include_once(dirname(__FILE__).'/dbRooms.php');
 	include_once(dirname(__FILE__).'/dbRoomLogs.php');
 	include_once(dirname(__FILE__).'/dbLog.php');
-//	include_once(dirname(__FILE__).'/dbWeeks.php');
 
 	// connect
 	$connected=connect();

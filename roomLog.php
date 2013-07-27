@@ -96,8 +96,9 @@ include_once(dirname(__FILE__)."/domain/Person.php");
 				foreach($pendingBookings as $booking){
 					echo ("<option value='" . $booking->get_id() . "'>");
 					$person = retrieve_dbPersons(substr($booking->get_id(), 8));
-					if ($person)
-					    echo ($person->get_first_name() . " " . $person->get_last_name() . " (" .date_string(substr($booking->get_id(),0,8)).")");
+					if ($person) { 
+						echo ($person->get_first_name() . " " . $person->get_last_name() . " (" .date_string(substr($booking->get_id(),0,8)).")");
+					}
 					else echo($booking->get_id());
 					echo ("</option>");
 				}

@@ -100,7 +100,7 @@ include_once("database/dbPersons.php");
 		// boolean to display admins
 		echo('<p><table class="searchResults">');
 		if(mysql_num_rows($result))
-			echo ('<tr><td class=searchResults><strong>Guest(s)</strong></td>');
+			echo ('<tr><td class=searchResults><strong>Guest</strong></td>');
 			echo ("<td class=searchResults><strong>Patient</strong></td>");
 			echo ("<td class=searchResults><strong>Status</strong></td>");
 			echo ("<td class=searchResults><strong>Submitted</strong></td>");
@@ -127,8 +127,6 @@ include_once("database/dbPersons.php");
 				"\">view</td>";
 			if ($thisRow['status']=="pending") 
 				echo "<td class=searchResults><a href=viewBookings.php?id=delete&bookingid=".$thisRow['id'].">delete</a></td>";
-			else if ($thisRow['status']=="closed" || $thisRow['status']=="closed-deceased")	
-				echo "<td class=searchResults><a href=bookingEdit.php?id=".$thisRow['guest_id'].">create new booking</a></td>";
 			echo "</tr>";
 			// note: can't delete an active booking or create a new referral with a non-closed booking
 		}

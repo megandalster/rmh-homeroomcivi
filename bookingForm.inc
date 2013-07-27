@@ -14,7 +14,7 @@ else {
 <div align="left">
 <fieldset>
 <legend>Booking Information:</legend>
-<b>Patient</b>: <input type="text" size="25" name="patient_name0" value= "<?php echo($tempBooking->getith_patient(0))?>"/>
+<b>Patient</b>: <input type="text" size="25" name="patient_name0" value= "<?php echo($tempBooking->getith_patient(0));?>"/>
 
 Birth date:  
     <select name = "patient_birth_month">

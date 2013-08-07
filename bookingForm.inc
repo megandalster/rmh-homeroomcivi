@@ -1,22 +1,23 @@
 <form method="POST">
 <?php     
 if ($_SESSION['access_level']==0)
-    echo "<b> To request a room at the Ronald McDonald House, please fill out the following form:</b>";
+    echo "<b> To request a room at the Ronald McDonald House, please fill out the following form</b> ";
 else if ($id=='update') {
     echo "<b> Editing a pending or active booking " ;
-	echo ("</b> (All fields are required unless noted as <i>Optional</i>):<br><br>");
+	echo ("</b> ");
 }
 else {
 	echo "<b> Creating a new booking " ;
-	echo ("</b> (All fields are required unless noted as <i>Optional</i>):<br><br>");
+	echo ("</b> ");
 }
+echo '(<span style="font-size:x-small;color:FF0000">*</span> denotes required fields):<br><br>';
 ?>
 <div align="left">
 <fieldset>
 <legend>Booking Information:</legend>
-<b>Patient</b>: <input type="text" size="25" name="patient_name0" value= "<?php echo($tempBooking->getith_patient(0));?>"/>
+<span style='font-size:x-small;color:FF0000'>* </span>Patient: <input type="text" size="25" name="patient_name0" value= "<?php echo($tempBooking->getith_patient(0));?>"/>
 
-Birth date:  
+<span style='font-size:x-small;color:FF0000'>* </span>Birth date:  
     <select name = "patient_birth_month">
     <?php 
       $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
@@ -55,11 +56,11 @@ Birth date:
     </select>
     
     <input type="text" size = "1" maxLength = "2" name="patient_birth_year" value= "<?php echo(substr($patient_DOB,0,2))?>"/><br />
-Additional patients <i>(Optional)</i>:    <input type="text" name="patient_name1" value= "<?php echo($tempBooking->getith_patient(1))?>"/>
+Additional patients:    <input type="text" name="patient_name1" value= "<?php echo($tempBooking->getith_patient(1))?>"/>
 <input type="text" name="patient_name2" value= "<?php echo($tempBooking->getith_patient(2))?>"/>
     
 					
-<br>Hospital <select name="hospital">
+<br><span style='font-size:x-small;color:FF0000'>* </span>Hospital <select name="hospital">
 			<?php 
 $hospitals = array("", "Maine Medical Center", "Mercy Hospital", "Specialist", "Spring Harbor Hospital", "Other");	
 			foreach($hospitals as $hospital){
@@ -71,7 +72,7 @@ $hospitals = array("", "Maine Medical Center", "Mercy Hospital", "Specialist", "
 			}
 			?>
 </select>
-Department of Treatment  
+<br><span style='font-size:x-small;color:FF0000'>* </span>Department of Treatment  
 <select name="dept">
 			<?php 
 $departments = array("", "BBCH", "CARDIOLOGY", "MCCP", "NEEDS", "NICU/CCN", "PRENATAL", "SCU", "SPRING HARBOR", "Other", "Outpatient");			
@@ -85,7 +86,7 @@ $departments = array("", "BBCH", "CARDIOLOGY", "MCCP", "NEEDS", "NICU/CCN", "PRE
 			?>
 </select><br>
 
-Submitted by: <input type="text" size="35" name="referred_by" value="
+<span style='font-size:x-small;color:FF0000'>* </span>Submitted by: <input type="text" size="35" name="referred_by" value="
 <?php 
 if ($tempBooking->get_referred_by()!="")
 	echo($tempBooking->get_referred_by());
@@ -103,7 +104,7 @@ echo "<br />";
 <fieldset>
   <legend><b>Primary Guest:</b></legend>
 <?php    if ($id!="new") {
-    echo '<a href = "personEdit.php?id='.$guest->get_id().'">'.$guest->get_first_name().' '.$guest->get_last_name(). '</a><br>';
+    echo '<a  target="_blank" href="personEdit.php?id='.$guest->get_id().'">'.$guest->get_first_name().' '.$guest->get_last_name().'</a><br>';
     echo 'Relationship to Patient: '.$guest->get_patient_relation().'<br />';
     echo 'Address: '.$guest->get_address().', '. $guest->get_city().', '.$guest->get_state().' '.$guest->get_zip(). '<br />';
     echo 'E-mail: '.$guest->get_email().'<br />';
@@ -123,33 +124,33 @@ echo "<br />";
     }
 }
     else {
-        echo 'First Name: <input type="text" size="30" name="first_name_1" value='.$guest->get_first_name().'><br />' ;
-        echo 'Last Name: <input type="text" size="30" name="last_name_1" value='.$guest->get_last_name().'><br />' ;
-        echo 'Relationship to Patient: <input type="text" size = "30" name = "patient_relation_1" value='.$guest->get_patient_relation().'><br />' ;
+        echo '<span style="font-size:x-small;color:FF0000">* </span>First Name: <input type="text" size="30" name="first_name_1" value='.$guest->get_first_name().'><br />' ;
+        echo '<span style="font-size:x-small;color:FF0000">* </span>Last Name: <input type="text" size="30" name="last_name_1" value='.$guest->get_last_name().'><br />' ;
+        echo '<span style="font-size:x-small;color:FF0000">* </span>Relationship to Patient: <input type="text" size = "30" name = "patient_relation_1" value='.$guest->get_patient_relation().'><br />' ;
         echo 'Home Address: <input type="text" size="40" name = "address_1" value='.$guest->get_address().'><br />' ;
         echo 'City: <input type = "text" size = "15" name = "city_1" value='.$guest->get_city().'><br />' ;
-        echo 'State: <i>(Optional):</i><select name = "state_1">';
+        echo 'State: <select name = "state_1">';
     $states = array(" ", "AL","AK","AR","AZ","CA","CO","CT","DC","DE","FL","GA","HI","IA","ID","IL","IN",
 				"KS","KY","LA","MA","MD","ME","MI","MN","MO", "MS","MT","NC","ND","NE","NH","NJ","NM",
 				"NV","NY","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VA","VT","WA","WI",
 				"WV","WY");
         foreach ($states as $st) {
-            if ($st == $guest->get_state())
+            if ($st == $guest->get_state() || $st=="ME")
                 echo "<option selected='yes'>" . $st ."</option>";
             else
                 echo "<option>" . $st ."</option>";
         }
         echo '</select><br />' ;
-        echo 'Zip: <i>(Optional):</i><input type = "text" size = "5" maxLength = "5" name="zip_1" value='.$guest->get_zip().'><br />' ;
-		echo 'E-mail <i>(Optional):</i> <input type="text" size="30" name="email_1" value='.$guest->get_email().'><br />' ;
+        echo 'Zip: <input type = "text" size = "5" maxLength = "5" name="zip_1" value='.$guest->get_zip().'><br />' ;
+		echo 'E-mail: <input type="text" size="30" name="email_1" value='.$guest->get_email().'><br />' ;
         $phone1 = $guest->get_phone1();
         $phone2 = $guest->get_phone2();
-        echo 'Phone #: (<input type = "text" size = "2" maxLength = "3" name="phone1_area_1" value="'.substr($phone1,0,3).'">)';
+        echo '<span style="font-size:x-small;color:FF0000">* </span>Phone: (<input type = "text" size = "2" maxLength = "3" name="phone1_area_1" value="'.substr($phone1,0,3).'">)';
 		echo '<input type = "text" size = "2" maxLength = "3" name="phone1_middle_1" value='.substr($phone1,3,3).'>-';
         echo '<input type = "text" size = "3" maxLength = "4" name="phone1_end_1" value='.substr($phone1,6,4).'><br>';
-		echo 'Alternate Phone # <i> (Optional): (</i><input type = "text" size = "2" maxLength = "3" name="phone2_area_1" value="'.substr($phone2,0,3).'">)';
-		echo '<input type = "text" size = "2" maxLength = "3" name="phone2_middle_1" value='.substr($phone2,3,3).'>-';
-		echo '<input type = "text" size = "3" maxLength = "4" name="phone2_end_1" value='.substr($phone2,6,4).'>';
+	//	echo 'Alternate Phone: (<input type = "text" size = "2" maxLength = "3" name="phone2_area_1" value="'.substr($phone2,0,3).'">)';
+	//	echo '<input type = "text" size = "2" maxLength = "3" name="phone2_middle_1" value='.substr($phone2,3,3).'>-';
+	//	echo '<input type = "text" size = "3" maxLength = "4" name="phone2_end_1" value='.substr($phone2,6,4).'>';
 
         
     }
@@ -157,11 +158,10 @@ echo "<br />";
 </fieldset>
 
 <br>
- <b>Additional Guests </b><i>(Optional -- maximum of 6)</i>
+ <b>Additional Guests </b>(Name / Relation to Patient):<br>
 <br />
 <?php
   $occupants = $tempBooking->get_occupants();
-  echo "Name / Relation to Patient:<br>";
   for ($counter = 1; $counter <= 6; $counter++){
       $occupant_name = substr($occupants[$counter-1],0,strpos($occupants[$counter-1],":"));
       $occupant_relation = substr($occupants[$counter-1],strpos($occupants[$counter-1],":")+1);
@@ -173,7 +173,7 @@ echo "<br />";
   }
 ?>
 <br />
-<b>Automobile </b><i> (Optional)</i>:<br>  Make <input type="text" size="15" name="auto_make" value= "<?php echo($tempBooking->get_auto_make())?>"/>
+<b>Automobile</b>: <br>  Make <input type="text" size="15" name="auto_make" value= "<?php echo($tempBooking->get_auto_make())?>"/>
 	Model <input type="text" size="10" name="auto_model" value= "<?php echo($tempBooking->get_auto_model())?>"/>
 	Color <input type="text" size="10" name="auto_color" value= "<?php echo($tempBooking->get_auto_color())?>"/>
 	State <select name = "auto_state">
@@ -244,7 +244,7 @@ if ($tempBooking->get_status()!="active") {
       </select>
       /
     
-    <input type="text" size = "1" maxLength = "2" name="date_in_year" value= "<?php if ($tempBooking->get_date_in() != "Will Call") echo (substr($date_in,0,2))?>"/> <i>)</i> <br />
+    <input type="text" size = "1" maxLength = "2" name="date_in_year" value= "<?php if ($tempBooking->get_date_in() != "Will Call") echo (substr($date_in,0,2))?>"/> <br />
     
     
  <input type="radio" name="visitOrWC" value="Will Call" <?php if($tempBooking->get_date_in()== "Will Call") echo('checked')?>/> Will Call 

@@ -69,8 +69,6 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
            $tempBooking = new Booking(date("y-m-d"), "Will Call", $guest->get_id(), $status, "", $guest->get_patient_name(), "", "",  
                "","","","","","00000000000", "", "", "", "","new");                            
 	  }
-
-	  
 	  include('bookingForm.inc'); 
 	}
 	// now process the form that has been submitted
@@ -85,7 +83,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
         else{
             $primaryGuest = process_form($id,$referralid);
             $booking = build_POST_booking($primaryGuest,$referralid);
-            echo("This booking has been updated. ");
+            echo("This booking has been "); if ($id=="new") echo "submitted."; else echo "updated.";
             echo '<a href = "bookingEdit.php?id=update&referralid='.$booking->get_id().'" > (Edit this booking) </a><br>';
 			// Create the log message
 			$message = "<a href='viewPerson.php?id=".$_SESSION['_id']."'>".$user_name."</a>".

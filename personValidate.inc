@@ -10,7 +10,7 @@ function validate_form($id){
 	if($_POST['last_name']==null || $_POST['first_name']=='volunteer') $errors[] = 'Please enter a last name';
 	if($_POST['address']==null) $errors[] = 'Please enter an address';
 	if($_POST['city']==null) $errors[] = 'Please enter a city';
-	if(($_POST['zip'] != strval(intval($_POST['zip']))) || ($_POST['zip']==null) || (strlen($_POST['zip'])!=5)) $errors[] = 'Please enter a valid zip code';
+	if($_POST['zip']!=null && ($_POST['zip'] != strval(intval($_POST['zip'])) || (strlen($_POST['zip'])!=5))) $errors[] = 'Please enter a valid zip code';
 	if ($_SESSION['access_level']==0 && ($_POST['type']==null || !in_array('guest',$_POST['type'])))
 		$_POST['type'][] = 'guest';
 	if($_POST['type']==null && $_SESSION['access_level']>=1) $errors[] = 'Select a role';
@@ -21,9 +21,9 @@ function validate_form($id){
 	if($_POST['phone2']!=null && !valid_phone($_POST['phone2'])) $errors[] = 'Enter a valid secondary phone number (10 digits: ### ### ####)';
 	if(!valid_email($_POST['email']) && $_POST['email']!=null) $errors[] = "Please enter a valid email";
 	
-	//if ($_POST['patient_name0']==null) $errors[] = 'Enter a patient name';
-	$birthday = $_POST['DateOfBirth_Month'].'-'.$_POST['DateOfBirth_Day'].'-'.$_POST['DateOfBirth_Year'];
-	if (strlen($birthday)>2 && strlen($birthday)<8) $errors[] = 'Please select a valid patient birthday';
+//	if ($_POST['patient_name0']==null) $errors[] = 'Enter a patient name';
+//	$birthday = $_POST['DateOfBirth_Month'].'-'.$_POST['DateOfBirth_Day'].'-'.$_POST['DateOfBirth_Year'];
+//	if (strlen($birthday)>2 && strlen($birthday)<8) $errors[] = 'Please select a valid patient birthday';
 	
 	return $errors;
 }
@@ -82,5 +82,6 @@ function show_errors($e){
 			echo("<li><strong><font color=\"red\">".$error."</font></strong></li>\n");
 		}
 		echo("</ul></div></p>");
+		echo "Hit the Back button to fix these errors.";
 }
 ?>

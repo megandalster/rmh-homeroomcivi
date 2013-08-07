@@ -23,12 +23,12 @@
 					if($_POST['s_submitted']){
 						$fns = trim(str_replace('\'','&#39;',htmlentities($_POST['s_first_name'])));
 						$lns = trim(str_replace('\'','&#39;',htmlentities($_POST['s_last_name'])));
-						$ems = trim(str_replace('\'','&#39;',htmlentities($_POST['s_email'])));
+					//	$ems = trim(str_replace('\'','&#39;',htmlentities($_POST['s_email'])));
                         $pns = trim(str_replace('\'','&#39;',htmlentities($_POST['s_patient_name'])));
                         $mns = trim(str_replace('\'','&#39;',htmlentities($_POST['s_mgr_notes'])));
 						$query = "SELECT * FROM dbPersons WHERE first_name LIKE '%".$fns."%' " .
 								"AND last_name LIKE '%".$lns."%' " .
-								"AND email LIKE '%".$ems."%' " .
+						//		"AND email LIKE '%".$ems."%' " .
 								"AND patient_name LIKE '%".$pns."%' " .
 						        "AND mgr_notes LIKE '%".$mns."%' " ;		
 						if ($_POST['s_type']!=="") $query .= "AND type LIKE '%".$_POST['s_type']."%' ";
@@ -48,8 +48,8 @@
 								echo('<tr><td class="searchResults"><strong>Name</strong></td><td class="searchResults"><strong>Patient Name</strong></td></tr>');
 							while($thisRow = mysql_fetch_array($result, MYSQL_ASSOC)){
 								echo('<tr><td class="searchResults">'.$thisRow['last_name'].", ".
-									$thisRow['first_name'].'</td><td class="searchResults">'.$thisRow['patient_name'].'</td><td class="searchResults"><a href=\"viewPerson.php?id='.
-									$thisRow['id']."\">view</td><td class=searchResults><a href=personEdit.php?id=".
+									$thisRow['first_name'].'</td><td class="searchResults">'.$thisRow['patient_name'].'</td><td class="searchResults"><a href=viewPerson.php?id='.
+									$thisRow['id'].">view</td><td class=searchResults><a href=personEdit.php?id=".
 									$thisRow['id'].">edit</a></td><td class=searchResults><a href=bookingEdit.php?id=".
 									$thisRow['id'].">create new booking</a></td></tr>");
 							}

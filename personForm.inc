@@ -20,13 +20,14 @@ if($_SESSION['access_level']<2) {
 		echo('</div></div></body></html>');
 		die();
 	}
+
 if ($id=='new') {
 	  echo('<strong>New Person Input Form</strong><br />');
 	  echo('Here you can add a new person to the database.</p>');
 }
 else {
 	   echo('<strong>Person Edit Form</strong><br />');
-	   echo('Here you can edit, delete, or change the password for a person in the database.</p><p>');
+	   echo('Here you can edit (or delete) a person in the database.</p><p>');
 }
 
 ?>
@@ -38,15 +39,15 @@ else {
 	<span class="bigTable">
 	<table>
 		<?php 
-  echo "<tr><td>First Name: ";
+  echo "<tr><td><span style='font-size:x-small;color:FF0000'>* </span>First Name";
     if ($id=='new')
-        echo '<span style="font-size:x-small;color:FF0000">*</span>:</td><td> 
+        echo ':</td><td> 
         	<input type="text" name="first_name" tabindex=1 value="'.$person->get_first_name().'"></td></tr>';
     else echo '</td><td>'.$person->get_first_name().'</td></tr>';
  ?>
-		<tr><td>Last Name<span style="font-size:x-small;color:FF0000">*</span>:</td><td> <input type="text" name="last_name" tabindex=2 value="<?PHP echo($person->get_last_name())?>"></td></tr>
-		<tr><td>Address<span style="font-size:x-small;color:FF0000">*</span>:</td><td> <input type="text" name="address" tabindex=3 value="<?PHP echo($person->get_address())?>"></td></tr>
-		<tr><td>City<span style="font-size:x-small;color:FF0000">*</span>:</td><td> <input type="text" name="city" tabindex=4 value="<?PHP echo($person->get_city())?>"></td></tr>
+		<tr><td><span style='font-size:x-small;color:FF0000'>* </span>Last Name:</td><td> <input type="text" name="last_name" tabindex=2 value="<?PHP echo($person->get_last_name())?>"></td></tr>
+		<tr><td><span style='font-size:x-small;color:FF0000'>* </span>Address:</td><td> <input type="text" name="address" tabindex=3 value="<?PHP echo($person->get_address())?>"></td></tr>
+		<tr><td><span style='font-size:x-small;color:FF0000'>* </span>City:</td><td> <input type="text" name="city" tabindex=4 value="<?PHP echo($person->get_city())?>"></td></tr>
 		<tr><td>State, Zip:</td>
 		<td><select name="state" tabindex=5>
 		<?PHP
@@ -72,9 +73,9 @@ else {
 		}
 		?>
 		<?php 
-  echo "<tr><td>Primary Phone";
+  echo "<tr><td><span style='font-size:x-small;color:FF0000'>* </span>Primary Phone:";
     if ($id=='new')
-        echo '<span style="font-size:x-small;color:FF0000">*</span>:</td><td> 
+        echo '</td><td> 
         	<input type="text" name="phone1" MAXLENGTH=12 tabindex=7 value="'.$person->get_phone1().'"></td></tr>';
     else echo ":</td><td>(".substr($person->get_phone1(),0,3).")".substr($person->get_phone1(),3,3)."-".substr($person->get_phone1(),6).'</td></tr>';
  ?> 	
@@ -85,17 +86,17 @@ else {
 	</span>
 <?PHP
     $st = implode(',',$person->get_type());
-    $newpersontypes = array('guest'=>'Guest');
-    $types = array('guest'=>'Guest', 'volunteer'=>'Volunteer', 'socialworker'=>'Social Worker', 'manager'=>'Manager' );
+    $newpersontypes = array('guest'=>'Primary Guest');
+    $types = array('guest'=>'Primary Guest', 'volunteer'=>'Volunteer', 'socialworker'=>'Social Worker', 'manager'=>'Manager' );
     if ($_SESSION['access_level']==0) {
 	     echo('<p>Please check "guest" if you are requesting a room at the House:');
 	     $ts = $newpersontypes;
     }
 	else {
-		 echo('<p>Role(s) for this person:');
+		 echo("<p><span style='font-size:x-small;color:FF0000'>* </span>Role(s) for this person:");
 		 $ts = $types;
 	}
-	echo('<span style="font-size:x-small;color:FF0000">*</span><br>');
+	echo('<br>');
     
 	//$i = 0;
     foreach ($ts as $key=>$value) {
@@ -104,76 +105,7 @@ else {
     	echo ('>' . $value . '<br />');
     //	$i++;
     }
-?>
-    <p><span class="bigTable">
-    <table>
-<?PHP
-    if ($id == 'new' ) {
-	    echo '<tr><td>Patient name</td><td> <input type="text" name="patient_name0" tabindex=1 value="'.$person->getith_patient_name(0).'"></td></tr>';
-?>	   
-		<tr><td>Patient birth date </td><td>
-    <select name = "DateOfBirth_Month">
-    <?php 
-      echo("<option> </option>");
-      for ($i = 1 ; $i <= 9 ; $i ++){
-          if (substr($person->get_patient_birthdate(),4,1)==="$i")
-             echo ("<option value='0".$i."'selected = 'yes'>".$i."</option>");
-          else
-             echo ("<option value='0".$i."'>".$i."</option>");
-      }
-      for ($i = 10 ; $i <= 12 ; $i ++){
-          if (substr($person->get_patient_birthdate(),3,2)==="$i")
-             echo ("<option selected = 'yes'>".$i."</option>");
-          else
-             echo ("<option>".$i."</option>");
-      }
-    ?>
-    </select>
-    /
-    <select name = "DateOfBirth_Day">
-    <?php 
-      echo("<option>  </option>");
-      for ($i = 1; $i <= 9 ; $i ++){
-          if(substr($person->get_patient_birthdate(),7,1)==="$i")
-             echo ("<option value='0".$i."' selected = 'yes'>".$i."</option>");
-          else
-             echo ("<option value='0".$i."'>".$i."</option>");
-      }
-      for ($i = 10; $i <= 31 ; $i ++){
-          if(substr($person->get_patient_birthdate(),6,2)==="$i")
-             echo ("<option selected = 'yes'>".$i."</option>");
-          else
-             echo ("<option>".$i."</option>");
-      }
-    ?>
-    </select>
-    /
-    <input type="text" size = "1" maxLength = "2" name="DateOfBirth_Year" value= "<?php echo(substr($person->get_patient_birthdate(),0,2))?>"/><br />
-		
 
-        </td></tr>
-        <?PHP echo '<tr><td>Additional patients <i>(Optional)</i></td><td> <input type="text" name="patient_name1" tabindex=1 value="'.$person->getith_patient_name(1).'">
-   				<input type="text" name="patient_name2" tabindex=1 value="'.$person->getith_patient_name(2).'"></td></tr>';	        
-   ?> 
-   <?PHP echo '<tr><td>Relation to patient</td><td> <input type="text" name="patient_relation" tabindex=1 value="'.$person->get_patient_relation().'"></td></tr>';	        
-   ?>         
-	    </td></tr> 
-      </table></span>
-<?PHP
-    }
-else if (strpos(implode(',',$person->get_type()),'guest') !== false) {
-   // echo 'Patient: '.$person->getith_patient_name(0).'<br>';
-    echo('Patient: <input readonly="readonly" name="patient_name0" value="'.$person->getith_patient_name(0).'"><br>');
-    echo('Patient birthdate: <input readonly="readonly" size="2" name="DateOfBirth_Month" value="'.substr($person->get_patient_birthdate(),3,2).'">'.'-');
-    echo('<input readonly="readonly" size="2" name="DateOfBirth_Day" value="'.substr($person->get_patient_birthdate(),6,2).'">'.'-');
-    echo('<input readonly="readonly" size="2" name="DateOfBirth_Year" value="'.substr($person->get_patient_birthdate(),0,2).'">');
-    if (sizeof($person->get_patient_name())>1) {
- //   echo 'Additional patients: '.$person->getith_patient_name(1).' '.$person->getith_patient_name(2).'<br>';	        
-    echo('<br>Additional patients: <input readonly="readonly" name="patient_name1" value="'.$person->getith_patient_name(1).'">');
-    echo('<input readonly="readonly" name="patient_name2" value="'.$person->getith_patient_name(2).'">');
-    }
-    echo '<br>Person\'s relation to patient: <input type="text" name="patient_relation" tabindex=1 value="'.$person->get_patient_relation().'">';
-}
     if ($id == 'new' || strpos(implode(',',$person->get_type()),'guest') !== false) {
 		if($_SESSION['access_level']<2)
 	  	    echo(' disabled="true"');
@@ -183,8 +115,9 @@ else if (strpos(implode(',',$person->get_type()),'guest') !== false) {
 	  	    foreach ($person->get_prior_bookings() as $prior_booking_id) {
 	  	    	 $date = substr($prior_booking_id,0,8);
 	  	    	 if ($date!="")
-	  	         	echo '<a href="viewBookings.php?id=closed&bookingid='.$prior_booking_id.'">'.date_string($date).'</a> <br>';
+	  	         	echo '<a href="viewBookings.php?id=closed&bookingid='.$prior_booking_id.'" target="_blank">'.date_string($date).'</a> <br>';
 	  	    }
+	  	    echo "<br><a href=bookingEdit.php?id=".$id." target='_blank'>Create new booking</a>";
 	  	}
 	  	echo('<p>Manager\'s Notes:<br />');
 	  	echo('<textarea name="mgr_notes" rows="3" cols="60"');

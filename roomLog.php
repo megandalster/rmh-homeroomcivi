@@ -71,9 +71,10 @@ include_once(dirname(__FILE__)."/domain/Person.php");
 			if($_POST['submit'] == "Save Roomlog"){
 				// Try to update the roomlog
 				if(update_dbRoomLog($roomLog)){
-					echo("<h3 style=\"text-align:center\">Roomlog updated successfully</h3>");
-				}else if(insert_dbRoomLog($roomLog)){
-					echo("<h3 style=\"text-align:center\">Roomlog saved successfully</h3>");
+					echo("<h3 style=\"text-align:center\">Room Log Updated Successfully</h3>");
+				}
+				else if(insert_dbRoomLog($roomLog)){
+					echo("<h3 style=\"text-align:center\">Room Log Saved Successfully</h3>");
 				}
 			}
 			
@@ -150,7 +151,7 @@ include_once(dirname(__FILE__)."/domain/Person.php");
 				echo ("<br />"); // new line break
 				// create a new form which just has the submit button
 				echo ("<form method=\"POST\" style=\"text-align:center\">");
-				echo ("<input type=\"submit\" value=\"Save Roomlog\" name=\"submit\"/>");
+				echo ("<input type=\"submit\" value=\"Save Room Log\" name=\"submit\"/>");
 				echo ("</form>");
 			}
 			?>

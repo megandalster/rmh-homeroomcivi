@@ -19,14 +19,14 @@ function validate_form($id){
 	        $errors[] = 'Please enter a valid date of arrival. If this date is unknown, please select "Will Call" instead.';
 	    }
 	}
-	if ($id!='update') {
-  	//   if(trim($_POST['first_name_1'])==null) $errors[] = 'Please enter a first name for the primary guest ';
-	//   if($_POST['last_name_1']==null || $_POST['first_name']=='volunteer') $errors[] = 'Please enter a last name for the primary guest ';   
-    //   if($_POST['patient_relation_1'] == null) $errors[] = 'Please enter a patient relationship for the primary guest ';
+	if ($id=='new') {
+  	   if(trim($_POST['first_name_1'])==null) $errors[] = 'Please enter a first name for the primary guest ';
+	   if($_POST['last_name_1']==null || $_POST['first_name']=='volunteer') $errors[] = 'Please enter a last name for the primary guest ';   
+       if($_POST['patient_relation_1'] == null) $errors[] = 'Please enter a patient relationship for the primary guest ';
        
 	   $phone1 = $_POST['phone1_area_1'].$_POST['phone1_middle_1'].$_POST['phone1_end_1'];
 	   $phone2 = $_POST['phone2_area_1'].$_POST['phone2_middle_1'].$_POST['phone2_end_1'];
-   //    if(!valid_phone($phone1)) $errors[] = 'Please enter a valid primary phone number for the primary guest (10 digits: ### ### ####)';
+       if(!valid_phone($phone1)) $errors[] = 'Please enter a valid primary phone number for the primary guest (10 digits: ### ### ####)';
 	   if($phone2!=null && !valid_phone($phone2)) $errors[] = 'Please enter a valid secondary phone number (Optional, 10 digits: ### ### ####)';
 	   if(!valid_email($_POST['email_1']) && $_POST['email_1']!=null) $errors[] = "Please enter a valid email";
 	}          
@@ -87,5 +87,6 @@ function show_errors($e){
 			echo("<li><strong><font color=\"red\">".$error."</font></strong></li>\n");
 		}
 		echo("</ul></div></p>");
+		echo "Hit the Back button to fix these errors.";
 }
 ?>

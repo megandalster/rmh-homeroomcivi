@@ -64,7 +64,7 @@
      if ($booking->day_use() == "yes") echo (' Day');
     echo "<br>";
      ?>
-     Additional Notes:  
+     Additional Notes/Special Requests:  
      <?php echo($booking->get_mgr_notes()."<br/><br/>");
      if($booking->get_status() == "pending"){
      	if ($booking->get_date_in() != "" && $booking->get_date_in() != "Will Call")
@@ -105,7 +105,6 @@ Do you currently:
             <select name = "flag"> 
                      <option value = "new" <?php if($booking->get_flag() == "new") echo SELECTED?>> new </option>
                      <option value = "viewed"  <?php if($booking->get_flag() == "viewed") echo SELECTED?>> viewed </option>
-                     <option value = "confirmed"  <?php if($booking->get_flag() == "confirmed") echo SELECTED?>> confirmed</option>
                      <option value = "requires attention" <?php if($booking->get_flag() == "requires attention") echo SELECTED?>> requires attention </option>
                      <option value = "past arrival date" <?php if($booking->get_flag() == "past arrival date") echo SELECTED?>> past arrival date </option>
                      </select><br/>

@@ -32,9 +32,10 @@
         $id = $_GET["id"];
         $bookingid = $_GET['bookingid'];
         //updates the notes and flag if these have just been edited            
-        if ($_POST['submit'] == "Update Flag")
+        if ($_POST['submit'] == "Update Flag") {
 	           update_notes_and_flag($bookingid);
-                             
+			echo "Flag updated: hit <a href='viewBookings.php?id=pending'>bookings: view</a> to see all pending bookings.";
+        }
         if ($id=="delete") {
     		if (delete_dbBookings($bookingid)) {
     			echo "<p>Booking successfully deleted.</p>";
@@ -142,8 +143,6 @@
 			  $flag = $current_booking->get_flag();
 			  if($flag =="new")
 				  $color = "Yellow";
-			  elseif ($flag == "confirmed")
-				  $color = "LightGreen";
 			  elseif ($flag == "requires attention")
 				  $color = "LightCoral";
 			  elseif ($flag == "past arrival date")

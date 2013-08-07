@@ -8,12 +8,17 @@ echo ("<p><table>");
 
 // begin adding entries to the tables
 echo ("<tr>");
-echo ("<td>Guest's First Name: </td>");
+echo ("<td>Primary Guest's First Name: </td>");
 echo ("<td><input type=\"text\" name=\"p_first_name\" value=\"".$_POST['p_first_name']."\"></td>");
 echo ("</tr>");
 
 echo ("<tr>");
-echo ("<td>Patient Name: </td>");
+echo ("<td>Primary Guest's Last Name: </td>");
+echo ("<td><input type=\"text\" name=\"p_last_name\" value=\"".$_POST['p_last_name']."\"></td>");
+echo ("</tr>");
+
+echo ("<tr>");
+echo ("<td>Patient's Name: </td>");
 echo ("<td><input type=\"text\" name=\"pat_first_name\" value=\"".$_POST['pat_first_name']."\"></td>");
 echo ("</tr>");
 	

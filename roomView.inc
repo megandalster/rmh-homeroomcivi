@@ -72,10 +72,10 @@ if($currentRoom->get_status()=="reserved"|| $currentRoom->get_status()=="booked"
 	// Add an option to checkout the family
 	echo ("<br />");
 	if ($_SESSION['access_level']!=2) {
-	    echo ("Checkout/Checkin Family?: <select name='assign_booking'>");
+	    echo ("Checking out or checking in? <select name='assign_booking'>");
 	    echo ("<option selected='yes'>No</option>");
-	    echo ("<option>Checkout</option>");
-	    echo ("<option>Checkin</option>");
+	    echo ("<option>Check out</option>");
+	    echo ("<option>Check in</option>");
 	    echo ("</select><br />");
 	    echo ("<br />");
 	}

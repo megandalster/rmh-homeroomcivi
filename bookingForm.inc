@@ -257,7 +257,7 @@ else echo " <b>Check-in date:</b> ".date_string($tempBooking->get_date_in());
  <input type="checkbox" name="overnight" value="yes" <?php if($tempBooking->overnight_use() == "yes") echo('checked')?>/> Overnight<br />
  <input type="checkbox" name="day" value="yes" <?php if($tempBooking->day_use() == "yes") echo('checked')?>/> Day <br />
 <br />
-<b>Additional Notes</b> <i>(optional):</i><br />
+<b>Additional Notes/Special Requests:</b><br />
   <textarea rows = "3" cols = "80" name = "notes" ><?php echo $tempBooking->get_mgr_notes()?></textarea>
  <br />
  

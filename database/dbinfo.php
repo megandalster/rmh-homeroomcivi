@@ -16,7 +16,7 @@
     $host = "localhost";
 	$database = "rmhhomeroomDB";
 	$user = "rmhhomeroomDB";
-	$password = "foodyWr1";
+	$password = "cs315";
 
  	$connected = mysql_connect($host,$user,$password);
  	if (!$connected) return mysql_error();

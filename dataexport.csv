@@ -1,4 +1,4 @@
-"Occupancy ","Data for ","January 1, 2013 to ","August 7, 2013"
+"Occupancy ","Data for ","January 1, 2013 to ","August 28, 2013"
 "Room #",Bookings,Nights,Guests
 125,3,185,5
 126,1,206,1
@@ -25,17 +25,17 @@ unknown,0,0,0
 State/County,Bookings,Guests
 ME,1,1
 ME/Androscoggin,1,2
-ME/Cumberland,4,6
+ME/Cumberland,3,5
 ME/Franklin,1,1
 ME/Kennebec,3,5
 ME/Oxford,3,7
 ME/Sagadahoc,2,3
 ME/York,6,11
 NH,1,1
-unknown,0,0
+unknown,1,1
 "Patient Age",Bookings,Guests
-0,18,33
-unknown,0,0
+0,17,32
+unknown,1,1
 2,1,1
 8,1,1
 17,1,1

@@ -109,14 +109,14 @@ p.error {color: #FF0000;}
 }
 
 #header{
-	height: 0px;
+	height: 155px;
 	border-left:2px solid #264576;
 	border-top:2px solid #264576;
 	border-right:2px solid #264576;
-	padding: 0px;
-	background: <!--url("images/rmhHeader.gif")--> #ffffff; 
+	padding: 10px;
+	background: url("images/rmhHeader.gif") #ffffff; 
 	background-repeat:no-repeat;
-	background-position:top center;
+	background-position:top left;
 	overflow:hidden;
 }
 

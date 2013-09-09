@@ -20,7 +20,7 @@ class testPerson extends UnitTestCase {
         $this->assertTrue($test_person->get_phone1() == "(207)555-1234");
         $this->assertTrue($test_person->get_phone2() == "");
         $this->assertTrue($test_person->get_email() == "email@bowdoin.edu");
-        $this->assertTrue($test_person->get_patient_name() == "Jane Smith");
+        $this->assertEqual($test_person->getith_patient_name(0), "Jane Smith");
         $this->assertTrue($test_person->get_patient_birthdate() == "98-01-01");
         $this->assertTrue($test_person->get_patient_relation() == "parent");
                  

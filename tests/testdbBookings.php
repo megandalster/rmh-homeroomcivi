@@ -1,16 +1,14 @@
 <?php
 include_once(dirname(__FILE__).'/../domain/Booking.php');
 include_once(dirname(__FILE__).'/../database/dbBookings.php');
-include_once(dirname(__FILE__).'/../domain/Loaner.php');
-include_once(dirname(__FILE__).'/../database/dbLoaners.php');
 class testdbBookings extends UnitTestCase {
     function testdbBookingsModule() {
         
         // create a booking and test inserting and retrieving it from dbBookings
         $today = date('y-m-d');
-        $b = new Booking($today,"","Meghan2075551234","pending","","Tiny",
+        $b = new Booking($today,"","Meghan2075551234","pending","",array("Tiny"),
                   array("Meghan:mother", "Jean:father", "Teeny:sibling"),
-                  array(), "", "", "Millie2073631234","Maine Med", "SCU", "00000000000",
+                  "", "", "", "Millie2073631234","Maine Med", "SCU", "00000000000",
                    "$10 per night", "","","","new");
         $this->assertTrue(insert_dbBookings($b));
         $this->assertTrue(retrieve_dbBookings($b->get_id()));
@@ -20,19 +18,17 @@ class testdbBookings extends UnitTestCase {
         $this->assertTrue(retrieve_dbBookings($b->get_id())->get_status(), "pending");
         
         //checks that initial flag is "new"
-        $this->assertTrue(retrieve_dbBookings($b->get_id())->get_flag(), "new");
-        $pending_bookings = retrieve_all_pending_dbBookings();
+        $this->assertEqual(retrieve_dbBookings($b->get_id())->get_flag(), "new");
+ //       $pending_bookings = retrieve_all_pending_dbBookings();
  //       $this->assertEqual($pending_bookings[0]->get_id(), $b->get_id());
-        
+      
         // make some changes and test updating it in the database
-        // Add a loaner to the booking
-		$b->add_loaner("remote3");
 		$b->add_occupant("Jordan","brother");
-		$b->set_flag("viewed");
-        $this->assertTrue($b->assign_room("126",$today));
+  		$b->set_flag("viewed");
+        $this->assertTrue($b->reserve_room("126",$today));
+        $this->assertTrue($b->book_room("126",$today));
         $bretrieved = retrieve_dbBookings($b->get_id());
-        $this->assertTrue(in_array("Jordan: brother", $bretrieved->get_occupants()));
-        $this->assertTrue(in_array("remote3", $bretrieved->get_loaners()));
+        $this->assertTrue(in_array("Jordan:brother", $bretrieved->get_occupants()));
         $this->assertEqual($bretrieved->get_status(),"active");
         $this->assertEqual($bretrieved->get_id(), $b->get_id());
         $this->assertEqual($bretrieved->get_room_no(), "126");
@@ -50,7 +46,7 @@ class testdbBookings extends UnitTestCase {
         $this->assertTrue(delete_dbBookings($b->get_id()));
         $this->assertFalse(retrieve_dbBookings($b->get_id()));
         
-        
+       
                  
         echo ("testdbBookings complete");
     }

@@ -49,7 +49,7 @@ class testdbPersons extends UnitTestCase {
         $this->assertEqual(retrieve_dbPersons($person1->get_id())->get_phone1 (), 2075551234);
         $this->assertEqual(retrieve_dbPersons($person1->get_id())->get_phone2 (), null);    
         $this->assertEqual(retrieve_dbPersons($person1->get_id())->get_email(), "email@bowdoin.edu");
-        $this->assertEqual(retrieve_dbPersons($person1->get_id())->get_patient_name (), "Jane Smith");
+        $this->assertEqual(retrieve_dbPersons($person1->get_id())->getith_patient_name (0), "Jane Smith");
         $this->assertEqual(retrieve_dbPersons($person1->get_id())->get_patient_birthdate (), "98-01-01");    
         $this->assertEqual(retrieve_dbPersons($person1->get_id())->get_patient_relation(), "parent");
         $this->assertTrue(retrieve_dbPersons($person1->get_id())->check_type("guest"));

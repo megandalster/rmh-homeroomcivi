@@ -3,9 +3,9 @@ include_once(dirname(__FILE__).'/../domain/Booking.php');
 class testBooking extends UnitTestCase {
       function testBookingModule() {
          $today = date('y-m-d');
-        $b = new Booking($today,"","Meghan2075551234","pending","","Tiny",
+        $b = new Booking($today,"","Meghan2075551234","pending","",array("Tiny"),
                   array("Meghan:mother", "Jean:father", "Teeny:sibling"),
-                  array(), "", "", "Millie2073631234","Maine Med", "SCU", "00000000000",
+                  "", "", "", "Millie2073631234","Maine Med", "SCU", "00000000000",
                    "$10 per night", "","","","new");
          
          $this->assertTrue($b->get_id() == $today."Meghan2075551234");
@@ -14,7 +14,7 @@ class testBooking extends UnitTestCase {
          $this->assertEqual($b->get_guest_id(),"Meghan2075551234");
          $this->assertEqual($b->get_status(),"pending");
          $this->assertEqual($b->get_room_no(),"");
-         $this->assertEqual($b->get_patient(),"Tiny");
+         $this->assertEqual($b->getith_patient(0),"Tiny");
          $occ = $b->get_occupants();
          $this->assertTrue(in_array("Jean:father",$occ));
          $this->assertEqual($b->get_linked_room(),"");

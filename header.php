@@ -70,9 +70,9 @@ h1 {padding-left: 0px; padding-right:165px;}
 		
 		if($_SESSION['access_level']>=1) // volunteers, social workers and managers 
 		{	
-		    echo(' | <strong>referrals:</strong> <a href="'.$path.'viewBookings.php?id=pending">pending,</a> <a href="'.$path.'searchBookings.php">search</a>' . 
+		    echo(' | <strong>bookings:</strong> <a href="'.$path.'viewBookings.php?id=pending">pending,</a> <a href="'.$path.'searchBookings.php">search</a>' . 
 			                                    '<a href="bookingEdit.php?id=new'.'">, new</a>');
-		    echo('<br> <strong>people :</strong> <a href="'.$path.'view.php">view,</a> <a href="'.$path.'searchPeople.php">search</a>');
+		    echo('<br> <strong>guests:</strong> <a href="'.$path.'view.php">view,</a> <a href="'.$path.'searchPeople.php">search</a>');
 		    if ($_SESSION['access_level']>=2)
 	    	    echo('<a href="personEdit.php?id='.'new'.'">, add</a> ');
 		}

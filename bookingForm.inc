@@ -93,13 +93,49 @@ if ($tempBooking->get_referred_by()!="")
 else 
 	echo($user_name." (".substr($user_phone,0,3)."-".substr($user_phone,3,3)."-".substr($user_phone,6).")");
 ?>"/>
-Date Submitted: <?php echo date_string($tempBooking->get_date_submitted()).'<br />';
+<br><span style='font-size:x-small;color:FF0000'>* </span>Date Submitted:  
+    <select name = "date_submitted_month">
+    <?php 
+      $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
+	  echo("<option> </option>");
+      for ($i = 1 ; $i <= 9 ; $i ++){
+          if('0'.$i == substr($tempBooking->get_date_submitted(),3,2))
+             echo ("<option value='0".$i."' selected = 'yes'>".$months[$i-1]."</option>");
+          else
+             echo ("<option value='0".$i."'>".$months[$i-1]."</option>");
+      }
+      for ($i = 10 ; $i <= 12 ; $i ++){
+          if($i == substr($tempBooking->get_date_submitted(),3,2))
+             echo ("<option value=".$i." selected = 'yes' >".$months[$i-1]."</option>");
+          else
+             echo ("<option value=".$i.">".$months[$i-1]."</option>");
+      }
+    ?>
+    </select>    
+    <select name = "date_submitted_day">
+    <?php 
+      echo("<option>  </option>");
+      for ($i = 1; $i <= 9 ; $i ++){
+          if($i == substr($tempBooking->get_date_submitted(),6,2))
+             echo ("<option value='0".$i."' selected = 'yes'>".$i."</option>");
+          else
+             echo ("<option value='0".$i."'>".$i."</option>");
+      }
+      for ($i = 10; $i <= 31 ; $i ++){
+          if($i == substr($tempBooking->get_date_submitted(),6,2))
+             echo ("<option selected = 'yes'>".$i."</option>");
+          else
+             echo ("<option>".$i."</option>");
+      }
+    ?>
+    </select>
+    <input type="text" size = "3" maxLength = "4" name="date_submitted_year" value= "<?php echo("20".substr($tempBooking->get_date_submitted(),0,2))?>"/><br />
 
+<?php
 echo "<br><b>Status: </b>". $tempBooking->get_status(); 
-
 echo "<br />";
 ?>
- <br/>
+<br/>
 
 <fieldset>
   <legend><b>Primary Guest:</b></legend>

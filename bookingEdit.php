@@ -154,7 +154,10 @@ function process_form($id,$referralid)	{
 }
 // build a booking from the posted data and save it
 function build_POST_booking($primaryGuest,$referralid) {
-	$current_date = date("y-m-d");
+	$date_submitted = substr($_POST['date_submitted_year'],2,2).'-'.
+                 $_POST['date_submitted_month'].'-'.
+                 $_POST['date_submitted_day']; 
+    
     if($_POST['visitOrWC'] == "Will Call" ){
        $date_in = "Will Call";
     }
@@ -162,7 +165,8 @@ function build_POST_booking($primaryGuest,$referralid) {
        $date_in = $_POST['date_in_year'].'-'.
                  $_POST['date_in_month'].'-'.
                  $_POST['date_in_day'];
-    } 
+    }
+     
     $referred_by = trim(str_replace("'","\'", htmlentities($_POST['referred_by'])));
     if($_POST['payment'] != "other")
         $payment = "10 per night";
@@ -186,6 +190,7 @@ function build_POST_booking($primaryGuest,$referralid) {
     
     if ($referralid && retrieve_dbBookings($referralid)) {
     	$pendingBooking = retrieve_dbBookings($referralid);
+    	$pendingBooking->set_date_submitted($date_submitted);
         $pendingBooking->set_date_in($date_in);
         $pendingBooking->set_patient($primaryGuest->get_patient_name());
         $pendingBooking->set_auto($auto);
@@ -200,7 +205,7 @@ function build_POST_booking($primaryGuest,$referralid) {
         $pendingBooking->remove_occupants();
     }
     else {
-    	$pendingBooking = new Booking($current_date, $date_in, $primaryGuest->get_id(), "pending", "", $primaryGuest->get_patient_name(), 
+    	$pendingBooking = new Booking($date_submitted, $date_in, $primaryGuest->get_id(), "pending", "", $primaryGuest->get_patient_name(), 
                                   array(), $auto, "", "", $referred_by, $hospital, $department, 
                                   $health_questions, $payment, $_POST['overnight'], $_POST['day'], $notes, "new"); 
     }

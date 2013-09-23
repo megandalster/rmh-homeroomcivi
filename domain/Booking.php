@@ -18,15 +18,15 @@ include_once(dirname(__FILE__).'/../database/dbBookings.php');
 include_once(dirname(__FILE__).'/../database/dbPersons.php');
 
 class Booking {
-    private $id;            // unique identifier of the form $date_submitted."guest_id"
-    private $date_submitted;// date that the boooking information was submitted in pending form "yy-mm-dd"
-    private $date_in;       // check-in date in the form "yy-mm-dd"
+    private $id;            // unique identifier of the form $current_date."guest_id"
+    private $date_submitted;// date that the boooking information was submitted, in the form "yy-mm-dd"
+    private $date_in;       // check-in date, in the form "yy-mm-dd"
 	private $guest_id;      // id of the primary guest e.g., "John2077291234"
  	private $status;		// "pending", "active", "closed", or "closed-deceased"
   	private $room_no;	    // id of the room; null if status == "pending" or "wait-list"
 	private $patient;       // array of up to 3 patients for whom this booking is made
   	private $occupants;     // array of up to 6 people staying in the room.  
-  	                        // Each entry has the form $first_name:$relationship_to_patient
+  	                        // Each entry has the form $first_name:$relationship_to_patient:$gender
   	                        // e.g., array("John:father", "Jean:mother", "Teeny:sibling")
   	private $auto;          // automobile make:model:color:state
 	private $linked_room;   // (optional) id of a room where other family members are staying
@@ -285,6 +285,9 @@ class Booking {
     }
     function set_linked_room($linked_room) {
         $this->linked_room = $linked_room;
+    }
+    function set_date_submitted ($new_date_submitted) {
+    	$this->date_submitted = $new_date_submitted;
     }
     function set_date_in ($new_date_in) {
     	$this->date_in = $new_date_in;

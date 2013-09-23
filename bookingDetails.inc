@@ -24,7 +24,7 @@
  <br/>
  <b>Status: </b> <?php echo($booking->get_status()."<br/>");
     if ($booking->get_status()== "pending"){
-         echo('Date submitted: '.date_string($booking->get_date_submitted()).", ");
+         echo('Date submitted: '.date_string($booking->get_date_submitted())."<br>");
     }
     else if($booking->get_status()== "active" || $booking->get_status()== "confirmed"){
          echo('Date In: '.date_string($booking->get_date_in()).', ');
@@ -50,7 +50,7 @@
         else echo '<br>';
      }?>
         
-     <br/>
+     <br/><br>
      Automobile: <?php echo $booking->get_auto_make()." ".$booking->get_auto_model()." ".
                              $booking->get_auto_color()." ".$booking->get_auto_state() ;
 		?>
@@ -59,13 +59,13 @@
      Payment Arrangement:  <?php echo($booking->get_payment_arrangement());?> <br> 
 
      <?php 
-    echo "<br>Approved Uses: ";
+    echo "Approved Uses: ";
      if ($booking->overnight_use() == "yes") echo ('Overnight');
      if ($booking->day_use() == "yes") echo (' Day');
     echo "<br>";
      ?>
-     <b>Additional Notes/Special Requests:  </b>
-     <?php echo($booking->get_mgr_notes()."<br/><br/>");
+     <br><b>Additional Notes/Special Requests:  
+     <?php echo($booking->get_mgr_notes()."</b><br/><br/>");
      if($booking->get_status() == "pending"){
      	if ($booking->get_date_in() != "" && $booking->get_date_in() != "Will Call")
             $d = date_string($booking->get_date_in());

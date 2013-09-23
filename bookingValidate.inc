@@ -11,11 +11,10 @@ function validate_form($id){
     if ($_POST['patient_birth_year'] == null || strlen($_POST['patient_birth_year']) != 2 
 	    || $_POST['patient_birth_month'] == null || $_POST['patient_birth_day'] == null) $errors[] = 'Please enter a valid date of birth for the patient';
 	if($_POST['referred_by'] == null) $errors[] = "Please specify who created this booking";
-    
+    if($_POST['date_submitted_day']== "" || $_POST['date_submitted_month']== "" || $_POST['date_submitted_year']== "")
+	    $errors[] = 'Please enter a Date Submitted';   
 	if($_POST['visitOrWC']=='visit'){
-	    if($_POST['date_in_day']== "" ||
-	       $_POST['date_in_month']== "" ||
-	       $_POST['date_in_year']== ""){
+	    if($_POST['date_in_day']== "" || $_POST['date_in_month']== "" || $_POST['date_in_year']== ""){
 	        $errors[] = 'Please enter a valid date of arrival. If this date is unknown, please select "Will Call" instead.';
 	    }
 	}

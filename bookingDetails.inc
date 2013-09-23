@@ -64,7 +64,7 @@
      if ($booking->day_use() == "yes") echo (' Day');
     echo "<br>";
      ?>
-     Additional Notes/Special Requests:  
+     <b>Additional Notes/Special Requests:  </b>
      <?php echo($booking->get_mgr_notes()."<br/><br/>");
      if($booking->get_status() == "pending"){
      	if ($booking->get_date_in() != "" && $booking->get_date_in() != "Will Call")

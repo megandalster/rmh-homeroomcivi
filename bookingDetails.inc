@@ -64,15 +64,17 @@
      if ($booking->day_use() == "yes") echo (' Day');
     echo "<br>";
      ?>
-     <br><b>Additional Notes/Special Requests:  
-     <?php echo($booking->get_mgr_notes()."</b><br/><br/>");
-     if($booking->get_status() == "pending"){
+     <br><b>Additional Notes/Special Requests:  </b><font color="red">
+     <?php echo($booking->get_mgr_notes()."</b><br/><br/></font>"); 
+     
+      if($booking->get_status() == "pending"){
      	if ($booking->get_date_in() != "" && $booking->get_date_in() != "Will Call")
             $d = date_string($booking->get_date_in());
         else $d = "Will Call";
      	echo('<b> Expected Arrival Date: </b> '.$d);
      }
      ?>
+   
      
   </fieldset>
 <br/><br/>                    

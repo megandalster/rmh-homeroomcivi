@@ -211,7 +211,7 @@ function build_POST_booking($primaryGuest,$referralid) {
     }
     for($count = 1 ; $count <= 6 ; $count++){
         if($_POST['additional_guest_'.$count] != "")
-           $pendingBooking->add_occupant($_POST['additional_guest_'.$count], $_POST['additional_guest_'.$count.'_relation']);
+           $pendingBooking->add_occupant($_POST['additional_guest_'.$count], $_POST['additional_guest_'.$count.'_relation'], $_POST['additional_guest_' .$count.'_gender']);
     }
      
     

@@ -14,7 +14,7 @@
  *	@version 9/1/2008
  */
 
-if($_SESSION['access_level']<2) {  
+if($_SESSION['access_level']<1) {  
         echo("<p id=\"error\">You do not have sufficient permissions to add a person to the database.</p>");
 	    ('footer.inc');
 		echo('</div></div></body></html>');
@@ -85,6 +85,7 @@ else {
 	</table>
 	</span>
 <?PHP
+	if($_SESSION['access_level'] > 1) {
     $st = implode(',',$person->get_type());
     $newpersontypes = array('guest'=>'Primary Guest');
     $types = array('guest'=>'Primary Guest', 'volunteer'=>'Volunteer', 'socialworker'=>'Social Worker', 'manager'=>'Manager' );
@@ -105,10 +106,12 @@ else {
     	echo ('>' . $value . '<br />');
     //	$i++;
     }
+	}
 
     if ($id == 'new' || strpos(implode(',',$person->get_type()),'guest') !== false) {
-		if($_SESSION['access_level']<2)
-	  	    echo(' disabled="true"');
+    	//I commented this on 11/07/13, why would we want to echo that?
+		//if($_SESSION['access_level']<2)
+	  	  //  echo(' disabled="true"');
 	  	
 	  	if ($id !== 'new') {
 	  	    echo('<p>Prior Bookings:<br />');

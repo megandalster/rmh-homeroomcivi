@@ -8,7 +8,7 @@ function validate_form($id){
     if ($_POST['patient_name0'] == null) $errors[] = "Please enter a name for the patient";
     if ($_POST['hospital']== null) $errors[]= "Please enter a hospital name";
     if ($_POST['dept']== null) $errors[]= "Please enter a department";
-    if ($_POST['patient_birth_year'] == null || strlen($_POST['patient_birth_year']) != 2 
+    if ($_POST['patient_birth_year'] == null || strlen($_POST['patient_birth_year']) != 4 
 	    || $_POST['patient_birth_month'] == null || $_POST['patient_birth_day'] == null) $errors[] = 'Please enter a valid date of birth for the patient';
 	if($_POST['referred_by'] == null) $errors[] = "Please specify who created this booking";
     if($_POST['date_submitted_day']== "" || $_POST['date_submitted_month']== "" || $_POST['date_submitted_year']== "")

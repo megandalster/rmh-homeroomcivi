@@ -39,11 +39,9 @@ echo ("<option value=''></option>");
 for($i = 1; $i<=31; $i++){
 	echo ("<option value=".$i.($_POST["day"]==$i?" selected":" ").">".$i."</option>");
 }
-echo ("</select>, Year:<select name=\"year\">");
-echo ("<option value=''></option>");
-for($i = 10; $i<=date('y'); $i++){
-	echo ("<option value=".$i.($_POST["year"]==$i?" selected":" ").">20".$i."</option>");
-}
+//creates a text field whose default value is the current year.
+echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"date_submitted_year\" value= \" ".date("Y")." \" /><br />");
+
 echo ("</select>");
 echo ("</td></tr>");
 	

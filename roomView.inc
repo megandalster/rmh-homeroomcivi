@@ -24,20 +24,36 @@ if ($booking)
 <form method="POST">
 
 <!--  input fields for everything in the room -->
-Beds: <input type="text" name="beds" value="<?php echo($currentRoom->get_beds());?>"/><br />
-Room Capacity: <input type="text" name="capacity" value="<?php echo($currentRoom->get_capacity());?>"/><br />
-Bath: <select name="bath">
-	<?php 
-	// fill in the selection for the bath
-	if($currentRoom->get_bath() == "y"){
-		echo ("<option selected='yes'>Yes</option>");
-		echo ("<option>No</option>");
-	}else{
-		echo ("<option>Yes</option>");
-		echo ("<option selected='yes'>No</option>");
-	}
-	?>
-</select><br />
+<?php
+if($_SESSION['access_level']>2) { 
+	echo "
+	Beds: <input type='text' name='beds' value='".$currentRoom->get_beds()."'/><br />
+	Room Capacity: <input type='text' name='capacity' value='".$currentRoom->get_capacity()."'/><br />
+	Bath: <select name='bath'>";
+		// fill in the selection for the bath
+		if($currentRoom->get_bath() == "y"){
+			echo ("<option selected='yes'>Yes</option>");
+			echo ("<option>No</option>");
+		}else{
+			echo ("<option>Yes</option>");
+			echo ("<option selected='yes'>No</option>");
+		}
+	echo "</select><br />";
+}
+else {
+	echo "
+	Beds: <input type='text' name='beds' value='".$currentRoom->get_beds()."' disabled/><br />
+	Room Capacity: <input type='text' name='capacity' value='".$currentRoom->get_capacity()."' disabled/><br />
+	Bath: <select name='bath' disabled>";
+		// fill in the selection for the bath
+		if($currentRoom->get_bath() == "y"){
+			echo ("<option selected='yes'>Yes</option>");
+		}else{
+			echo ("<option selected='yes'>No</option>");
+		}
+	echo "</select><br />";
+}
+?>
 <?php
 // Only allow changing the status if it isnt reserved. If it is reserved, only
 if($currentRoom->get_status() != "reserved"){
@@ -72,10 +88,10 @@ if($currentRoom->get_status()=="reserved"|| $currentRoom->get_status()=="booked"
 	// Add an option to checkout the family
 	echo ("<br />");
 	if ($_SESSION['access_level']!=2) {
-	    echo ("Checking out or checking in? <select name='assign_booking'>");
+	    echo ("Checkout/Checkin Family?: <select name='assign_booking'>");
 	    echo ("<option selected='yes'>No</option>");
-	    echo ("<option>Check out</option>");
-	    echo ("<option>Check in</option>");
+	    echo ("<option>Checkout</option>");
+	    echo ("<option>Checkin</option>");
 	    echo ("</select><br />");
 	    echo ("<br />");
 	}

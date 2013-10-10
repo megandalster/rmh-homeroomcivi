@@ -40,7 +40,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
 	        $date_in = "Will Call";
             $room_no = "";
             $flag = "new";
-            $guest = new Person("","","","","","","","","","","","","","","");
+            $guest = new Person("","","","","","","","","","","","","","","","");
             $tempBooking = new Booking(date("y-m-d"),"Will Call","","pending","","","","","","","","","","00000000000", "", "", "", "","new"); 
 	  }
 	  else if ($id=="update") {
@@ -62,7 +62,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
 	       $guest = retrieve_dbPersons($id);
            if (!$guest){
                 echo("The guest with id '".$id."' does not exist in the database. Please fill out a blank form below:");
-                $guest = new Person("","","","","","","","","","","","","","","");
+                $guest = new Person("","","","","","","","","","","","","","","","");
                 $patient_DOB = "";             
            }
            else $patient_DOB = $guest->get_patient_birthdate();
@@ -139,7 +139,7 @@ function process_form($id,$referralid)	{
                              $_POST['patient_birth_day'];
     $currentEntry = retrieve_dbPersons($first_name.$phone1);
     if(!$currentEntry) {
-            $currentEntry = new Person($last_name, $first_name, $address, $city,$state, $zip, $phone1, $phone2, 
+            $currentEntry = new Person($last_name, $first_name, "", $address, $city,$state, $zip, $phone1, $phone2, 
                                    $email, "guest", "", $patient_name,$patient_birthdate,$patient_relation,"");
     }
     else {

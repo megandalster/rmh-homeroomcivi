@@ -7,7 +7,7 @@ class testPerson extends UnitTestCase {
         $this->assertFalse(false);
              
         //fake person to test
-        $test_person = new Person("Smith", "John", "123 College Street","Brunswick", "ME", "04011", "(207)555-1234", "", 
+        $test_person = new Person("Smith", "John", "male", "123 College Street","Brunswick", "ME", "04011", "(207)555-1234", "", 
     				"email@bowdoin.edu", "guest", "","Jane Smith", "98-01-01", "parent" ,"");
                  
         //testing getter functions

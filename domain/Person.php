@@ -17,6 +17,7 @@ class Person {
     private $id;               // id (unique key) = first_name . phone1
     private $last_name;        // last name - string
     private $first_name;       // first name - string
+    private $gender;			// "male" or "female" or ""
     private $address;              // address - string
     private $city;                 // city - string
     private $state;                // state - string
@@ -30,18 +31,19 @@ class Person {
     private $patient_relation;  // person's relation to patient; e.g., parent, uncle, etc.
     private $prior_bookings;    // array of booking ids; e.g., '11-02-08John2077291234'
     private $mgr_notes;         // manager's notes
-    private $county;               // county in Maine; otherwise blank
+    private $county;               // county in Maine; otherwise blank new Person
     private $type;             // array of 'manager', 'socialworker', 'guest', 'volunteer'
     private $password;         // password for database access: default = $id
 
         /**
          * constructor for a Person
          */
-    function __construct($last_name, $first_name, $address, $city, $state, $zip, $phone1, $phone2, $email,
+    function __construct($last_name, $first_name, $gender, $address, $city, $state, $zip, $phone1, $phone2, $email,
                          $type, $prior_bookings, $patient_name, $patient_birthdate, $patient_relation, $password){                
         $this->id = $first_name . $phone1; 
         $this->last_name = $last_name;
         $this->first_name = $first_name;
+        $this->gender = $gender;
         $this->address = $address;
         $this->city = $city;
         $this->state = $state;
@@ -72,6 +74,9 @@ class Person {
     }
     function get_last_name() {
         return $this->last_name;
+    }
+    function get_gender() {
+        return $this->gender;
     }
     function get_address() {
         return $this->address;

@@ -43,7 +43,7 @@ include_once(dirname(__FILE__)."/domain/Person.php");
 				// make sure each entry was submitted
 				$dateDay = $_POST['day'];
 				$dateMonth = $_POST['month'];
-				$dateYear = $_POST['year'];
+				$dateYear = substr($_POST['year'], 2, 2);
 				
 				if($dateDay && $dateMonth && $dateYear){
 					// construct a date string

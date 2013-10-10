@@ -37,7 +37,7 @@ include_once(dirname(__FILE__)."/domain/OccupancyData.php");
 			if($_POST['submit'] == "Submit"){
 			    $endDay = $_POST['endday'];
 				$endMonth = $_POST['endmonth'];
-				$endYear = $_POST['endyear'];
+				$endYear = substr($_POST['endyear'],2,2);
 				
 				if($endDay && $endMonth && $endYear){
 					// construct a date string
@@ -48,7 +48,7 @@ include_once(dirname(__FILE__)."/domain/OccupancyData.php");
 				else $enddate = $_GET['enddate'];
 				$dateDay = $_POST['day'];
 				$dateMonth = $_POST['month'];
-				$dateYear = $_POST['year'];
+				$dateYear = substr($_POST['year'],2,2);
 				
 				if($dateDay && $dateMonth && $dateYear){
 					// construct a date string
@@ -128,7 +128,24 @@ function show_options(){
 	echo ("<form name=\"chooseDate\" method=\"post\">");
 	echo ("<p style=\"text-align:left\">");
 	echo ("(To view different data, choose a different<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start date ");
-	echo ("M: <select name=\"month\">");
+	
+	 echo ("Month: <select name=\"month\">");
+      $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
+	  echo("<option> </option>");
+      for ($i = 1 ; $i <= 9 ; $i ++){
+          if('0'.$i == substr($patient_DOB,3,2))
+             echo ("<option value='0".$i."' selected = 'yes'>".$months[$i-1]."</option>");
+          else
+             echo ("<option value='0".$i."'>".$months[$i-1]."</option>");
+      }
+      for ($i = 10 ; $i <= 12 ; $i ++){
+          if($i == substr($patient_DOB,3,2))
+             echo ("<option value=".$i." selected = 'yes' >".$months[$i-1]."</option>");
+          else
+             echo ("<option value=".$i.">".$months[$i-1]."</option>");
+      }
+    echo("</select>");
+	/*
 	echo ("<option value=''></option>");
 	for($i = 1; $i<=12; $i++){
 		echo ("<option value=\"");
@@ -138,9 +155,9 @@ function show_options(){
 			echo($i."\">".$i."</option>");
 		}
 	}
-	echo ("</select>");
+	echo ("</select>");*/
 	
-	echo (" D: <select name=\"day\">");
+	echo (" Day: <select name=\"day\">");
 	echo ("<option value=''></option>");
 	for($i = 1; $i<=31; $i++){
 		echo ("<option value=\"");
@@ -151,22 +168,28 @@ function show_options(){
 		}
 	}
 	echo ("</select>");
-	echo (" Y: <input type=\"text\" size=\"3\" maxLength=\"2\" name=\"year\"/>");
+	echo (" Year: <input type=\"text\" size=\"3\" maxLength=\"4\" name=\"year\"/>");
 	
 	echo ("<br>and/or end date ");
-	echo ("M: <select name=\"endmonth\">");
+	echo ("Month: <select name=\"endmonth\">");
 	echo ("<option value=''></option>");
-	for($i = 1; $i<=12; $i++){
-		echo ("<option value=\"");
-		if($i < 10){
-			echo ("0".$i."\">".$i."</option>");
-		}else{
-			echo($i."\">".$i."</option>");
-		}
-	}
-	echo ("</select>");
+      $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
+	  echo("<option> </option>");
+      for ($i = 1 ; $i <= 9 ; $i ++){
+          if('0'.$i == substr($patient_DOB,3,2))
+             echo ("<option value='0".$i."' selected = 'yes'>".$months[$i-1]."</option>");
+          else
+             echo ("<option value='0".$i."'>".$months[$i-1]."</option>");
+      }
+      for ($i = 10 ; $i <= 12 ; $i ++){
+          if($i == substr($patient_DOB,3,2))
+             echo ("<option value=".$i." selected = 'yes' >".$months[$i-1]."</option>");
+          else
+             echo ("<option value=".$i.">".$months[$i-1]."</option>");
+      }
+    echo("</select>");
 	
-	echo (" D: <select name=\"endday\">");
+	echo (" Day: <select name=\"endday\">");
 	echo ("<option value=''></option>");
 	for($i = 1; $i<=31; $i++){
 		echo ("<option value=\"");
@@ -177,7 +200,7 @@ function show_options(){
 		}
 	}
 	echo ("</select>");
-	echo (" Y: <input type=\"text\" size=\"3\" maxLength=\"2\" name=\"endyear\"/>");
+	echo (" Year: <input type=\"text\" size=\"3\" maxLength=\"4\" name=\"endyear\"/>");
 	
 	echo (" and hit ");
 	echo ("<input type=\"submit\" name=\"submit\" value=\"Submit\"/>".".)");

@@ -274,9 +274,9 @@ function date_select_display($now,$when) {
 	}
 	echo ("</select>");
 	
-	echo (" Year <input type=\"text\" size=\"3\" maxLength=\"2\" name=\"year\" ");
+	echo (" Year <input type=\"text\" size=\"3\" maxLength=\"4\" name=\"year\" ");
 	if ($when=="now")
-	    echo 'value="'.substr($now,0,2).'">';
+	    echo 'value="20'.substr($now,0,2).'">';
 	else echo '>';  
 }
 

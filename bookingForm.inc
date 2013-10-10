@@ -55,7 +55,15 @@ echo '(<span style="font-size:x-small;color:FF0000">*</span> denotes required fi
     ?>
     </select>
     
-    <input type="text" size = "1" maxLength = "2" name="patient_birth_year" value= "<?php echo(substr($patient_DOB,0,2))?>"/><br />
+    <?php
+    if($patient_DOB){ 
+    $tempYear = (substr($patient_DOB,0,2));
+    echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value= \"20$tempYear \"/><br />");
+    }
+    else
+    echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value= \"\"/><br />");
+    ?>
+    
 Additional patients:    <input type="text" name="patient_name1" value= "<?php echo($tempBooking->getith_patient(1))?>"/>
 <input type="text" name="patient_name2" value= "<?php echo($tempBooking->getith_patient(2))?>"/>
     

@@ -134,7 +134,7 @@ function process_form($id,$referralid)	{
             $patient_name[] = trim(str_replace("'","\'", htmlentities($_POST['patient_name1'])));
     if ($_POST['patient_name2']!="") 
             $patient_name[] = trim(str_replace("'","\'", htmlentities($_POST['patient_name2'])));
-    $patient_birthdate = $_POST['patient_birth_year'].'-'.
+    $patient_birthdate = substr($_POST['patient_birth_year'], 2,2).'-'. 
                              $_POST['patient_birth_month'].'-'.
                              $_POST['patient_birth_day'];
     $currentEntry = retrieve_dbPersons($first_name.$phone1);

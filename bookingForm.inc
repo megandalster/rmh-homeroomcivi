@@ -181,35 +181,56 @@ echo "<br />";
 		echo 'E-mail: <input type="text" size="30" name="email_1" value='.$guest->get_email().'><br />' ;
         $phone1 = $guest->get_phone1();
         $phone2 = $guest->get_phone2();
-        echo '<span style="font-size:x-small;color:FF0000">* </span>Phone: (<input type = "text" size = "2" maxLength = "3" name="phone1_area_1" value="'.substr($phone1,0,3).'">)';
-		echo '<input type = "text" size = "2" maxLength = "3" name="phone1_middle_1" value='.substr($phone1,3,3).'>-';
-        echo '<input type = "text" size = "3" maxLength = "4" name="phone1_end_1" value='.substr($phone1,6,4).'><br>';
-	//	echo 'Alternate Phone: (<input type = "text" size = "2" maxLength = "3" name="phone2_area_1" value="'.substr($phone2,0,3).'">)';
-	//	echo '<input type = "text" size = "2" maxLength = "3" name="phone2_middle_1" value='.substr($phone2,3,3).'>-';
-	//	echo '<input type = "text" size = "3" maxLength = "4" name="phone2_end_1" value='.substr($phone2,6,4).'>';
-
+		echo '<span style="font-size:x-small;color:FF0000">* </span>Phone: (<input type = "text" size = "2" maxLength = "3" name="phone1_area_1" value="'.substr($phone1,0,3).'" onkeyup="moveOnMax(this,\'input2\')">)';
+		echo '<input id="input2" type = "text" size = "2" maxLength = "3" name="phone1_middle_1" value="'.substr($phone1,3,3).'" onkeyup="moveOnMax(this,\'input3\')">-';
+		echo '<input id="input3" type = "text" size = "3" maxLength = "4" name="phone1_end_1" value="'.substr($phone1,6,4).'"><br>';
+// echo 'Alternate Phone: (<input type = "text" size = "2" maxLength = "3" name="phone2_area_1" value="'.substr($phone2,0,3).'">)';
+// echo '<input type = "text" size = "2" maxLength = "3" name="phone2_middle_1" value='.substr($phone2,3,3).'>-';
+// echo '<input type = "text" size = "3" maxLength = "4" name="phone2_end_1" value='.substr($phone2,6,4).'>';
         
     }
  ?> 
 </fieldset>
 
 <br>
- <b>Additional Guests </b>(Name / Relation to Patient):<br>
+ <b>Additional Guests </b>(Name / Relation to Patient / Gender):<br>
 <br />
 <?php
   $occupants = $tempBooking->get_occupants();
   for ($counter = 1; $counter <= 6; $counter++){
-      $occupant_name = substr($occupants[$counter-1],0,strpos($occupants[$counter-1],":"));
-      $occupant_relation = substr($occupants[$counter-1],strpos($occupants[$counter-1],":")+1);
+      $startingColonPosition = strpos($occupants[$counter-1],":");
+      $secondColonPosition = strpos($occupants[$counter-1],":", $startingColonPosition+1);
+      
+      $lengthOfRelation = $secondColonPosition - $startingColonPosition - 1;
+      $lengthOfGender = strlen($occupants[$counter-1]) - $secondColonPosition - 1;
+       
+      $occupant_name = substr($occupants[$counter-1],0,$startingColonPosition);
+      $occupant_relation = substr($occupants[$counter-1],$startingColonPosition+1,$lengthOfRelation);
+      $occupant_gender = substr($occupants[$counter-1], $secondColonPosition+1, $lengthOfGender);
+      
+      if($occupant_gender == 'Male')	$male_previouslySelected = 'yes';
+      else 								$male_previouslySelected = 'no';
+      
+      if($occupant_gender == 'Female')	$female_previouslySelected = 'yes';
+      else 								$female_previouslySelected = 'no';
+      
      echo
 		'<input type="text" size="25" name = "additional_guest_'.($counter).'" value = "'.$occupant_name.'"/>' . ' / '.
-		'<input type="text" size="15" name = "additional_guest_'.($counter).'_relation" value = "'.$occupant_relation.'"/>';
+		'<input type="text" size="15" name = "additional_guest_'.($counter).'_relation" value = "'.$occupant_relation.'"/>' . ' / ' .
+		'<select name= "additional_guest_'.($counter).'_gender"> 
+     	<option value = " "> </option>';
+     	if($occupant_gender == 'Male')	echo '<option value = "Male" selected>Male</option>';
+     	else 							echo '<option value = "Male">Male</option>';
+     	if($occupant_gender == 'Female')	echo '<option value = "Female" selected>Female</option>';
+     	else 								echo '<option value = "Female">Female</option>';
+     	echo '</select>';
 		if ($counter % 2 == 0) echo '<br />';
 		else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
   }
 ?>
 <br />
-<b>Automobile</b>: <br>  Make <input type="text" size="15" name="auto_make" value= "<?php echo($tempBooking->get_auto_make())?>"/>
+
+<b>Automobile </b>: <br>  Make <input type="text" size="15" name="auto_make" value= "<?php echo($tempBooking->get_auto_make())?>"/>
 	Model <input type="text" size="10" name="auto_model" value= "<?php echo($tempBooking->get_auto_model())?>"/>
 	Color <input type="text" size="10" name="auto_color" value= "<?php echo($tempBooking->get_auto_color())?>"/>
 	State <select name = "auto_state">
@@ -343,3 +364,10 @@ if ($id == "new") {
 ?>
 </div>
 </form>
+<script>
+function moveOnMax(field,nextFieldID){
+  if(field.value.length >= field.maxLength){
+    document.getElementById(nextFieldID).focus();
+  }
+}
+</script>

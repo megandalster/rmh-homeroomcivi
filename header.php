@@ -42,8 +42,8 @@ h1 {padding-left: 0px; padding-right:165px;}
 		$permission_array['roomLog.php']=1;
 		$permission_array['room.php']=1;
 		//additional pages social workers can view
-		$permission_array['bookingEdit.php']=2;
-		$permission_array['people.php']=2;
+		$permission_array['bookingEdit.php']=1;
+		$permission_array['people.php']=1;
 		//additional pages managers can view
 		$permission_array['log.php']=3;
 		$permission_array['data.php']=3;
@@ -73,7 +73,7 @@ h1 {padding-left: 0px; padding-right:165px;}
 		    echo(' | <strong>bookings:</strong> <a href="'.$path.'viewBookings.php?id=pending">pending,</a> <a href="'.$path.'searchBookings.php">search</a>' . 
 			                                    '<a href="bookingEdit.php?id=new'.'">, new</a>');
 		    echo('<br> <strong>guests:</strong> <a href="'.$path.'view.php">view,</a> <a href="'.$path.'searchPeople.php">search</a>');
-		    if ($_SESSION['access_level']>=2)
+		    if ($_SESSION['access_level']>=1)
 	    	    echo('<a href="personEdit.php?id='.'new'.'">, add</a> ');
 		}
 	    if($_SESSION['access_level']==3) { // managers 

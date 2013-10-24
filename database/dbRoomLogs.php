@@ -80,7 +80,7 @@ function build_room_log($date){
         }
     }
     mysql_close();
-	return true;
+	return retrieve_dbRoomLog($date);
 }
 
 /**

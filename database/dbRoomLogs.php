@@ -67,7 +67,7 @@ function build_room_log($date){
         $all_rooms = array();
         while ($result_row = mysql_fetch_assoc($result)) {
             $theBooking = build_booking($result_row);
-            $all_rooms[] = $theBooking->get_room_no();
+            $all_rooms[] = $theBooking->get_room_no().":".$theBooking->get_id();
         }
         $query = "INSERT INTO dbRoomLogs VALUES('".$date."','".implode(',',$all_rooms)."','','')";
         $result = mysql_query($query);

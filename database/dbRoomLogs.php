@@ -57,6 +57,7 @@ function build_room_log($date){
     // Connect to the database
     connect();
     // Check if the room log already exists
+    echo "HELLO WORLD";
     $query = "SELECT * FROM dbRoomLogs WHERE id = '".$date."'";
     $result = mysql_query($query);
     // If room log does not yet exist
@@ -65,11 +66,14 @@ function build_room_log($date){
         $query = "SELECT * FROM dbBookings WHERE room_no <> NULL AND '".$date."' >= date_in AND ('".$date."' < date_out OR date_out = NULL)";
         $result = mysql_query($query);
         $all_rooms = array();
-        while ($result_row = mysql_fetch_assoc($result)) {
-            $theBooking = build_booking($result_row);
-            $all_rooms[] = $theBooking->get_room_no().":".$theBooking->get_id();
+        if(mysql_num_rows($result) > 0 ){
+            while ($result_row = mysql_fetch_assoc($result)) {
+                $theBooking = build_booking($result_row);
+                echo "RESULT: ".var_dump($theBooking);
+                $all_rooms[] = $theBooking->get_room_no().":".$theBooking->get_id();
+            }
         }
-        $query = "INSERT INTO dbRoomLogs VALUES('".$date."','".implode(',',$all_rooms)."','','')";
+        $query = "INSERT INTO dbRoomLogs VALUES('".$date."','".implode(',',$all_rooms)."','','unpublished')";
         $result = mysql_query($query);
         // Check if succesful
         if(!$result) {

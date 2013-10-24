@@ -4,7 +4,7 @@
  * @author Oliver Radwan <oradwan@bowdoin.edu>
  */
 ?>
-</div>
+<div>
 	<div id="content">
 			<?PHP
 				include_once(dirname(__FILE__).'/database/dbPersons.php');

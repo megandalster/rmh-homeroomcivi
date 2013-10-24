@@ -17,7 +17,7 @@ class Person {
     private $id;               // id (unique key) = first_name . phone1
     private $last_name;        // last name - string
     private $first_name;       // first name - string
-    private $gender;			// "male" or "female" or ""
+    private $gender;			//gender of person - string
     private $address;              // address - string
     private $city;                 // city - string
     private $state;                // state - string
@@ -31,7 +31,7 @@ class Person {
     private $patient_relation;  // person's relation to patient; e.g., parent, uncle, etc.
     private $prior_bookings;    // array of booking ids; e.g., '11-02-08John2077291234'
     private $mgr_notes;         // manager's notes
-    private $county;               // county in Maine; otherwise blank new Person
+    private $county;               // county in Maine; otherwise blank
     private $type;             // array of 'manager', 'socialworker', 'guest', 'volunteer'
     private $password;         // password for database access: default = $id
 
@@ -76,8 +76,9 @@ class Person {
         return $this->last_name;
     }
     function get_gender() {
-        return $this->gender;
+    	return $this->gender;
     }
+    
     function get_address() {
         return $this->address;
     }
@@ -137,6 +138,9 @@ class Person {
     //setter functions
     function set_last_name($ln) {
         $this->last_name = $ln;
+    }
+    function set_gender($g) {
+    	$this->gender = $g;
     }
     function set_address($ad) {
         $this->address = $ad;

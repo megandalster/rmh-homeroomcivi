@@ -26,8 +26,8 @@ class Booking {
   	private $room_no;	    // id of the room; null if status == "pending" or "wait-list"
 	private $patient;       // array of up to 3 patients for whom this booking is made
   	private $occupants;     // array of up to 6 people staying in the room.  
-  	                        // Each entry has the form $first_name:$relationship_to_patient:$gender
-  	                        // e.g., array("John:father:Male", "Jean:mother:Female", "Teeny:sibling:Female")
+  	                        // Each entry has the form $first_name:$relationship_to_patient:$gender:$present
+  	                        // e.g., array("John:father:Male:Present", "Jean:mother:Female:", "Teeny:sibling:Female:Present")
   	private $auto;          // automobile make:model:color:state
 	private $linked_room;   // (optional) id of a room where other family members are staying
  	private $date_out;      // check-out date "yy-mm-dd" ; null if unknown
@@ -243,8 +243,8 @@ class Booking {
         }
         else return false;
     }
-    function add_occupant($name, $relationship, $gender) {
-    	$this->occupants[] = $name.":".$relationship .":".$gender;
+    function add_occupant($name, $relationship, $gender, $present) {
+    	$this->occupants[] = $name.":".$relationship.":".$gender.":".$present;
     	update_dbBookings($this);
     }
     function remove_occupant($name) {

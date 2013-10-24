@@ -51,7 +51,8 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
             $flag = $tempBooking->get_flag();
             $guestid = $tempBooking->get_guest_id();
             $guest = retrieve_dbPersons($guestid);
-            $patient_DOB = $guest->get_patient_birthdate(); 
+            $patient_DOB = $guest->get_patient_birthdate();
+            $patient_gender = $guest->get_gender(); 
 	  }
 	  else { // id is a guest id... create a new booking for that guest
 	       $status = "pending";
@@ -63,9 +64,14 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
            if (!$guest){
                 echo("The guest with id '".$id."' does not exist in the database. Please fill out a blank form below:");
                 $guest = new Person("","","","","","","","","","","","","","","","");
-                $patient_DOB = "";             
+                $patient_DOB = ""; 
+                $patient_gender = "";            
            }
-           else $patient_DOB = $guest->get_patient_birthdate();
+           else 
+           {
+           		$patient_DOB = $guest->get_patient_birthdate();
+           		$patient_gender = $guest->get_gender();
+           }
            $tempBooking = new Booking(date("y-m-d"), "Will Call", $guest->get_id(), $status, "", $guest->get_patient_name(), "", "",  
                "","","","","","00000000000", "", "", "", "","new");                            
 	  }
@@ -137,6 +143,7 @@ function process_form($id,$referralid)	{
     $patient_birthdate = substr($_POST['patient_birth_year'], 2,2).'-'. 
                              $_POST['patient_birth_month'].'-'.
                              $_POST['patient_birth_day'];
+    $patient_gender = $_POST['patient_gender'];
     $currentEntry = retrieve_dbPersons($first_name.$phone1);
     if(!$currentEntry) {
             $currentEntry = new Person($last_name, $first_name, "", $address, $city,$state, $zip, $phone1, $phone2, 
@@ -146,6 +153,7 @@ function process_form($id,$referralid)	{
             $currentEntry->set_patient_name($patient_name);
             $currentEntry->set_patient_birthdate($patient_birthdate);
             $currentEntry->set_patient_relation($patient_relation);
+            $currentEntry->set_gender($patient_gender);
             $currentEntry->add_type("guest");
     }
     insert_dbPersons($currentEntry);
@@ -211,7 +219,8 @@ function build_POST_booking($primaryGuest,$referralid) {
     }
     for($count = 1 ; $count <= 6 ; $count++){
         if($_POST['additional_guest_'.$count] != "")
-           $pendingBooking->add_occupant($_POST['additional_guest_'.$count], $_POST['additional_guest_'.$count.'_relation'], $_POST['additional_guest_' .$count.'_gender']);
+           $pendingBooking->add_occupant($_POST['additional_guest_'.$count], $_POST['additional_guest_'.$count.'_relation'],
+            							 $_POST['additional_guest_'.$count.'_gender'], $_POST['additional_guest_'.$count.'_present']);
     }
      
     

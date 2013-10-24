@@ -9,7 +9,7 @@
  ?>
   
          <b>Patient: </b> <?php echo($booking->getith_patient(0));?> <br/>
-         &nbsp;&nbsp;&nbsp;&nbsp;Birth date:  <?php echo date_string($current_guest->get_patient_birthdate())?> <br/>
+         Birth date:  <?php echo date_string($current_guest->get_patient_birthdate())?> <br/>
          <?php 
          if (sizeof($booking->get_patient())>1) {
              echo "Additional Patients: ". $booking->getith_patient(1);
@@ -18,6 +18,7 @@
              else echo "<br>";
          }
          ?>
+         Gender: <?php echo($current_guest->get_gender());?> <br/>
          Hospital:  <?php echo($booking->get_hospital());?> <br/>
          Department: <?php echo($booking->get_department());?> <br/>
        
@@ -41,16 +42,17 @@
     <br/>
     <?php  echo '&nbsp;&nbsp;&nbsp;&nbsp;Relationship to Patient: '.$current_guest->get_patient_relation().'<br />' ;
     ?>
-    Additional Guests: 
+    <br/>
+    Additional Guests: <br/>
     <?php $occupants = $booking->get_occupants();
     for($i=0 ; $i< sizeof($occupants) ; $i++){
         echo($occupants[$i]);
         if ($i < sizeof($occupants)-1)
-            echo ', ';
+            echo '<br/>';
         else echo '<br>';
      }?>
         
-     <br/><br>
+     <br>
      Automobile: <?php echo $booking->get_auto_make()." ".$booking->get_auto_model()." ".
                              $booking->get_auto_color()." ".$booking->get_auto_state() ;
 		?>

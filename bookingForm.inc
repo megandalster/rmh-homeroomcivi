@@ -55,16 +55,22 @@ echo '(<span style="font-size:x-small;color:FF0000">*</span> denotes required fi
     ?>
     </select>
     
-    <?php
-    if($patient_DOB){ 
-    $tempYear = (substr($patient_DOB,0,2));
-    echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value= \"20$tempYear \"/><br />");
-    }
-    else
-    echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value= \"\"/><br />");
-    ?>
-    
-Additional patients:    <input type="text" name="patient_name1" value= "<?php echo($tempBooking->getith_patient(1))?>"/>
+    <input type="text" size = "1" maxLength = "2" name="patient_birth_year" value= "<?php echo(substr($patient_DOB,0,2))?>"/><br />
+
+ Gender:  
+<?php  
+		echo '<select name = "patient_gender"> <option value = " "> </option>';
+		 
+		 if($patient_gender == "Male") echo '<option value = "Male" selected>Male</option>';
+		 else 									echo '<option value = "Male">Male</option>';
+		 
+		 if($patient_gender == "Female") echo '<option value = "Female" selected>Female</option>';
+		 else 									echo '<option value = "Female">Female</option>';
+		 echo '</select>';
+?>
+<br />
+
+ Additional patients:    <input type="text" name="patient_name1" value= "<?php echo($tempBooking->getith_patient(1))?>"/>
 <input type="text" name="patient_name2" value= "<?php echo($tempBooking->getith_patient(2))?>"/>
     
 					
@@ -170,9 +176,10 @@ echo "<br />";
     else {
         echo '<span style="font-size:x-small;color:FF0000">* </span>First Name: <input type="text" size="30" name="first_name_1" value='.$guest->get_first_name().'><br />' ;
         echo '<span style="font-size:x-small;color:FF0000">* </span>Last Name: <input type="text" size="30" name="last_name_1" value='.$guest->get_last_name().'><br />' ;
+        //echo '<select name= .$guest->get_first_name().';
         echo '<span style="font-size:x-small;color:FF0000">* </span>Relationship to Patient: <input type="text" size = "30" name = "patient_relation_1" value='.$guest->get_patient_relation().'><br />' ;
         echo 'Home Address: <input type="text" size="40" name = "address_1" value='.$guest->get_address().'><br />' ;
-        echo 'City: <input type = "text" size = "15" name = "city_1" value='.$guest->get_city().'><br />' ;
+        echo 'City (or Country if outside US): <input type = "text" size = "15" name = "city_1" value='.$guest->get_city().'><br />' ;
         echo 'State: <select name = "state_1">';
     $states = array(" ", "AL","AK","AR","AZ","CA","CO","CT","DC","DE","FL","GA","HI","IA","ID","IL","IN",
 				"KS","KY","LA","MA","MD","ME","MI","MN","MO", "MS","MT","NC","ND","NE","NH","NJ","NM",
@@ -206,34 +213,43 @@ echo "<br />";
 <?php
   $occupants = $tempBooking->get_occupants();
   for ($counter = 1; $counter <= 6; $counter++){
+  	  //Before getting information from the occupants array we need to sanitize it
+  	  //So we find if it has the appropiate number of colons (:) and act accordingly (add them if needed, move on if not)
+  	  $numberOfColons = substr_count($occupants[$counter-1], ":");
+  	  if($numberOfColons < 3 )
+  	  {
+  	  	for($i = $numberOfColons; $i < 3; $i++)
+  	  	{
+  	  		$occupants[$counter-1] .= ":";
+  	  	}
+  	  }
+  	
       $startingColonPosition = strpos($occupants[$counter-1],":");
       $secondColonPosition = strpos($occupants[$counter-1],":", $startingColonPosition+1);
+      $thirdColonPosition = strpos($occupants[$counter-1],":", $secondColonPosition+1);
       
       $lengthOfRelation = $secondColonPosition - $startingColonPosition - 1;
-      $lengthOfGender = strlen($occupants[$counter-1]) - $secondColonPosition - 1;
+      $lengthOfGender = $thirdColonPosition - $secondColonPosition - 1;
+      $lengthOfPresent = strlen($occupants[$counter-1]) - thirdColonPosition - 1;
        
       $occupant_name = substr($occupants[$counter-1],0,$startingColonPosition);
       $occupant_relation = substr($occupants[$counter-1],$startingColonPosition+1,$lengthOfRelation);
       $occupant_gender = substr($occupants[$counter-1], $secondColonPosition+1, $lengthOfGender);
-      
-      if($occupant_gender == 'Male')	$male_previouslySelected = 'yes';
-      else 								$male_previouslySelected = 'no';
-      
-      if($occupant_gender == 'Female')	$female_previouslySelected = 'yes';
-      else 								$female_previouslySelected = 'no';
+      $occupant_present = substr($occupants[$counter-1], $thirdColonPosition+1, $lengthOfPresent);
       
      echo
 		'<input type="text" size="25" name = "additional_guest_'.($counter).'" value = "'.$occupant_name.'"/>' . ' / '.
 		'<input type="text" size="15" name = "additional_guest_'.($counter).'_relation" value = "'.$occupant_relation.'"/>' . ' / ' .
 		'<select name= "additional_guest_'.($counter).'_gender"> 
-     	<option value = " "> </option>';
+     	<option value = "---"> </option>';
      	if($occupant_gender == 'Male')	echo '<option value = "Male" selected>Male</option>';
      	else 							echo '<option value = "Male">Male</option>';
      	if($occupant_gender == 'Female')	echo '<option value = "Female" selected>Female</option>';
      	else 								echo '<option value = "Female">Female</option>';
      	echo '</select>';
-		if ($counter % 2 == 0) echo '<br />';
-		else echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+     	if($occupant_present == "Present") echo '<input type="checkbox" name="additional_guest_'.($counter).'_present" value="Present" checked>Present<br>';
+     	else 							   echo '<input type="checkbox" name="additional_guest_'.($counter).'_present" value="Present">Present<br>';
+		echo '<br />';
   }
 ?>
 <br />

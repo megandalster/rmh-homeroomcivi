@@ -46,8 +46,19 @@ else {
     else echo '</td><td>'.$person->get_first_name().'</td></tr>';
  ?>
 		<tr><td><span style='font-size:x-small;color:FF0000'>* </span>Last Name:</td><td> <input type="text" name="last_name" tabindex=2 value="<?PHP echo($person->get_last_name())?>"></td></tr>
+		<tr><td>Gender:</td><td> <select name="gender" tabindex=2>
+		<option value=""></option>
+		<?php
+		if($person->get_gender() == "Male")	echo("<option value='Male' selected>Male</option>");
+		else 								echo("<option value='Male'>Male</option>");
+		if($person->get_gender() == "Female")	echo("<option value='Female' selected>Female</option>");
+		else 								echo("<option value='Female'>Female</option>");
+		?>
+		</select> </td></tr>
+		
+		
 		<tr><td><span style='font-size:x-small;color:FF0000'>* </span>Address:</td><td> <input type="text" name="address" tabindex=3 value="<?PHP echo($person->get_address())?>"></td></tr>
-		<tr><td><span style='font-size:x-small;color:FF0000'>* </span>City:</td><td> <input type="text" name="city" tabindex=4 value="<?PHP echo($person->get_city())?>"></td></tr>
+		<tr><td><span style='font-size:x-small;color:FF0000'>* </span>City (Or Country if outside US):</td><td> <input type="text" name="city" tabindex=4 value="<?PHP echo($person->get_city())?>"></td></tr>
 		<tr><td>State, Zip:</td>
 		<td><select name="state" tabindex=5>
 		<?PHP

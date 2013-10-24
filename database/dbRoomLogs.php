@@ -57,7 +57,7 @@ function build_room_log($date){
     // Connect to the database
     connect();
     // Check if the room log already exists
-    $query = "SELECT * FROM dbRoomLog WHERE date = '".$date."'";
+    $query = "SELECT * FROM dbRoomLog WHERE id = '".$date."'";
     $result = mysql_query($query);
     // If room log does not yet exist
     if(mysql_num_rows($result) == 0){

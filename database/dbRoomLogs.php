@@ -53,6 +53,36 @@ function create_dbRoomLogs(){
 	return true;
 }
 
+function build_room_log($date){
+    // Connect to the database
+    connect();
+    // Check if the room log already exists
+    $query = "SELECT * FROM dbRoomLogs WHERE id = '".$date."'";
+    $result = mysql_query($query);
+    // If room log does not yet exist
+    if(mysql_num_rows($result) == 0){
+        // Retrieve all Bookings during $date that have a room
+        $query = "SELECT * FROM dbBookings WHERE room_no <> NULL AND '".$date."' >= date_in AND ('".$date."' < date_out OR date_out = NULL)";
+        $result = mysql_query($query);
+        $all_rooms = array();
+        while ($result_row = mysql_fetch_assoc($result)) {
+            $theBooking = build_booking($result_row);
+            $all_rooms[] = $theBooking->get_room_no();
+        }
+        $query = "INSERT INTO dbRoomLogs VALUES('".$date."','".implode(',',$all_rooms)."','','')";
+        $result = mysql_query($query);
+        // Check if succesful
+        if(!$result) {
+            //print the error
+            echo mysql_error()." Could not insert into dbRoomLogs :".$date."\n";
+            mysql_close();
+            return false;
+        }
+    }
+    mysql_close();
+	return true;
+}
+
 /**
  * Function to insert a new RoomLog into the database
  */

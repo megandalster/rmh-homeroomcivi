@@ -69,11 +69,7 @@ function build_room_log($date){
             $theBooking = build_booking($result_row);
             $all_rooms[] = $theBooking->get_room_no();
         }
-        $query = "INSERT INTO dbRoomLogs VALUES('".
-            $date."','".
-            implode(',',$all_rooms)."','"
-            ."','".
-            ."')";
+        $query = "INSERT INTO dbRoomLogs VALUES('".$date."','".implode(',',$all_rooms)."','','')";
         $result = mysql_query($query);
         // Check if succesful
         if(!$result) {

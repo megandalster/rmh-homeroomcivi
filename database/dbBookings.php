@@ -155,6 +155,29 @@ function retrieve_active_dbBookings ($date) {
 	return $theBookings;
 }
 /**
+ * Retrieves an array of room_no:booking_id pairs for all bookings that were "active" on a past $date.
+ * An active booking on a past date is 
+ *      "closed" and date_in <= $date and date_out > $date, or
+ *      "active" and date_in <= $date
+ * In either case, these bookings all have room numbers.  There should not be more than 21 of these.
+ * @param $date 
+ * @return array of active room_no:booking_id pairs on $date ordered by room_no
+ */
+function retrieve_past_active_dbBookings ($date) {
+	connect();
+	$query = "SELECT * FROM dbBookings WHERE (status = 'active' AND date_in <= '".$date. "')" .
+    		 			" OR (status = 'closed' AND date_in <= '".$date. "' AND date_out > '" . $date . "')" . 
+             			" ORDER BY room_no";
+    $result = mysql_query ($query);
+    $theBookings = array();
+	while ($result_row = mysql_fetch_assoc($result)) {
+	    $theBooking = build_booking($result_row);
+	    $theBookings[$theBooking->get_room_no()] = $theBooking->get_id();
+	}
+	mysql_close();
+	return $theBookings;
+}
+/**
  * Retrieves an array of all Bookings that are "pending" on a certain $date.
  * A booking is pending on a certain date if 
  *      status = "pending" and date_in <= $date

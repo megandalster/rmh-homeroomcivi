@@ -55,45 +55,33 @@ for($i = 0; $i < 3; $i++){
 		}else if($roomStatus == "off-line"){
 			$statusColor = "blue";
 		}
-		echo ("<b style=\"float:right; color:".$statusColor."\">");
-		echo ($roomStatus."</b>");
-		// echo <br /> is for a new line
-		echo ("<br />");
-
-		// Print the capacity of the room
-		// echo ("<b>Capacity: </b>".$currentRoom->get_capacity());
-		// echo ("<br />");
-		
+		if($date == date("y-m-d"))  {
+			echo ("<b style=\"float:right; color:".$statusColor."\">");
+			echo ($roomStatus."</b>");
+			echo ("<br />");
+		}
 		// Print the beds in the room
 		echo("<b>Beds: </b>".$currentRoom->get_beds());
 		// Print if there is a private bath
 		if($currentRoom->get_bath() == "y"){
 			echo (" bath");
 		}
-		if($currentRoom->get_room_notes() != "")
+		if($date == date("y-m-d") && $currentRoom->get_room_notes() != "")
 		    echo "<br /><b>Notes: </b><br>".$currentRoom->get_room_notes();
 		// Display info from the booking, such as the guests and loaners
-		if($roomStatus=="booked" || $roomStatus=="reserved"){
-		    if (!$currentBooking)
-		        echo "<br />(Booking details not available)<br />".$currentBookingID."<br />";
-			// Print the guests
-			else {
-			    echo ("<br /><b>Guests:</b><br />");
-			    print_booking_info($currentBooking);
-			}
-			
+		if (!$currentBooking)
+		    echo "<br /><br /><br />";
+		else {
+			echo ("<br /><b>Guests:</b><br />");
+			print_booking_info($currentBooking);
 		}
 		// End this table item. Finish the link if it was started
-		if($date == date("y-m-d"))
-			echo ("</a></td>");
-		else
-			echo ("</td>");
+		echo ("</td>");
 	}
 	echo ("</tr>");
 }
 if($date == date("y-m-d")) {
-    echo "<tr><td colspan=7 id=\"nav\" onclick=\"window.location.href='room.php?room=day'\"><b>Day Use Bookings: </b>";
-    
+    echo "<tr><td colspan=7 id=\"nav\" onclick=\"window.location.href='room.php?room=day'\"><b>Day Use Bookings: </b>"; 
 	echo ("</a></td>");
 }
 else {

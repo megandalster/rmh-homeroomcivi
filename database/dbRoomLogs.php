@@ -18,6 +18,8 @@
 // We must include the dbRoom.php so that we
 // also add rooms
 include_once(dirname(__FILE__).'/../domain/RoomLog.php');
+include_once(dirname(__FILE__).'/../domain/Booking.php');
+include_once(dirname(__FILE__).'/../domain/Room.php');
 include_once(dirname(__FILE__).'/dbRooms.php');
 include_once(dirname(__FILE__).'/dbBookings.php');
 include_once(dirname(__FILE__).'/dbinfo.php');
@@ -57,23 +59,25 @@ function build_room_log($date){
     // Connect to the database
     connect();
     // Check if the room log already exists
-    echo "HELLO WORLD";
     $query = "SELECT * FROM dbRoomLogs WHERE id = '".$date."'";
     $result = mysql_query($query);
     // If room log does not yet exist
     if(mysql_num_rows($result) == 0){
-        // Retrieve all Bookings during $date that have a room
-        $query = "SELECT * FROM dbBookings WHERE room_no <> NULL AND '".$date."' >= date_in AND ('".$date."' < date_out OR date_out = NULL)";
+    	// rebuild the past room log using functions in the RoomLog class
+    	$new_roomLog = new RoomLog($date);
+    	echo "build_room_log date=".$date;
+        insert_dbRoomLog($new_roomLog);
+        /*
+        $query = "SELECT * FROM dbBookings WHERE room_no <> '' AND '".$date."' >= date_in AND ('".$date."' < date_out OR date_out = '')";
         $result = mysql_query($query);
+        var_dump($result);
         $all_rooms = array();
-        if(mysql_num_rows($result) > 0 ){
-            while ($result_row = mysql_fetch_assoc($result)) {
-                $theBooking = build_booking($result_row);
-                echo "RESULT: ".var_dump($theBooking);
-                $all_rooms[] = $theBooking->get_room_no().":".$theBooking->get_id();
-            }
+        while ($result_row = mysql_fetch_assoc($result)) {
+            $theBooking = build_booking($result_row);
+            $all_rooms[] = $theBooking->get_room_no().":".$theBooking->get_id();
         }
-        $query = "INSERT INTO dbRoomLogs VALUES('".$date."','".implode(',',$all_rooms)."','','unpublished')";
+        
+        $query = "INSERT INTO dbRoomLogs VALUES('".$date."','".implode(',',$all_rooms)."','','')";
         $result = mysql_query($query);
         // Check if succesful
         if(!$result) {
@@ -82,6 +86,7 @@ function build_room_log($date){
             mysql_close();
             return false;
         }
+        */
     }
     mysql_close();
 	return retrieve_dbRoomLog($date);

@@ -67,7 +67,10 @@ function retrieve_all_rooms($date) {
     $room_data = array ("125y2T"=>2,"126yQ/3T"=>4,"151y2T"=>2,"152y2T"=>2,"214nQ"=>2,"215n2T"=>2,"218yQ"=>2,
 	"223nQ"=>2,"224n3T"=>3,"231y2T"=>2,"232n2T"=>2,"233n3T"=>3,"243yQ/3T"=>4,"244nQ"=>2,
 	"245nQ"=>2,"250y2T"=>2,"251y2T"=>2,"252yQ"=>2,"253yQ"=>2,"254y2T"=>2,"255y2T"=>2);
-    $active_bookings = retrieve_active_dbBookings($date);
+    if ($date >= date('y-m-d'))
+    	$active_bookings = retrieve_active_dbBookings($date);
+    else 
+    	$active_bookings = retrieve_past_active_dbBookings($date);
     $my_rooms = array();
 	foreach ($room_data as $room => $capacity){
 	    $room_no = substr($room, 0, 3);

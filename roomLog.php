@@ -33,7 +33,6 @@ include_once(dirname(__FILE__)."/domain/Person.php");
 // Get the date of the room log
 // Filter the date for any nasty characters that will break SQL or html
 $date = trim(str_replace('\\\'','',htmlentities(str_replace('&','and',$_GET['date']))));
-
 // Check if a custom date was submitted
 if($_POST['submit'] == "Submit"){
 	// make sure each entry was submitted
@@ -48,63 +47,47 @@ if($_POST['submit'] == "Submit"){
 		$date = trim(str_replace('\\\'','',htmlentities(str_replace('&','and',$date))));
 	}
 }
-if($date == "today"){
+// Check if today's room log has been saved before: if not, save it.
+if(!retrieve_dbRoomLog($roomLogID) && $roomLogID == date("y-m-d")){
+	if (insert_dbRoomLog($roomLog))
+	echo ("<h3 style=\"text-align:center\">Today's room log has been saved.</h3>");
+	else echo ("<h3 style=\"text-align:center;color:red\">Today's room log has not been saved.</h3>");
+}
+if($date == "today" || $date==date('y-m-d')){
 	// Today's date, so pull up today's roomLog.
 	$roomLogID = date("y-m-d");
 	$roomLog = new RoomLog($roomLogID);
 	// change the $date variable to an actual date
 	$date = $roomLogID;
-}else if (strtotime($date) < strtotime(date("y-m-d"))){
-	// Search for the room log in the database
-	//old
-	//$roomLog = retrieve_dbRoomLog($date);
-	$roomLog = build_room_log($date);
-}else{
-	// future date, create a new room log
-	$roomLogID = $date;
-	$roomLog = new RoomLog($roomLogID);
-}
+	echo '<form name="chooseBooking" action="viewBookings.php" target="_blank">
+		<p style="text-align: center"><b>&nbsp;&nbsp;&nbsp;&nbsp;Pending
+		Bookings: </b> <select name="bookingid">';
 
-// Check if the save button was hit
-if($_POST['submit'] == "Save Roomlog"){
-	// Try to update the roomlog
-	if(update_dbRoomLog($roomLog)){
-		echo("<h3 style=\"text-align:center\">Room Log Updated Successfully</h3>");
+	// Grab a list of all pending bookings
+	$pendingBookings = retrieve_all_pending_dbBookings(date("y-m-d"));
+	if($pendingBookings){
+		// Make each booking id a menu item
+		foreach($pendingBookings as $booking){
+			echo ("<option value='" . $booking->get_id() . "'>");
+			$person = retrieve_dbPersons(substr($booking->get_id(), 8));
+			if ($person) {
+				echo ($person->get_first_name() . " " . $person->get_last_name() . " (" .date_string(substr($booking->get_id(),0,8)).")");
+			}
+			else echo($booking->get_id());
+			echo ("</option>");
 	}
-	else if(insert_dbRoomLog($roomLog)){
-		echo("<h3 style=\"text-align:center\">Room Log Saved Successfully</h3>");
-	}
-}
-
-// Check if today's room log has been saved before: if not, save it.
-if(!retrieve_dbRoomLog($roomLogID) &&
-$roomLogID == date("y-m-d")){
-	if (insert_dbRoomLog($roomLog))
-	echo ("<h3 style=\"text-align:center\">Today's room log has been saved.</h3>");
-	else echo ("<h3 style=\"text-align:center;color:red\">Today's room log has not been saved.</h3>");
-}
-?>
-<form name="chooseBooking" action="viewBookings.php" target="_blank">
-<p style="text-align: center"><b>&nbsp;&nbsp;&nbsp;&nbsp;Pending
-Bookings: </b> <select name="bookingid">
-<?php
-// Grab a list of all pending bookings
-$pendingBookings = retrieve_all_pending_dbBookings(date("y-m-d"));
-if($pendingBookings){
-	// Make each booking id a menu item
-	foreach($pendingBookings as $booking){
-		echo ("<option value='" . $booking->get_id() . "'>");
-		$person = retrieve_dbPersons(substr($booking->get_id(), 8));
-		if ($person) {
-			echo ($person->get_first_name() . " " . $person->get_last_name() . " (" .date_string(substr($booking->get_id(),0,8)).")");
-		}
-		else echo($booking->get_id());
-		echo ("</option>");
-	}
-
 	// Then add a button
 	echo ("<input type=\"submit\" value=\"View Booking\"/>");
-
+}	
+}else if ($date < date("y-m-d")){
+	// Search for the room log in the database
+	// old $roomLog = retrieve_dbRoomLog($date);
+	$roomLog = build_room_log($date);
+	$roomLogID = $date;
+}else{
+	// future date, create a new room log like today's
+	$roomLogID = $date;
+	$roomLog = new RoomLog($roomLogID);
 }
 ?>
 </select>
@@ -121,7 +104,7 @@ $formattedDate = date("l, F j, Y",$currentDate);
 //if room log doesn't exist, build it
 //then if that fails, we say we can't find it
 if(!$roomLog instanceof RoomLog) {
-	build_room_log($date);
+	$roomLog = build_room_log($date);
 }
 // Only display the room log if one exists
 if($roomLog instanceof RoomLog){
@@ -143,18 +126,8 @@ else{
 	// Display a form that let's you choose another date
 	display_navigation($date);
 }
-?> <!-- Display a list of pending bookings --> <!-- Have an option for saving the room log -->
-<?php
-// This only appears if the room log is valid
-if(($roomLog instanceof RoomLog) &&
-("today" == $_GET['date'] || date("y-m-d") == $_GET['date'])){
-	echo ("<br />"); // new line break
-	// create a new form which just has the submit button
-	echo ("<form method=\"POST\" style=\"text-align:center\">");
-	echo ("<input type=\"submit\" value=\"Save Room Log\" name=\"submit\"/>");
-	echo ("</form>");
-}
-?> <!--  the footer goes here now --></div>
+?>
+<!--  the footer goes here now --></div>
 <?php include_once("footer.inc");?></div>
 </body>
 </html>

@@ -16,9 +16,12 @@ function validate_form($id){
 	if($_POST['type']==null && $_SESSION['access_level']>=1) $errors[] = 'Select a role';
 	if ($_POST['type']!=null && $_SESSION['access_level']<=1 && in_array('manager',$_POST['type']))
 		$errors[] = "Sorry, you can't promote yourself to manager.";
-    if ($id=='new')
-	    if(!valid_phone($_POST['phone1'])) $errors[] = 'Enter a valid primary phone number (10 digits: ### ### ####)';
-	if($_POST['phone2']!=null && !valid_phone($_POST['phone2'])) $errors[] = 'Enter a valid secondary phone number (10 digits: ### ### ####)';
+ 
+    $phone1 = $_POST['phone1_area_1'].$_POST['phone1_middle_1'].$_POST['phone1_end_1'];
+    $phone2 = $_POST['phone2_area_2'].$_POST['phone2_middle_2'].$_POST['phone2_end_2'];
+    
+	    if(!valid_phone($phone1)) $errors[] = 'Enter a valid primary phone number (10 digits: ### ### ####)';
+	if($phone2!=null && !valid_phone($phone2)) $errors[] = 'Enter a valid secondary phone number (10 digits: ### ### ####)';
 	if(!valid_email($_POST['email']) && $_POST['email']!=null) $errors[] = "Please enter a valid email";
 	
 //	if ($_POST['patient_name0']==null) $errors[] = 'Enter a patient name';

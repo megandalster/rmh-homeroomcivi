@@ -46,19 +46,8 @@ else {
     else echo '</td><td>'.$person->get_first_name().'</td></tr>';
  ?>
 		<tr><td><span style='font-size:x-small;color:FF0000'>* </span>Last Name:</td><td> <input type="text" name="last_name" tabindex=2 value="<?PHP echo($person->get_last_name())?>"></td></tr>
-		<tr><td>Gender:</td><td> <select name="gender" tabindex=2>
-		<option value=""></option>
-		<?php
-		if($person->get_gender() == "Male")	echo("<option value='Male' selected>Male</option>");
-		else 								echo("<option value='Male'>Male</option>");
-		if($person->get_gender() == "Female")	echo("<option value='Female' selected>Female</option>");
-		else 								echo("<option value='Female'>Female</option>");
-		?>
-		</select> </td></tr>
-		
-		
 		<tr><td><span style='font-size:x-small;color:FF0000'>* </span>Address:</td><td> <input type="text" name="address" tabindex=3 value="<?PHP echo($person->get_address())?>"></td></tr>
-		<tr><td><span style='font-size:x-small;color:FF0000'>* </span>City (Or Country if outside US):</td><td> <input type="text" name="city" tabindex=4 value="<?PHP echo($person->get_city())?>"></td></tr>
+		<tr><td><span style='font-size:x-small;color:FF0000'>* </span>City:</td><td> <input type="text" name="city" tabindex=4 value="<?PHP echo($person->get_city())?>"></td></tr>
 		<tr><td>State, Zip:</td>
 		<td><select name="state" tabindex=5>
 		<?PHP
@@ -85,12 +74,28 @@ else {
 		?>
 		<?php 
   echo "<tr><td><span style='font-size:x-small;color:FF0000'>* </span>Primary Phone:";
-    if ($id=='new')
-        echo '</td><td> 
-        	<input type="text" name="phone1" MAXLENGTH=12 tabindex=7 value="'.$person->get_phone1().'"></td></tr>';
-    else echo ":</td><td>(".substr($person->get_phone1(),0,3).")".substr($person->get_phone1(),3,3)."-".substr($person->get_phone1(),6).'</td></tr>';
+   // if ($id=='new')
+     //   echo '</td><td> 
+       // 	<input type="text" name="phone1" MAXLENGTH=12 tabindex=7 value="'.$person->get_phone1().'"></td></tr>';
+    //else echo ":</td><td>(".substr($person->get_phone1(),0,3).")".substr($person->get_phone1(),3,3)."-".substr($person->get_phone1(),6).'</td></tr>';
  ?> 	
-		<tr><td>Alternate Phone:</td><td><input type="text" name="phone2" MAXLENGTH=12 tabindex=8 value="<?PHP echo($person->get_phone2())?>"></td></tr>
+         
+        <?php
+        echo '</td><td>';
+        $phone1 = $person->get_phone1();
+        $phone2 = $person->get_phone2();
+        
+		echo '<span style="font-size:x-small;color:FF0000"> </span> (<input type = "text" size = "2" maxLength = "3" name="phone1_area_1" value="'.substr($phone1,0,3).'" onkeyup="moveOnMax(this,\'input2\')">)';
+		echo '<input id="input2" type = "text" size = "2" maxLength = "3" name="phone1_middle_1" value="'.substr($phone1,3,3).'" onkeyup="moveOnMax(this,\'input3\')">-';
+		echo '<input id="input3" type = "text" size = "3" maxLength = "4" name="phone1_end_1" value="'.substr($phone1,6,4).'"></td></tr>';
+		
+ echo "<tr><td>";
+ echo 'Alternate Phone:</td><td> (<input type = "text" size = "2" maxLength = "3" name="phone2_area_1" value="'.substr($phone2,0,3).'" onkeyup="moveOnMax(this,\'input4\')">)';
+ echo '<input id="input4" type = "text" size = "2" maxLength = "3" name="phone2_middle_1" value="'.substr($phone2,3,3).'" onkeyup="moveOnMax(this,\'input5\')">-';
+ echo '<input id ="input5" type = "text" size = "3" maxLength = "4" name="phone2_end_1" value='.substr($phone2,6,4).'>';
+ echo '</td></tr>'
+?>
+		
 		<tr><td>Email:</td><td><input type="text" name="email" tabindex=9 value="<?PHP echo($person->get_email())?>"></td></tr>
        
 	</table>
@@ -152,3 +157,10 @@ else {
 		}
 		?>
 </form>
+<script>
+function moveOnMax(field,nextFieldID){
+  if(field.value.length >= field.maxLength){
+    document.getElementById(nextFieldID).focus();
+  }
+}
+</script>

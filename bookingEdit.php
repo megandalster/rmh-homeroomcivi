@@ -104,7 +104,6 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
 	</div>
 </body>
 </html>
-
 <?php
 // sanitize the primary guest and patient data and reconcile with dbPersons
 function process_form($id,$referralid)	{

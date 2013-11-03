@@ -58,7 +58,11 @@ echo '(<span style="font-size:x-small;color:FF0000">*</span> denotes required fi
     <?php
         if($patient_DOB){
             $tempYear = (substr($patient_DOB,0,2));
-            echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value= \"20$tempYear \"/><br />");
+            if($tempYear < 40)
+           		echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value= \"20$tempYear \"/><br />");
+            else
+            	echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value= \"19$tempYear \"/><br />");
+            
         }
         else echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value= \"\"/><br />");
     ?>

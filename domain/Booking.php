@@ -216,6 +216,7 @@ class Booking {
             return $this;
         }
         else return false;
+        	  
     }
     
     /*

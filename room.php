@@ -128,7 +128,7 @@ function update_room_info($currentRoom){
 		
 		if($newBooking){
 			// Checkout the booking if the option was selected
-			if($newBooking == "Check out"){
+			if($newBooking == "Checkout"){
 			    $currentRoom->set_status("dirty");
 				//retrieve the booking and check it out
 				$newBooking = retrieve_dbBookings($currentRoom->get_booking_id());
@@ -148,7 +148,7 @@ function update_room_info($currentRoom){
 				    }
 				}
 			}
-		    else if($newBooking == "Check in"){  // booking a previously reserved room
+		    else if($newBooking == "Checkin"){  // booking a previously reserved room
 				// retrieve the booking and update it
 				$newBooking = retrieve_dbBookings($currentRoom->get_booking_id());
 				

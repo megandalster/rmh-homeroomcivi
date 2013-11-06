@@ -20,6 +20,7 @@ include_once(dirname(__FILE__)."/domain/Person.php");
 <?php 
 // get the room id and filter it
 $roomID = sanitize($_GET['room']);
+$date = $_GET['date']
 ?>
 <!-- html header stuff -->
 <html>
@@ -48,7 +49,7 @@ $roomID = sanitize($_GET['room']);
 	$currentRoom = retrieve_dbRooms($roomID);
 	// Check if the room is valid and if any data was recently change
 	// by the user
-	if($currentRoom instanceof Room){
+	  if($currentRoom instanceof Room){
 		// Check if the room has been modified
 		if($_POST['submit'] == "Submit"){
 			//update the room
@@ -60,11 +61,10 @@ $roomID = sanitize($_GET['room']);
 		}
 		// Display the room's information
 		include_once("roomView.inc");
-	}
+	  }
 	}
 	?>
-		<!-- include the footer at the end -->
-		
+		<!-- include the footer at the end -->	
 	</div>
 	<?php include_once("footer.inc");?>	
 </div>
@@ -133,7 +133,7 @@ function update_room_info($currentRoom){
 				//retrieve the booking and check it out
 				$newBooking = retrieve_dbBookings($currentRoom->get_booking_id());
 				if ($newBooking) {
-				    $newBooking->check_out(date("y-m-d"));			
+				    $newBooking->check_out($date);			
 				    // Add a log to show that the family was checked out
 				    // Get the info of the primary guest
 				    $pGuest = retrieve_dbPersons($newBooking->get_guest_id());
@@ -156,13 +156,12 @@ function update_room_info($currentRoom){
 				// Get the info of the primary guest
 				$pGuest = retrieve_dbPersons($newBooking->get_guest_id());
 				$guestName = $pGuest->get_first_name()." ".$pGuest->get_last_name();
-				echo "we are here";
 				// Create the log message
 				$message = "<a href='viewPerson.php?id=".$_SESSION['_id']."'>".$name."</a>".
 				" has checked in <a href='viewPerson.php?id=".$pGuests[0]."'>".
 				$guestName."</a>";
 				// quick fix: don't add a log if the reservation was not successful
-				if ($newBooking->book_room($currentRoom->get_room_no(),date('y-m-d'))){
+				if ($newBooking->book_room($currentRoom->get_room_no(),$date)){
 					add_log_entry($message);
 				}
 				else add_log_entry("<a href='viewPerson.php?id=".$_SESSION['_id']."'>".$name."</a>".
@@ -183,7 +182,7 @@ function update_room_info($currentRoom){
 				" has reserved <a href='viewPerson.php?id=".$pGuests[0]."'>".
 				$guestName."</a>";
 				// quick fix: don't add a log if the reservation was not successful
-				if ($newBooking->reserve_room($currentRoom->get_room_no(),date('y-m-d'))){
+				if ($newBooking->reserve_room($currentRoom->get_room_no(),$date)){
 					add_log_entry($message);
 				}
 				else add_log_entry("<a href='viewPerson.php?id=".$_SESSION['_id']."'>".$name."</a>".

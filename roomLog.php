@@ -33,6 +33,7 @@ include_once(dirname(__FILE__)."/domain/Person.php");
 // Get the date of the room log
 // Filter the date for any nasty characters that will break SQL or html
 $date = trim(str_replace('\\\'','',htmlentities(str_replace('&','and',$_GET['date']))));
+if ($date=="today") $date = date('y-m-d');
 // Check if a custom date was submitted
 if($_POST['submit'] == "Submit"){
 	// make sure each entry was submitted
@@ -53,7 +54,7 @@ if(!retrieve_dbRoomLog($roomLogID) && $roomLogID == date("y-m-d")){
 	echo ("<h3 style=\"text-align:center\">Today's room log has been saved.</h3>");
 	else echo ("<h3 style=\"text-align:center;color:red\">Today's room log has not been saved.</h3>");
 }
-if($date == "today" || $date==date('y-m-d')){
+if($date==date('y-m-d')){
 	// Today's date, so pull up today's roomLog.
 	$roomLogID = date("y-m-d");
 	$roomLog = new RoomLog($roomLogID);

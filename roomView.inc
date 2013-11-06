@@ -14,8 +14,10 @@
 $bookingID = $currentRoom->get_booking_id();
 $booking = retrieve_dbBookings($bookingID);
 
-echo ("<h3>Viewing Room ");
-echo ($roomID."</h3>");
+echo ("<h3>Viewing Status of Room ".$roomID);
+if ($date != date('y-m-d'))
+	echo " on ". date ("l M j, Y", mktime(0,0,0,substr($date,3,2),substr($date,6,2),substr($date,0,2))) . ".</h3>";
+else echo " (today).</h3>";
 // echo '<p> (Please change only the information you want to update.)</p>';
 if ($booking)
     echo '<p>To view more guest or patient information for this booking, please go <a href="viewBookings.php?id=update&bookingid='.$bookingID.'">here.</a></p>'		
@@ -102,7 +104,7 @@ if($currentRoom->get_status()=="reserved"|| $currentRoom->get_status()=="booked"
 	// First option is to leave the room alone
 	echo ("<option selected='yes'>Leave Room Unassigned</option>");
 	// Grab a list of all pending bookings
-	$pendingBookings = retrieve_all_pending_dbBookings(date("y-m-d"));
+	$pendingBookings = retrieve_all_pending_dbBookings($date);
 	if($pendingBookings){
 		// Make each booking id a menu item
 		foreach($pendingBookings as $booking){

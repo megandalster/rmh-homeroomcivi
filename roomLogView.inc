@@ -31,8 +31,8 @@ for($i = 0; $i < 3; $i++){
 		// This begins a "link" where the link is actually
 		// the entire box. It only does this if date is
 		// today or later
-		if(strcmp($date,date("y-m-d")) >=0){
-			echo ("<td id=\"nav\" onclick=\"window.location.href='room.php?room=".$currentRoomID."'\"");
+		if(strcmp($date,date("y-m-d")) >=0 || !$currentBooking || $currentBooking && $currentBooking->get_status()=="active"){
+			echo ("<td id=\"nav\" onclick=\"window.location.href='room.php?room=".$currentRoomID."&date=".$date."'\"");
 			echo ("style=\"vertical-align:text-top\">");
 		}else{
 			echo ("<td style=\"vertical-align:text-top\">");

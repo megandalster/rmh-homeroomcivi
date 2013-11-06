@@ -34,6 +34,14 @@ class OccupancyData {
 	private $ageguestcounts; // array of age=>totalguests for each patient birth year, over all dates in the range
 	private $hospitalcounts; // array of hospital-department=>count pairs for each hospital-department, over all dates in the range
 	private $hospitalguestcounts; //array of hospital-department=>totalguests for each hospital-department, over all dates in the range
+	private $closedcounts_room; //array of room=>closed count pairs
+	private $closedcounts_zip; //array of zip=>closed count pairs
+	private $closedcounts_age; //array of age=>closed count pairs
+	private $closedcounts_hospital; //array of hospital=>closed count pairs
+	private $closedcounts_room_d; //array of room=>closed count pairs
+	private $closedcounts_zip_d; //array of zip=>closed count pairs
+	private $closedcounts_age_d; //array of age=>closed count pairs
+	private $closedcounts_hospital_d; //array of hospital=>closed count pairs
 	/*
 	 * Construct occupancy data for a particular date range
 	 * 
@@ -61,10 +69,14 @@ class OccupancyData {
 		    $this->bookingcounts[substr($aRoom,0,3)] = 0;
 		    $this->roomcounts[substr($aRoom,0,3)] = 0;
 		    $this->guestcounts[substr($aRoom,0,3)] = 0;
+		    $this->closedcounts_room[substr($aRoom,0,3)] = 0;
+		    $this->closedcounts_room_d[substr($aRoom,0,3)] = 0;
 		}
 		$this->bookingcounts["unknown"] = 0;
 		$this->roomcounts["unknown"] = 0;
 		$this->guestcounts["unknown"] = 0;
+		$this->closedcounts_room["unknown"] = 0;
+		$this->closedcounts_room_d["unknown"] = 0;
 		
 		foreach ($allBookings as $aBooking){
 			if ($aBooking->get_date_in() < $this->date) 
@@ -84,8 +96,24 @@ class OccupancyData {
 				$this->bookingcounts[$bRoom] += 1;
 				$this->roomcounts[$bRoom] += $days;
 				$this->guestcounts[$bRoom] += $bGuests;
+
+				//closed counts
+				if($aBooking->get_status() == "closed") {
+					$this->closedcounts_room[$bRoom] += 1;
+				} else if ($aBooking->get_status() == "closed-deceased") {
+					$this->closedcounts_room[$bRoom] += 1;
+					$this->closedcounts_room_d[$bRoom] += 1;
+				}
 			}
 		}
+		foreach ($allRooms as $aRoom) {
+			if($this->closedcounts_room_d[substr($aRoom,0,3)] > 0) {
+				$this->closedcounts_room[substr($aRoom,0,3)] = 
+					$this->closedcounts_room[substr($aRoom,0,3)] + 
+					"(" + $this->closedcounts_room_d[substr($aRoom,0,3)] + ")";
+			}
+		}
+
 	}
     // compute address counts
 	function compute_addresscounts($allBookings) {
@@ -194,6 +222,18 @@ class OccupancyData {
 	}
 	function get_hospital_guest_counts() {
 		return $this->hospitalguestcounts;
+	}
+	function get_closed_counts_by_room() {
+		return $this->closedcounts_room;
+	}
+	function get_closed_counts_by_zip() {
+		return $this->closedcounts_zip;
+	}
+	function get_closed_counts_by_age() {
+		return $this->closedcounts_age;
+	}
+	function get_closed_counts_by_hospital() {
+		return $this->closedcounts_hospital;
 	}
 }
 

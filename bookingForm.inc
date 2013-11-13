@@ -89,7 +89,7 @@ $hospitals = array("", "Maine Medical Center", "Mercy Hospital", "Specialist", "
 			foreach($hospitals as $hospital){
 				echo ("<option value='");
 				echo ($hospital. "' ");
-				if ($tempBooking->get_hospital() == $hospital || $id == "new" && $hospital == "")
+				if ($tempBooking->get_hospital() == $hospital || $id == "new" && $hospital == "" || $last_hospital == $hospital)
 				    echo "SELECTED";
 				echo (">".$hospital."</option>");
 			}
@@ -102,7 +102,7 @@ $departments = array("", "BBCH", "CARDIOLOGY", "MCCP", "NEEDS", "NICU/CCN", "PRE
 			foreach($departments as $department){
 				echo ("<option value='");
 				echo ($department. "' ");
-				if ($tempBooking->get_department() == $department)
+				if ($tempBooking->get_department() == $department  || $last_department == $department)
 				    echo "SELECTED";
 				echo (">".$department."</option>");
 			}
@@ -263,9 +263,24 @@ echo "<br />";
 ?>
 <br />
 
-<b>Automobile </b>: <br>  Make <input type="text" size="15" name="auto_make" value= "<?php echo($tempBooking->get_auto_make())?>"/>
-	Model <input type="text" size="10" name="auto_model" value= "<?php echo($tempBooking->get_auto_model())?>"/>
-	Color <input type="text" size="10" name="auto_color" value= "<?php echo($tempBooking->get_auto_color())?>"/>
+<b>Automobile </b>: <br>  Make <input type="text" size="15" name="auto_make" value= "
+<?php 
+if($tempBooking->get_auto_make() != "") echo($tempBooking->get_auto_make()); 
+else if($last_auto_make != "") echo($last_auto_make); 
+?>
+"/>
+	Model <input type="text" size="10" name="auto_model" value= "
+<?php 
+if($tempBooking->get_auto_model() != "") echo($tempBooking->get_auto_model());
+else if($last_auto_model != "") echo($last_auto_model); 
+?>
+"/>
+	Color <input type="text" size="10" name="auto_color" value= "
+<?php 
+if($tempBooking->get_auto_color() != "") echo($tempBooking->get_auto_color());
+else if($last_auto_color != "") echo($last_auto_color);
+?>
+"/>
 	State <select name = "auto_state">
   <?php
   $states = array(" ", "AL","AK","AR","AZ","CA","CO","CT","DC","DE","FL","GA","HI","IA","ID","IL","IN",
@@ -273,7 +288,7 @@ echo "<br />";
 				"NV","NY","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VA","VT","WA","WI",
 				"WV","WY");
 			foreach ($states as $st) {
-			    if ($st == $tempBooking->get_auto_state())
+			    if ($st == $tempBooking->get_auto_state() || $last_auto_state == $st)
 			       echo "<option selected='yes'>" . $st ."</option>";
 			    else
 				   echo "<option>" . $st ."</option>";

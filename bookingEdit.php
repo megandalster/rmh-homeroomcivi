@@ -29,6 +29,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
 	$user = retrieve_dbPersons($_SESSION['_id']);
 	$user_name = $user->get_first_name()." ".$user->get_last_name();
 	$user_phone = $user->get_phone1();
+
 	$id = $_GET['id'];
 	if (!$_GET['referralid']) $referralid = date("y-m-d").$id; // new booking from an old one
 	else $referralid = $_GET['referralid'];
@@ -71,6 +72,20 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
            {
            		$patient_DOB = $guest->get_patient_birthdate();
            		$patient_gender = $guest->get_gender();
+                $allBookingIDs = $guest->get_prior_bookings();
+                if($allBookingIDs != "") {
+                    //Get last Booking ID
+                    $lastBookingID = end(explode(",", $allBookingIDs));
+                    $lastBooking = retrieve_dbBookings($lastBookingID);
+                    if($lastBooking != "") {
+                        $last_hospital = $lastBooking->get_hospital();
+                        $last_department = $lastBooking->get_department();
+                        $last_auto_make =   $lastBooking->get_auto_make();
+                        $last_auto_model=   $lastBooking->get_auto_model();
+                        $last_auto_color=   $lastBooking->get_auto_color();
+                        $last_auto_state=   $lastBooking->get_auto_state();
+                    }
+                }
            }
            $tempBooking = new Booking(date("y-m-d"), "Will Call", $guest->get_id(), $status, "", $guest->get_patient_name(), "", "",  
                "","","","","","00000000000", "", "", "", "","new");                            

@@ -34,14 +34,10 @@ class OccupancyData {
 	private $ageguestcounts; // array of age=>totalguests for each patient birth year, over all dates in the range
 	private $hospitalcounts; // array of hospital-department=>count pairs for each hospital-department, over all dates in the range
 	private $hospitalguestcounts; //array of hospital-department=>totalguests for each hospital-department, over all dates in the range
-	private $closedcounts_room; //array of room=>closed count pairs
-	private $closedcounts_zip; //array of zip=>closed count pairs
-	private $closedcounts_age; //array of age=>closed count pairs
-	private $closedcounts_hospital; //array of hospital=>closed count pairs
-	private $closedcounts_room_d; //array of room=>closed count pairs
-	private $closedcounts_zip_d; //array of zip=>closed count pairs
-	private $closedcounts_age_d; //array of age=>closed count pairs
-	private $closedcounts_hospital_d; //array of hospital=>closed count pairs
+	private $bookingcounts_d; //array of room=>closed count pairs
+	private $addresscounts_d; //array of zip=>closed count pairs
+	private $agecounts_d; //array of age=>closed count pairs
+	private $hospitalcounts_d; //array of hospital=>closed count pairs
 	/*
 	 * Construct occupancy data for a particular date range
 	 * 
@@ -69,14 +65,12 @@ class OccupancyData {
 		    $this->bookingcounts[substr($aRoom,0,3)] = 0;
 		    $this->roomcounts[substr($aRoom,0,3)] = 0;
 		    $this->guestcounts[substr($aRoom,0,3)] = 0;
-		    $this->closedcounts_room[substr($aRoom,0,3)] = 0;
-		    $this->closedcounts_room_d[substr($aRoom,0,3)] = 0;
+		    $this->bookingcounts_d[substr($aRoom,0,3)] = 0;
 		}
 		$this->bookingcounts["unknown"] = 0;
 		$this->roomcounts["unknown"] = 0;
 		$this->guestcounts["unknown"] = 0;
-		$this->closedcounts_room["unknown"] = 0;
-		$this->closedcounts_room_d["unknown"] = 0;
+		$this->bookingcounts_d["unknown"] = 0;
 		
 		foreach ($allBookings as $aBooking){
 			if ($aBooking->get_date_in() < $this->date) 
@@ -91,27 +85,28 @@ class OccupancyData {
 			    $this->bookingcounts["unknown"] += 1;
 			    $this->roomcounts["unknown"] += $days;
 			    $this->guestcounts["unknown"] += $bGuests;
+			    if($aBooking->get_status() == "closed-deceased") {
+			    	$this->bookingcounts_d["unknown"] += 1;
+			    }
 			}
 			else {
 				$this->bookingcounts[$bRoom] += 1;
 				$this->roomcounts[$bRoom] += $days;
 				$this->guestcounts[$bRoom] += $bGuests;
-
-				//closed counts
-				if($aBooking->get_status() == "closed") {
-					$this->closedcounts_room[$bRoom] += 1;
-				} else if ($aBooking->get_status() == "closed-deceased") {
-					$this->closedcounts_room[$bRoom] += 1;
-					$this->closedcounts_room_d[$bRoom] += 1;
+				if($aBooking->get_status() == "closed-deceased") {
+					$this->bookingcounts_d[$bRoom] += 1;
 				}
 			}
 		}
 		foreach ($allRooms as $aRoom) {
-			if($this->closedcounts_room_d[substr($aRoom,0,3)] > 0) {
-				$this->closedcounts_room[substr($aRoom,0,3)] = 
-					$this->closedcounts_room[substr($aRoom,0,3)] + 
-					"(" + $this->closedcounts_room_d[substr($aRoom,0,3)] + ")";
+			if($this->bookingcounts_d[substr($aRoom,0,3)] > 0) {
+				$this->bookingcounts[substr($aRoom,0,3)] = 
+					"{$this->bookingcounts[substr($aRoom,0,3)]} ({$this->bookingcounts_d[substr($aRoom,0,3)]})";
 			}
+		}
+		if($this->bookingcounts_d["unknown"] > 0) {
+			$this->bookingcounts["unknown"] = 
+				"{$this->bookingcounts["unknown"]} ({$this->bookingcounts_d["unknown"]})";
 		}
 
 	}
@@ -119,8 +114,11 @@ class OccupancyData {
 	function compute_addresscounts($allBookings) {
 		$this->addresscounts = array();
 		$this->addressguestcounts = array();
+		$this->addresscounts_d = array();
 		$this->addresscounts["unknown"]=0;
 		$this->addressguestcounts["unknown"]=0;
+		$this->addresscounts_d["unkown"] = 0;
+		$this->addresses = array();
 		foreach ($allBookings as $aBooking){
 			$g = $aBooking->get_guest_id();
 			$bGuest = retrieve_dbPersons($g);
@@ -133,6 +131,7 @@ class OccupancyData {
 			        $bZip = $bGuest->get_state(); 
 			}
 			else $bZip = "unknown";   
+			array_push($this->addresses, $bZip);
 			if (!$this->addresscounts[$bZip]) {
 			    $this->addresscounts[$bZip] = 1;
 			    $this->addressguestcounts[$bZip] = $bGuests;
@@ -141,14 +140,30 @@ class OccupancyData {
 				$this->addresscounts[$bZip] += 1;
 				$this->addressguestcounts[$bZip] += $bGuests;
 			}
+			if($aBooking->get_status() == "closed-deceased") {
+				$this->addresscounts_d[$bZip] += 1;
+			}
+		}
+		foreach ($addresses as $bZip) {
+			if($this->addresscounts_d[$bZip > 0]) {
+				$this->addresscounts = 
+					"{$this->addresscounts[$bZip]} ({$this->addresscounts_d[$bZip]})";
+			}
+		}
+		if($this->addresscounts_d["unknown"] > 0) {
+			$this->addresscounts["unknown"] = 
+				"{$this->addresscounts["unknown"]} ({$this->addresscounts_d["unknown"]})";
 		}
 	}
 	// compute age counts
 	function compute_agecounts($allBookings) {
 		$this->agecounts = array();
 		$this->agecounts["unknown"]=0;
+		$this->agecounts_d = array();
+		$this->agecounts_d["unknown"]=0;
 		$this->ageguestcounts = array();
 		$this->ageguestcounts["unknown"]=0;
+		$this->ages = array();
 		foreach ($allBookings as $aBooking){
 			$g = $aBooking->get_guest_id();
 			$bGuest = retrieve_dbPersons($g);
@@ -159,6 +174,7 @@ class OccupancyData {
 			    $bAge = ($bDate2 - $bDate1)/31536000; // years = 365*60*60*24 seconds (approximately)
 			}
 			else $bAge = "unknown";
+			array_push($this->ages, $bAge);
 			if (!$this->agecounts[$bAge]) {
 			    $this->agecounts[$bAge] = 1;
 			    $this->ageguestcounts[$bAge] = $bGuests;
@@ -167,18 +183,35 @@ class OccupancyData {
 				$this->agecounts[$bAge] += 1;
 				$this->ageguestcounts[$bAge] += $bGuests;
 			}
+			if($aBooking->get_status() == "closed-deceased") {
+				$this->agecounts_d[$bAge] += 1;
+			}
+		}
+		foreach ($ages as $bAge) {
+			if($this->agecounts_d[$bAge] > 0) {
+				$this->agecounts[$bAge] =
+					"{$this->agecounts[$bAge]} ({$this->agecounts_d[$bAge]})";
+			}
+		}
+		if($this->agecounts_d["unknown"] > 0) {
+			$this->agecounts["unkown"] = 
+				"{$this->agecounts["unknown"]} ({$this->agecounts_d["unknown"]})";
 		}
 	}
 	// compute hospital counts
 	function compute_hospitalcounts($allBookings) {
 		$this->hospitalcounts = array();
 		$this->hospitalcounts["other"] = 0;
+		$this->hospitalcounts_d = array();
+		$this->hospitalcounts_d["unknown"]=0;
 		$this->hospitalguestcounts = array();
 		$this->hospitalguestcounts["other"] = 0;
+		$this->hospitals = array();
 		foreach ($allBookings as $aBooking){
 			$bHospital = $aBooking->get_hospital();
 			$bHospital .= "/".$aBooking->get_department();
 			$bGuests = sizeof($aBooking->get_occupants());
+			array_push($this->hospitals, $bHospital);
 			if (!$bHospital || $bHospital=="/") {
 			    $this->hospitalcounts["unknown"] += 1;
 			    $this->hospitalguestcounts["unknown"] += $bGuests;
@@ -187,6 +220,19 @@ class OccupancyData {
 				$this->hospitalcounts[$bHospital] += 1;
 				$this->hospitalguestcounts[$bHospital] += $bGuests;
 			}
+			if($aBooking->get_status() == "closed-deceased") {
+				$this->agecounts_d[$bHospital] += 1;
+			}
+		}
+		foreach ($hospitals as $bHospital) {
+			if($this->hospitalcounts_d["$bHospital"] > 0) {
+				$this->hospitalcounts["$bHospital"] = 
+					"{$this->hospitalcounts["$bHospital"]} ({$this->hospitalcounts_d["$bHospital"]})";
+			}
+		}
+		if($this->hospitalcounts_d["unknown"] > 0) {
+			$this->hospitalcounts["unknown"] =
+				"{$this->hospitalcounts["unknown"]} ({$this->hospitalcounts_d["unknown"]})";
 		}
 	}
 	function get_date() {
@@ -222,18 +268,6 @@ class OccupancyData {
 	}
 	function get_hospital_guest_counts() {
 		return $this->hospitalguestcounts;
-	}
-	function get_closed_counts_by_room() {
-		return $this->closedcounts_room;
-	}
-	function get_closed_counts_by_zip() {
-		return $this->closedcounts_zip;
-	}
-	function get_closed_counts_by_age() {
-		return $this->closedcounts_age;
-	}
-	function get_closed_counts_by_hospital() {
-		return $this->closedcounts_hospital;
 	}
 }
 

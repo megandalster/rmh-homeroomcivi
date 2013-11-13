@@ -93,6 +93,7 @@ if($currentRoom->get_status()=="reserved"|| $currentRoom->get_status()=="booked"
 	    echo ("Checkout/Checkin Family?: <select name='assign_booking'>");
 	    echo ("<option selected='yes'>No</option>");
 	    echo ("<option>Checkout</option>");
+	    echo ("<option>Checkout (Deceased)</option>");
 	    echo ("<option>Checkin</option>");
 	    echo ("</select><br />");
 	    echo ("<br />");

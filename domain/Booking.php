@@ -222,12 +222,16 @@ class Booking {
     /*
      *  check a client out of the room and update the client's record.
      */
-    function check_out ($date){
+    function check_out ($date, $deceased){
         $r = retrieve_dbRooms($this->room_no);
         $p = retrieve_dbPersons(substr($this->id,8));
         if ($r && $r->unbook_me($this->id)) {  
             if ($this->status=="active") { // changing back from active to closed
-                $this->status = "closed";
+                if($deceased) {
+                    $this->status = "closed-deceased";
+                } else {
+                   $this->status = "closed";
+            }
                 $this->date_out = $date;  
             }
             else {                        // changing back from reserved to pending
@@ -236,7 +240,7 @@ class Booking {
                 $this->room_no = "";
             }
             update_dbBookings($this);
-            if ($p && $this->status=="closed") {
+            if ($p && ($this->status=="closed" || $this->status=="closed-deceased")) {
             	$p->add_prior_booking($this->id);
             	update_dbPersons($p);
             }

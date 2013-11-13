@@ -93,35 +93,31 @@ function export_data ($od, $date, $enddate, $formattedDate, $formattedEndDate) {
 				
 	$bc = $od->get_booking_counts();
 	$gc = $od->get_guest_counts();
-	$cc = $od->get_closed_counts_by_room();
-	$myArray = array("Room #", "Bookings", "Nights", "Guests", "Closings");
+	$myArray = array("Room #", "Bookings", "Nights", "Guests");
 	fputcsv($handle, $myArray);
 	foreach ($od->get_room_counts() as $room_no=>$count){
-		$myArray = array($room_no, $bc[$room_no], $count, $gc[$room_no], $cc[$room_no]);
+		$myArray = array($room_no, $bc[$room_no], $count, $gc[$room_no]);
 		fputcsv($handle, $myArray);
 	}
 	$gc = $od->get_address_guest_counts();
-	$cc = $od->get_closed_counts_by_zip();
-	$myArray = array("State/County", "Bookings", "Guests", "Closings");
+	$myArray = array("State/County", "Bookings", "Guests");
 	fputcsv($handle, $myArray);
 	foreach ($od->get_address_counts() as $zip=>$count){
-		$myArray = array($zip, $count, $gc[$zip], $cc[$zip]);
+		$myArray = array($zip, $count, $gc[$zip]);
 		fputcsv($handle, $myArray);
 	}
 	$gc = $od->get_age_guest_counts();
-	$cc = $od->get_closed_counts_by_age();
-	$myArray = array("Patient Age", "Bookings", "Guests", "Closings");
+	$myArray = array("Patient Age", "Bookings", "Guests");
 	fputcsv($handle, $myArray);
 	foreach ($od->get_age_counts() as $age=>$count){
-		$myArray = array($age, $count, $gc[$age], $cc[$age]);
+		$myArray = array($age, $count, $gc[$age]);
 		fputcsv($handle, $myArray);
 	}
 	$gc = $od->get_hospital_guest_counts();
-	$cc = $od->get_closed_counts_by_hospital();
 	$myArray = array("Hospital", "Bookings", "Guests");
 	fputcsv($handle, $myArray);
 	foreach ($od->get_hospital_counts() as $hospital=>$count){
-		$myArray = array($hospital, $count, $gc[$hospital], $cc[$hospital]);
+		$myArray = array($hospital, $count, $gc[$hospital]);
 		fputcsv($handle, $myArray);
 	}
 	fclose($handle);

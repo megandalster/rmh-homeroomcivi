@@ -20,7 +20,7 @@ include_once(dirname(__FILE__)."/domain/Person.php");
 <?php 
 // get the room id and filter it
 $roomID = sanitize($_GET['room']);
-$date = $_GET['date']
+$date = $_GET['date'];
 ?>
 <!-- html header stuff -->
 <html>
@@ -49,7 +49,7 @@ $date = $_GET['date']
 	$currentRoom = retrieve_dbRooms($roomID);
 	// Check if the room is valid and if any data was recently change
 	// by the user
-	  if($currentRoom instanceof Room){
+	if($currentRoom instanceof Room){
 		// Check if the room has been modified
 		if($_POST['submit'] == "Submit"){
 			//update the room
@@ -61,10 +61,11 @@ $date = $_GET['date']
 		}
 		// Display the room's information
 		include_once("roomView.inc");
-	  }
+	}
 	}
 	?>
-		<!-- include the footer at the end -->	
+		<!-- include the footer at the end -->
+		
 	</div>
 	<?php include_once("footer.inc");?>	
 </div>
@@ -133,7 +134,7 @@ function update_room_info($currentRoom){
 				//retrieve the booking and check it out
 				$newBooking = retrieve_dbBookings($currentRoom->get_booking_id());
 				if ($newBooking) {
-				    $newBooking->check_out($date);			
+				    $newBooking->check_out(date($date), false);		//not deceased		
 				    // Add a log to show that the family was checked out
 				    // Get the info of the primary guest
 				    $pGuest = retrieve_dbPersons($newBooking->get_guest_id());
@@ -146,6 +147,25 @@ function update_room_info($currentRoom){
 				        $guestName."</a>";
 				        add_log_entry($message);
 				    }
+				}
+			}
+			else if($newBooking == "Checkout (Deceased)") { //closing a booking for deceased patient
+			    $currentRoom->set_status("dirty");
+				//retrieve the booking and check it out
+				$newBooking = retrieve_dbBookings($currentRoom->get_booking_id());
+				if ($newBooking) {
+				    $newBooking->check_out(date("y-m-d"), true);	//deceased		
+				   	// Add a log to show that the family was checked out
+				   	// Get the info of the primary guest
+				   	$pGuest = retrieve_dbPersons($newBooking->get_guest_id());
+				   	if ($pGuest) {
+				        $guestName = $pGuest->get_first_name()." ".$pGuest->get_last_name();
+				        // Create the log message
+				        $message = "<a href='viewPerson.php?id=".$_SESSION['_id']."'>".$name."</a>".
+						" has checked out (deceased) <a href='viewPerson.php?id=".$pGuests[0]."'>".
+				        $guestName."</a>";
+				   	    add_log_entry($message);
+				   	}
 				}
 			}
 		    else if($newBooking == "Checkin"){  // booking a previously reserved room

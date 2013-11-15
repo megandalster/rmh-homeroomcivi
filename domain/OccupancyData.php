@@ -108,7 +108,6 @@ class OccupancyData {
 			$this->bookingcounts["unknown"] = 
 				"{$this->bookingcounts["unknown"]} ({$this->bookingcounts_d["unknown"]})";
 		}
-
 	}
     // compute address counts
 	function compute_addresscounts($allBookings) {
@@ -118,7 +117,7 @@ class OccupancyData {
 		$this->addresscounts["unknown"]=0;
 		$this->addressguestcounts["unknown"]=0;
 		$this->addresscounts_d["unkown"] = 0;
-		$this->addresses = array();
+		$addresses = array();
 		foreach ($allBookings as $aBooking){
 			$g = $aBooking->get_guest_id();
 			$bGuest = retrieve_dbPersons($g);
@@ -131,22 +130,23 @@ class OccupancyData {
 			        $bZip = $bGuest->get_state(); 
 			}
 			else $bZip = "unknown";   
-			array_push($this->addresses, $bZip);
+			if (!in_array($bZip, $addresses))
+				array_push($addresses, $bZip);
 			if (!$this->addresscounts[$bZip]) {
 			    $this->addresscounts[$bZip] = 1;
-			    $this->addressguestcounts[$bZip] = $bGuests;
+			    $this->addresscounts_d[$bZip] = 0;
+			    $this->addressguestcounts[$bZip] = $bGuests;   
 			}
 			else {
 				$this->addresscounts[$bZip] += 1;
-				$this->addressguestcounts[$bZip] += $bGuests;
+				$this->addressguestcounts[$bZip] += $bGuests;	
 			}
-			if($aBooking->get_status() == "closed-deceased") {
-				$this->addresscounts_d[$bZip] += 1;
-			}
+			if($aBooking->get_status() == "closed-deceased") 
+					$this->addresscounts_d[$bZip] += 1;
 		}
 		foreach ($addresses as $bZip) {
-			if($this->addresscounts_d[$bZip > 0]) {
-				$this->addresscounts = 
+			if($this->addresscounts_d[$bZip] > 0) {
+				$this->addresscounts[$bZip] = 
 					"{$this->addresscounts[$bZip]} ({$this->addresscounts_d[$bZip]})";
 			}
 		}
@@ -163,7 +163,7 @@ class OccupancyData {
 		$this->agecounts_d["unknown"]=0;
 		$this->ageguestcounts = array();
 		$this->ageguestcounts["unknown"]=0;
-		$this->ages = array();
+		$ages = array();
 		foreach ($allBookings as $aBooking){
 			$g = $aBooking->get_guest_id();
 			$bGuest = retrieve_dbPersons($g);
@@ -174,18 +174,20 @@ class OccupancyData {
 			    $bAge = ($bDate2 - $bDate1)/31536000; // years = 365*60*60*24 seconds (approximately)
 			}
 			else $bAge = "unknown";
-			array_push($this->ages, $bAge);
+			if (!in_array($bAge, $ages))
+				array_push($ages, $bAge); //$this->ages[] = $bAge;
 			if (!$this->agecounts[$bAge]) {
 			    $this->agecounts[$bAge] = 1;
+			    $this->agecounts_d[$bAge] = 0;
 			    $this->ageguestcounts[$bAge] = $bGuests;
 			}
 			else {
 				$this->agecounts[$bAge] += 1;
 				$this->ageguestcounts[$bAge] += $bGuests;
 			}
-			if($aBooking->get_status() == "closed-deceased") {
+			if($aBooking->get_status() == "closed-deceased") 
 				$this->agecounts_d[$bAge] += 1;
-			}
+			
 		}
 		foreach ($ages as $bAge) {
 			if($this->agecounts_d[$bAge] > 0) {
@@ -203,31 +205,34 @@ class OccupancyData {
 		$this->hospitalcounts = array();
 		$this->hospitalcounts["other"] = 0;
 		$this->hospitalcounts_d = array();
-		$this->hospitalcounts_d["unknown"]=0;
+		$this->hospitalcounts_d["other"]=0;
 		$this->hospitalguestcounts = array();
 		$this->hospitalguestcounts["other"] = 0;
-		$this->hospitals = array();
+		$hospitals = array();
 		foreach ($allBookings as $aBooking){
 			$bHospital = $aBooking->get_hospital();
-			$bHospital .= "/".$aBooking->get_department();
+			if ($bHospital=="")
+				$bHospital="other";
+			else $bHospital .= "/".$aBooking->get_department();
 			$bGuests = sizeof($aBooking->get_occupants());
-			array_push($this->hospitals, $bHospital);
-			if (!$bHospital || $bHospital=="/") {
-			    $this->hospitalcounts["unknown"] += 1;
-			    $this->hospitalguestcounts["unknown"] += $bGuests;
+			if (!in_array($bHospital, $hospitals))
+				array_push($hospitals, $bHospital);
+			if (!$this->hospitalcounts[$bHospital]) {
+				$this->hospitalcounts[$bHospital] = 1;
+			    $this->hospitalcounts_d[$bHospital] = 0;
+			    $this->hospitalguestcounts[$bHospital] = $bGuests; 
 			}
 			else {
 				$this->hospitalcounts[$bHospital] += 1;
 				$this->hospitalguestcounts[$bHospital] += $bGuests;
 			}
-			if($aBooking->get_status() == "closed-deceased") {
-				$this->agecounts_d[$bHospital] += 1;
-			}
+			if($aBooking->get_status() == "closed-deceased") 
+				$this->hospitalcounts_d[$bHospital] += 1;
 		}
 		foreach ($hospitals as $bHospital) {
-			if($this->hospitalcounts_d["$bHospital"] > 0) {
-				$this->hospitalcounts["$bHospital"] = 
-					"{$this->hospitalcounts["$bHospital"]} ({$this->hospitalcounts_d["$bHospital"]})";
+			if($this->hospitalcounts_d[$bHospital] > 0) {
+				$this->hospitalcounts[$bHospital] = 
+					"{$this->hospitalcounts[$bHospital]} ({$this->hospitalcounts_d[$bHospital]})";
 			}
 		}
 		if($this->hospitalcounts_d["unknown"] > 0) {

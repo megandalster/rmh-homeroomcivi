@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /**
  * validate_form validates the form data, checking all legality.
  * it returns an array of the errors with the form (string warnings)
@@ -17,6 +17,13 @@ function validate_form($id){
 	    if($_POST['date_in_day']== "" || $_POST['date_in_month']== "" || $_POST['date_in_year']== ""){
 	        $errors[] = 'Please enter a valid date of arrival. If this date is unknown, please select "Will Call" instead.';
 	    }
+	}
+	    
+	if($_POST['day']=='yes'){
+	    if($_POST['day_use_day']== "" || $_POST['day_use_month']== "" || $_POST['day_use_year']== ""){
+	        $errors[] = 'Please enter a valid day use date. If this booking is not day use, please uncheck day use';
+	    }
+	    
 	}
 	if ($id=='new') {
   	   if(trim($_POST['first_name_1'])==null) $errors[] = 'Please enter a first name for the primary guest ';

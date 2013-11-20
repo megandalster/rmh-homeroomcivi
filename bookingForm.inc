@@ -1,3 +1,7 @@
+
+
+
+
 <form method="POST">
 <?php     
 if ($_SESSION['access_level']==0)
@@ -12,6 +16,7 @@ else {
 }
 echo '(<span style="font-size:x-small;color:FF0000">*</span> denotes required fields):<br><br>';
 ?>
+
 <div align="left">
 <fieldset>
 <legend>Booking Information:</legend>
@@ -359,20 +364,30 @@ else echo " <b>Check-in date:</b> ".date_string($tempBooking->get_date_in());
 <br />
 <br />
 <b>Approved Use(s): </b> <br />
+
+
+
  <input type="checkbox" name="overnight" value="yes" <?php if($tempBooking->overnight_use() == "yes") echo('checked')?>/> Overnight<br />
- <input type="checkbox" onClick="add()" name="day" value="yes" <?php if($tempBooking->day_use() == "yes") echo('checked')?>/> Day <br />
+ <input type="checkbox" onClick="add()" name="day" value="yes" <?php if($tempBooking->day_use() == "yes") echo('checked' )?>/> Day <br />
  
  
  <div name = "day_use_input" style = "visibility:hidden" >For Date: </div> 
  <select name = "day_use_month" style="visibility:hidden">
     <?php 
+    $day_use_date = $tempBooking->get_day_use_date();
       $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
 	  echo("<option> </option>");
       for ($i = 1 ; $i <= 9 ; $i ++){
+      	if($i == substr($day_use_date,5,2))
+             echo ("<option value=".$i." selected = 'yes'>".$months[$i-1]."</option>");
+        else 
              echo ("<option value='0".$i."'>".$months[$i-1]."</option>");
       }
       for ($i = 10 ; $i <= 12 ; $i ++){
-          echo ("<option value=".$i.">".$months[$i-1]."</option>");
+      if($i == substr($day_use_date,5,2))
+            echo ("<option value=".$i." selected = 'yes'>".$months[$i-1]."</option>");
+      else 
+          	echo ("<option value=".$i.">".$months[$i-1]."</option>");
       }
     ?>
     </select>
@@ -381,15 +396,80 @@ else echo " <b>Check-in date:</b> ".date_string($tempBooking->get_date_in());
     <?php 
       echo("<option>  </option>");
       for ($i = 1; $i <= 9 ; $i ++){
+      	if($i == substr($day_use_date,8,2))
+             echo ("<option selected = 'yes'>".$i."</option>");
+        else
              echo ("<option value='0".$i."'>".$i."</option>");
       }
       for ($i = 10; $i <= 31 ; $i ++){
+      	if($i == substr($day_use_date,8,2))
+         	echo ("<option selected = 'yes'>".$i."</option>");
+        else 
              echo ("<option>".$i."</option>");
       }
     ?>
     </select>
-	<input type="text" size = "3" maxLength = "4" name="day_use_year" style="visibility:hidden"><br />
-           
+	<input type="text" size = "3" maxLength = "4" name="day_use_year" value = "<?php echo (substr($day_use_date,0,4))?>" style="visibility:hidden"><br />
+	
+	
+	<script>
+function add(){
+
+	var currentDate = new Date();
+	title = document.getElementsByName("day_use_input");
+	checkbox = document.getElementsByName("day");
+	
+	if(checkbox[0].checked)
+		title[0].style.visibility = "visible";
+	else
+		title[0].style.visibility = "hidden";	
+
+		
+	month = document.getElementsByName("day_use_month");
+	if(checkbox[0].checked){
+		month[0].style.visibility = "visible";
+		if(month[0].value == "")
+		month[0].value = currentDate.getMonth() +1;
+	}
+	else
+		month[0].style.visibility = "hidden";
+	
+	
+	day = document.getElementsByName("day_use_day");
+	if(checkbox[0].checked){
+		day[0].style.visibility = "visible";
+
+		if(currentDate.getDate()<10)
+		{
+			if(day[0].value == "")
+			day[0].value = "0"+currentDate.getDate();
+		}
+		else
+		{
+			if(day[0].value == "")
+			day[0].value = currentDate.getDate();
+		}
+	}
+	else 
+		day[0].style.visibility = "hidden";
+	
+	
+	year = document.getElementsByName("day_use_year");
+	if(checkbox[0].checked){
+		year[0].style.visibility = "visible";
+		if(year[0].value == "")
+		year[0].value = currentDate.getFullYear();
+	}
+	else
+		year[0].style.visibility = "hidden";
+	
+}
+</script>
+	
+    <script>
+    add(); 
+    </script>
+          
  
  
  
@@ -458,47 +538,5 @@ function moveOnMax(field,nextFieldID){
   if(field.value.length >= field.maxLength){
     document.getElementById(nextFieldID).focus();
   }
-}
-</script>
-<script>
-function add(){
-
-	var currentDate = new Date();
-	title = document.getElementsByName("day_use_input");
-	if(title[0].style.visibility == "hidden")
-		title[0].style.visibility = "visible";
-	else
-		title[0].style.visibility = "hidden";	
-
-		
-	month = document.getElementsByName("day_use_month");
-	if(month[0].style.visibility == "hidden"){
-		month[0].style.visibility = "visible";
-		month[0].value = currentDate.getMonth() +1;
-	}
-	else
-		month[0].style.visibility = "hidden";
-	
-	
-	day = document.getElementsByName("day_use_day");
-	if(day[0].style.visibility == "hidden"){
-		day[0].style.visibility = "visible";
-		if(currentDate.getDate()<10)
-			day[0].value = "0"+currentDate.getDate();
-		else
-			day[0].value = currentDate.getDate();
-	}
-	else 
-		day[0].style.visibility = "hidden";
-	
-	
-	year = document.getElementsByName("day_use_year");
-	if(year[0].style.visibility == "hidden"){
-		year[0].style.visibility = "visible";
-		year[0].value = currentDate.getFullYear();
-	}
-	else
-		year[0].style.visibility = "hidden";
-	
 }
 </script>

@@ -25,6 +25,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
 		<br/>
 
 <?php
+
     // Get the info of the user who is making the referral
 	$user = retrieve_dbPersons($_SESSION['_id']);
 	$user_name = $user->get_first_name()." ".$user->get_last_name();
@@ -42,7 +43,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
             $room_no = "";
             $flag = "new";
             $guest = new Person("","","","","","","","","","","","","","","","");
-            $tempBooking = new Booking(date("y-m-d"),"Will Call","","pending","","","","","","","","","","00000000000", "", "", "", "","new"); 
+            $tempBooking = new Booking(date("y-m-d"),"Will Call","","pending","","","","","","","","","","00000000000", "", "", "", "", "","new"); 
 	  }
 	  else if ($id=="update") {
 	        $tempBooking = retrieve_dbBookings($referralid);
@@ -88,7 +89,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
                 }
            }
            $tempBooking = new Booking(date("y-m-d"), "Will Call", $guest->get_id(), $status, "", $guest->get_patient_name(), "", "",  
-               "","","","","","00000000000", "", "", "", "","new");                            
+               "","","","","","00000000000", "", "", "", "", "","new");                            
 	  }
 	  include('bookingForm.inc'); 
 	}
@@ -122,6 +123,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
 <?php
 // sanitize the primary guest and patient data and reconcile with dbPersons
 function process_form($id,$referralid)	{
+
    	if ($id=="update") {
    	    $tempBooking = retrieve_dbBookings($referralid);
    	    $guestid = $tempBooking->get_guest_id();
@@ -157,6 +159,11 @@ function process_form($id,$referralid)	{
     $patient_birthdate = substr($_POST['patient_birth_year'], 2,2).'-'. 
                              $_POST['patient_birth_month'].'-'.
                              $_POST['patient_birth_day'];
+                             
+							 
+							 
+
+                             
     $patient_gender = $_POST['patient_gender'];
     $currentEntry = retrieve_dbPersons($first_name.$phone1);
     if(!$currentEntry) {
@@ -171,8 +178,8 @@ function process_form($id,$referralid)	{
             $currentEntry->add_type("guest");
     }
     insert_dbPersons($currentEntry);
-    
     return $currentEntry;
+    
 }
 // build a booking from the posted data and save it
 function build_POST_booking($primaryGuest,$referralid) {
@@ -188,6 +195,14 @@ function build_POST_booking($primaryGuest,$referralid) {
                  $_POST['date_in_month'].'-'.
                  $_POST['date_in_day'];
     }
+
+    if($_POST['day']=="yes" && $_POST['day_use_year'] && $_POST['day_use_month'] && $_POST['day_use_day']){
+    	$day_use_date = $_POST['day_use_year'].'-'.
+                 $_POST['day_use_month'].'-'.
+                 $_POST['day_use_day'];
+    }
+    
+
      
     $referred_by = trim(str_replace("'","\'", htmlentities($_POST['referred_by'])));
     if($_POST['payment'] != "other")
@@ -219,6 +234,7 @@ function build_POST_booking($primaryGuest,$referralid) {
         $pendingBooking->set_payment_arrangement($payment);
         $pendingBooking->set_overnight_use($_POST['overnight']);
         $pendingBooking->set_day_use($_POST['day']);
+        $pendingBooking -> set_day_use_date($day_use_date);
         $pendingBooking->set_mgr_notes($notes);
         $pendingBooking->set_referred_by($referred_by);
         $pendingBooking->set_hospital($hospital);
@@ -227,9 +243,12 @@ function build_POST_booking($primaryGuest,$referralid) {
         $pendingBooking->remove_occupants();
     }
     else {
+
     	$pendingBooking = new Booking($date_submitted, $date_in, $primaryGuest->get_id(), "pending", "", $primaryGuest->get_patient_name(), 
                                   array(), $auto, "", "", $referred_by, $hospital, $department, 
-                                  $health_questions, $payment, $_POST['overnight'], $_POST['day'], $notes, "new"); 
+                                  $health_questions, $payment, $_POST['overnight'], $_POST['day'], $day_use_date, $notes, "new"); 
+                                  
+                            
     }
     for($count = 1 ; $count <= 6 ; $count++){
         if($_POST['additional_guest_'.$count] != "")
@@ -237,8 +256,9 @@ function build_POST_booking($primaryGuest,$referralid) {
             							 $_POST['additional_guest_'.$count.'_gender'], $_POST['additional_guest_'.$count.'_present']);
     }
      
-    
+
     insert_dbBookings($pendingBooking);
+
     return $pendingBooking;
 }
 

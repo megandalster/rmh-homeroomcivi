@@ -45,7 +45,7 @@ function create_dbBookings() {
         date_submitted TEXT, guest_id TEXT, status TEXT, date_in TEXT, room_no TEXT, auto TEXT,
 		patient TEXT, occupants TEXT, linked_room TEXT, date_out TEXT, 
         referred_by TEXT, hospital TEXT, department TEXT, health_questions TEXT, 
-        payment_arrangement TEXT, overnight_use TEXT, day_use TEXT, mgr_notes TEXT, flag TEXT)");
+        payment_arrangement TEXT, overnight_use TEXT, day_use TEXT, day_use_date TEXT, mgr_notes TEXT, flag TEXT)");
     mysql_close();	
     if(!$result) {
 		echo mysql_error() . ">>>Error creating dbBookings table. <br>";
@@ -89,6 +89,7 @@ function insert_dbBookings ($booking) {
 				$booking->get_payment_arrangement()."','".
 				$booking->overnight_use()."','".
 				$booking->day_use()."','".
+				$booking->get_day_use_date()."','".
 				$booking->get_mgr_notes()."','".
 				$booking->get_flag()."')";
 	$result=mysql_query($query);
@@ -128,7 +129,7 @@ function build_booking($result_row) {
 	    explode(',',$result_row['patient']), explode(',',$result_row['occupants']),
 	    $result_row['auto'], $result_row['linked_room'], $result_row['date_out'], $result_row['referred_by'], 
 	    $result_row['hospital'], $result_row['department'], $result_row['health_questions'], $result_row['payment_arrangement'], 
-	    $result_row['overnight_use'], $result_row['day_use'], $result_row['mgr_notes'], $result_row['flag']);
+	    $result_row['overnight_use'], $result_row['day_use'], $result_row['day_use_date'], $result_row['mgr_notes'], $result_row['flag']);
    
 	return $theBooking;
 }

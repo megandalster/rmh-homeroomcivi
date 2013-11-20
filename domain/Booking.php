@@ -54,6 +54,7 @@ class Booking {
 	private $payment;       // the paymant arrangement for this booking, typically $10/night
 	private $overnight;     // marks approval for overnight use (yes/no)
 	private $day;           // marks approval for day use (yes/no)
+	private $day_use_date;		//string with with format "yyyy-mm-dd"
     private $mgr_notes;		// (optional) notes from the manager/social worker
 	private $flag;        // to mark whether this booking has been viewed since submission
 	                        
@@ -62,7 +63,7 @@ class Booking {
      */
     function __construct ($date_submitted, $date_in, $guest_id, $status, $room_no, $patient, 
             $occupants, $auto, $linked_room, $date_out, $referred_by, 
-            $hospital, $department, $health_questions, $payment, $overnight, $day, $mgr_notes, $flag) {
+            $hospital, $department, $health_questions, $payment, $overnight, $day, $day_use_date, $mgr_notes, $flag) {
     	$this->id = $date_submitted . $guest_id;
     	$this->date_submitted = $date_submitted;
     	$this->date_in = $date_in;
@@ -81,6 +82,7 @@ class Booking {
     	$this->payment = $payment;
     	$this->overnight = $overnight;
     	$this->day = $day;
+    	$this->day_use_date = $day_use_date;
     	$this->mgr_notes = $mgr_notes;
     	$this->flag = $flag;
     }
@@ -189,6 +191,10 @@ class Booking {
     function day_use(){
         return $this->day;
     }
+function get_day_use_date(){
+        return $this->day_use_date;
+    }
+    
     /*
      *  assign a room to a booking after client has confirmed
      */
@@ -330,6 +336,9 @@ class Booking {
     }
     function set_day_use($u){
         $this->day = $u;    
+    }
+    function set_day_use_date($date){
+    	$this->day_use_date=$date;
     }
 
 }

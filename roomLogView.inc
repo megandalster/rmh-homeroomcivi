@@ -80,16 +80,94 @@ for($i = 0; $i < 3; $i++){
 	}
 	echo ("</tr>");
 }
-if($date == date("y-m-d")) {
-    echo "<tr><td colspan=7 id=\"nav\" onclick=\"window.location.href='room.php?room=day'\"><b>Day Use Bookings: </b>"; 
-	echo ("</a></td>");
-}
-else {
-    echo ("<td colspan=7 style=\"vertical-align:text-top\"><b>Day Use Bookings: </b>");
-    
-	echo ("</td>");
-}
+
 echo ("</tr></table>");
+
+
+echo("<br>");
+echo ("<b>Day Use Bookings: </b>");
+
+$day_rooms = count($rooms) - 21;
+
+$day_rows = $day_rooms / 7;
+
+$counter = 0;
+
+// Use loops to construct each table row and column
+for($i = 0; $i < $day_rows; $i++){
+	// i rows
+	echo ("<tr>");
+	for($j = 0; $j < 7; $j++)
+	{
+		if($counter < $day_rooms)
+		{
+			//do stuff
+			$currentRoomID = '0'.$i.$j;
+			$currentBookingID = substr($rooms[($i*7)+$j+21],4);
+			
+			$currentRoom = retrieve_dbRooms($currentRoomID);
+			$currentBooking = retrieve_dbBookings($currentBookingID);
+		
+			// This begins a "link" where the link is actually
+			// the entire box. It only does this if date is
+			// today or later
+			if(strcmp($date,date("y-m-d")) >=0 || !$currentBooking || $currentBooking && $currentBooking->get_status()=="active"){
+				echo ("<td id=\"nav\" onclick=\"window.location.href='room.php?room=".$currentRoomID."&date=".$date."'\"");
+				echo ("style=\"vertical-align:text-top\">");
+			}else{
+				echo ("<td style=\"vertical-align:text-top\">");
+			}
+	
+			// The ID of the room and the status
+			echo ("<b style=\"float:left\">".$currentRoomID."</b>");
+			// Print the status of the room
+			$roomStatus = $currentRoom->get_status();
+			$statusColor = null;
+			// Change the color depending on the status
+			if($roomStatus == "clean"){
+				$statusColor = "green";
+			}else if($roomStatus == "reserved"){
+				$statusColor = "orange";
+			}else if($roomStatus == "dirty"){
+				$statusColor = "brown";
+			}else if($roomStatus == "booked"){
+				$statusColor = "red";
+			}else if($roomStatus == "off-line"){
+				$statusColor = "blue";
+			}
+			if($date == date("y-m-d"))  {
+				echo ("<b style=\"float:right; color:".$statusColor."\">");
+				echo ($roomStatus."</b>");
+				echo ("<br />");
+			}
+			// Print the beds in the room
+			echo("<b>Beds: </b>".$currentRoom->get_beds());
+			// Print if there is a private bath
+			if($currentRoom->get_bath() == "y"){
+				echo (" bath");
+			}
+			if($date == date("y-m-d") && $currentRoom->get_room_notes() != "")
+			    echo "<br /><b>Notes: </b><br>".$currentRoom->get_room_notes();
+			// Display info from the booking, such as the guests and loaners
+			if (!$currentBooking)
+			    echo "<br /><br /><br />";
+			else {
+				echo ("<br /><b>Guests:</b><br />");
+				print_booking_info($currentBooking);
+			}
+			// End this table item. Finish the link if it was started
+			echo ("</td>");
+				$counter++;
+			}
+			else
+				break;
+	}
+	echo ("</tr>");
+}
+
+echo ("</tr></table>");
+
+
 
 /**
  * These functions help in printing out information

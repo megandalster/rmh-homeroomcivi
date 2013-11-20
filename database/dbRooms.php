@@ -78,6 +78,7 @@ function retrieve_all_rooms($date) {
 		    $my_rooms[] = $room_no . ":" . $active_bookings[$room_no];
 		else $my_rooms[] =  $room_no . ":";
 	}
+	
 	return $my_rooms;
 }
 
@@ -96,6 +97,9 @@ function insert_dbRooms($room){
 	connect();
 	// check if the entry already exists
 	$query = "Select * FROM dbRooms WHERE room_no = '".$room->get_room_no()."'";
+	
+
+		
 	$result = mysql_query($query);
 	if(mysql_num_rows($result) != 0){
 		// if it exists, delete it

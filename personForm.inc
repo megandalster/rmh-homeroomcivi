@@ -85,6 +85,7 @@ else {
         $phone1 = $person->get_phone1();
         $phone2 = $person->get_phone2();
         
+        
 		echo '<span style="font-size:x-small;color:FF0000"> </span> (<input type = "text" size = "2" maxLength = "3" name="phone1_area_1" value="'.substr($phone1,0,3).'" onkeyup="moveOnMax(this,\'input2\')">)';
 		echo '<input id="input2" type = "text" size = "2" maxLength = "3" name="phone1_middle_1" value="'.substr($phone1,3,3).'" onkeyup="moveOnMax(this,\'input3\')">-';
 		echo '<input id="input3" type = "text" size = "3" maxLength = "4" name="phone1_end_1" value="'.substr($phone1,6,4).'"></td></tr>';

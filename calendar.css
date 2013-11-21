@@ -1,0 +1,22 @@
+table{
+	width:90%;
+}
+
+table#nav{
+	width:80%;
+}
+td#nav:hover{
+	background-color:lightgray;
+}
+
+table#nav td{
+	border-width:0px;
+}
+a#shiftlink {
+	display: block;
+	color: #000;
+	text-decoration: none;
+	font-weight: normal;
+	height: 100%;
+	width: 100%;
+}

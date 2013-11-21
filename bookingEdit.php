@@ -76,7 +76,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
                 $allBookingIDs = $guest->get_prior_bookings();
                 if($allBookingIDs != "") {
                     //Get last Booking ID
-                    $lastBookingID = end(explode(",", $allBookingIDs));
+                    $lastBookingID = end($allBookingIDs);
                     $lastBooking = retrieve_dbBookings($lastBookingID);
                     if($lastBooking != "") {
                         $last_hospital = $lastBooking->get_hospital();

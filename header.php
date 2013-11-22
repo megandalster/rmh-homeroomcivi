@@ -1,6 +1,7 @@
 <!--
 /*
- * Copyright 2011 by Alex Lucyk, Jesus Navarro, and Allen Tucker.
+ * Copyright 2011-2013 by Felix Emiliano, Luis Rojas, David Phipps, 
+ * Ruben Martinez, Alex Lucyk, Jesus Navarro, and Allen Tucker.
  * This program is part of RMH Homeroom, which is free software.
  * It comes with absolutely no warranty.  You can redistribute and/or
  * modify it under the terms of the GNU Public License as published

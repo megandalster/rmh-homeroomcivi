@@ -15,21 +15,23 @@
 			<?PHP include('header.php');?>
 			<div id="content">
 				<p><strong>Background</strong><br /><br />
-				<i>Homeroom</i> is a web-based room scheduling system developed at <a href="http://www.bowdoin.edu" TARGET="_BLANK">Bowdoin College</a> for the Ronald McDonald House in Portland, Maine.  
-				It was designed and implemented in spring semester 2011 by two Bowdoin Students (Alex Lucyk and Jesus Navarro) and
-				a Bowdoin Professor (Allen Tucker).
+				<i>Homeroom</i> is a web-based room scheduling system developed at <a href="http://www.bowdoin.edu" TARGET="_BLANK">Bowdoin College</a> for the Ronald McDonald House in Portland, Maine.   
+				It was first designed and implemented in spring semester 2011 by two Bowdoin Students (Alex Lucyk and Jesus Navarro) and
+				a Bowdoin Professor (Allen Tucker).  The current version was implemented in fall 2013 by Felix Emiliano, Luis Rojas, David Phipps, Ruben Martinez, and the instructor, working with the
+				help of RMH staff members Gabrielle Booth and Karla Prouty.
 				<p>
 				This project was supported by Bowdoin College as part of its ongoing commitment to serving the common good. It is also inspired by the software movement known as HFOSS, which aims to "build a community of academic computing departments,
 				IT corporations, and local and global humanitarian and community organizations dedicated to
 				building and using Free and Open Source Software to benefit humanity."  
-				More information about HFOSS can be found on-line at <a href="http://www.hfoss.org/"> http://www.hfoss.org/</a>.
+				More information about HFOSS can be found on-line at <a href="http://www.hfoss.org/" TARGET="_BLANK"> http://www.hfoss.org/</a>.
 				<p><strong>System Access</strong><br /><br />
 Because <i>Homeroom</i> must protect the privacy of individual clients at the Ronald McDonald House, access to the system is
-limited.  If you have system access and have forgotten your Username or Password, please contact the <a href="mailto:housemngr@rmhportland.org">House Manager</a>.
+limited.  If you have system access and have forgotten your Username or Password, please contact the <a href="mailto:housemngr@rmhportland.org" TARGET="_BLANK">House Manager</a>.
                 </p>
-				<p> <i>Homeroom</i> is free and open source software (see <a href="http://sourceforge.net/projects/rmhhomeroom">http://sourceforge.net/projects/rmhhomeroom</a>).  From Sourceforge, its source code can be freely downloaded and adapted
-				 to support the room scheduling needs of other nonprofit organizations.  For more information about the capabilities or adaptability of <i>Homeroom</i> to other settings, please contact
-either <a href="mailto:allen@bowdoin.edu">Allen Tucker</a> or visit the website <a href="http://myopensoftware.org/content/software-projects">http://myopensoftware.org</a>.
+				<p> <i>Homeroom</i> is free and open source software (see <a href="http://code.google.com/p/rmh-homeroomcivi" TARGET="_BLANK">http://code.google.com/p/rmh-homeroomcivi</a>).  
+				Its source code can be freely downloaded and adapted to support the room scheduling needs of other nonprofit organizations.  
+				For more information about the capabilities or adaptability of <i>Homeroom</i> to other settings, please contact
+either <a href="mailto:allen@bowdoin.edu">Allen Tucker</a> or visit the website <a href="http://myopensoftware.org/content/software-projects" TARGET="_BLANK">http://myopensoftware.org</a>.
 				</p>
 				<!-- below is the footer that we're using currently-->
 				

@@ -20,7 +20,7 @@ function validate_form($id){
 	}
 	    
 	if($_POST['day']=='yes'){
-	    if($_POST['day_use_day']== "" || $_POST['day_use_month']== "" || $_POST['day_use_year']== ""){
+	    if($_POST['day_use_day']== "" || $_POST['day_use_month']== "" || $_POST['day_use_year']== "" || strlen($_POST['day_use_year']) != 4){
 	        $errors[] = 'Please enter a valid day use date. If this booking is not day use, please uncheck day use';
 	    }
 	    

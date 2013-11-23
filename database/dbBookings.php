@@ -111,7 +111,7 @@ function retrieve_dbBookings ($id) {
 	connect();
     $query = "SELECT * FROM dbBookings WHERE id =\"".$id."\"";
     $result = mysql_query ($query);
-    if (mysql_num_rows($result)!==1) {
+    if (mysql_num_rows($result)!=1) {
 	    mysql_close();
 		return false;
 	}
@@ -155,6 +155,22 @@ function retrieve_active_dbBookings ($date) {
 	mysql_close();
 	return $theBookings;
 }
+
+function retrieve_active_day_use_dbBookings ($date)
+{
+	connect();
+    $query = "SELECT * FROM dbBookings WHERE ((status = 'active' AND date_in <= '".$date."') OR status = 'reserved') AND day_use = 'yes'" . 
+             " ORDER BY room_no";
+    $result = mysql_query ($query);
+    $theBookings = array();
+	while ($result_row = mysql_fetch_assoc($result)) {
+	    $theBooking = build_booking($result_row);
+	    $theBookings[$theBooking->get_room_no()] = $theBooking->get_id();
+	}
+	mysql_close();
+	return $theBookings;
+}
+
 /**
  * Retrieves an array of room_no:booking_id pairs for all bookings that were "active" on a past $date.
  * An active booking on a past date is 
@@ -178,6 +194,22 @@ function retrieve_past_active_dbBookings ($date) {
 	mysql_close();
 	return $theBookings;
 }
+
+function retrieve_past_active_day_use_dbBookings ($date) {
+	connect();
+	$query = "SELECT * FROM dbBookings WHERE (status = 'active' AND date_in <= '".$date. "' AND day_use = 'yes')" .
+    		 			" OR (status = 'closed' AND date_in <= '".$date. "' AND date_out > '" . $date . "' AND day_use = 'yes')" . 
+             			" ORDER BY room_no";
+    $result = mysql_query ($query);
+    $theBookings = array();
+	while ($result_row = mysql_fetch_assoc($result)) {
+	    $theBooking = build_booking($result_row);
+	    $theBookings[$theBooking->get_room_no()] = $theBooking->get_id();
+	}
+	mysql_close();
+	return $theBookings;
+}
+
 /**
  * Retrieves an array of all Bookings that are "pending" on a certain $date.
  * A booking is pending on a certain date if 
@@ -190,6 +222,19 @@ function retrieve_pending_dbBookings ($date) {
     $query = "SELECT * FROM dbBookings WHERE status = 'pending' AND date_in <= '".$date."' ORDER BY date_in";
     $result = mysql_query ($query);
     $theBookings = array();
+	while ($result_row = mysql_fetch_assoc($result)) {
+	    $theBooking = build_booking($result_row);
+	    $theBookings[] = $theBooking;
+	}
+	mysql_close();
+	return $theBookings;
+}
+
+function retrieve_pendingDayUse_dbBookings ($date) {
+	connect();
+	$query = "SELECT * FROM dbBookings WHERE status = 'pending' AND day_use = 'yes' AND day_use_date = '".$date."' ";
+	$result = mysql_query($query);
+	$theBookings = array();
 	while ($result_row = mysql_fetch_assoc($result)) {
 	    $theBooking = build_booking($result_row);
 	    $theBookings[] = $theBooking;

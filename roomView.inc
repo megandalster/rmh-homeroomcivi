@@ -82,7 +82,8 @@ Room Notes: <input type="text" size="50" name="room_notes" value="<?php echo($cu
 // or not we have a booking
 
 // If successful, display the guests and add options to add or remove them.
-if($currentRoom->get_status()=="reserved"|| $currentRoom->get_status()=="booked"){
+if($currentRoom->get_status()=="reserved"|| $currentRoom->get_status()=="booked")
+{
 	// Print booking information
 	if ($booking) 
 	    print_booking_info($booking);
@@ -98,7 +99,8 @@ if($currentRoom->get_status()=="reserved"|| $currentRoom->get_status()=="booked"
 	    echo ("</select><br />");
 	    echo ("<br />");
 	}
-}else if ($_SESSION['access_level']!=2) {
+}
+else if ($_SESSION['access_level']!=2) {
 	echo "</fieldset><br>";
 	// add options to assign a booking
 	echo ("Reserve this room: <select name='assign_booking'>");

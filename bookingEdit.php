@@ -42,7 +42,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
 	        $date_in = "Will Call";
             $room_no = "";
             $flag = "new";
-            $guest = new Person("","","","","","","","","","","","","","","","");
+            $guest = new Person("","","","","","","","","","","","","","","","", "");
             $tempBooking = new Booking(date("y-m-d"),"Will Call","","pending","","","","","","","","","","00000000000", "", "", "", "", "","new"); 
 	  }
 	  else if ($id=="update") {
@@ -65,7 +65,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
 	       $guest = retrieve_dbPersons($id);
            if (!$guest){
                 echo("The guest with id '".$id."' does not exist in the database. Please fill out a blank form below:");
-                $guest = new Person("","","","","","","","","","","","","","","","");
+                $guest = new Person("","","","","","","","","","","","","","","","","");
                 $patient_DOB = ""; 
                 $patient_gender = "";            
            }
@@ -74,10 +74,12 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
            		$patient_DOB = $guest->get_patient_birthdate();
            		$patient_gender = $guest->get_gender();
                 $allBookingIDs = $guest->get_prior_bookings();
-                if($allBookingIDs != "") {
+                var_dump($allBookingIDs);
+                if(!$allBookingIDs[0] == "") {
                     //Get last Booking ID
-                    $lastBookingID = end(explode(",", $allBookingIDs));
+                    $lastBookingID = end($allBookingIDs);
                     $lastBooking = retrieve_dbBookings($lastBookingID);
+                    
                     if($lastBooking != "") {
                         $last_hospital = $lastBooking->get_hospital();
                         $last_department = $lastBooking->get_department();
@@ -167,8 +169,8 @@ function process_form($id,$referralid)	{
     $patient_gender = $_POST['patient_gender'];
     $currentEntry = retrieve_dbPersons($first_name.$phone1);
     if(!$currentEntry) {
-            $currentEntry = new Person($last_name, $first_name, "", $address, $city,$state, $zip, $phone1, $phone2, 
-                                   $email, "guest", "", $patient_name,$patient_birthdate,$patient_relation,"");
+            $currentEntry = new Person($last_name, $first_name, "", "", $address, $city,$state, $zip, $phone1, $phone2, 
+                                   $email, "guest", date("y-m-d").$first_name.$phone1, $patient_name,$patient_birthdate,$patient_relation,"");
     }
     else {
             $currentEntry->set_patient_name($patient_name);
@@ -176,6 +178,7 @@ function process_form($id,$referralid)	{
             $currentEntry->set_patient_relation($patient_relation);
             $currentEntry->set_gender($patient_gender);
             $currentEntry->add_type("guest");
+            $currentEntry->add_prior_booking($referralid);
     }
     insert_dbPersons($currentEntry);
     return $currentEntry;
@@ -197,9 +200,10 @@ function build_POST_booking($primaryGuest,$referralid) {
     }
 
     if($_POST['day']=="yes" && $_POST['day_use_year'] && $_POST['day_use_month'] && $_POST['day_use_day']){
-    	$day_use_date = $_POST['day_use_year'].'-'.
+    	$day_use_date = substr($_POST['day_use_year'],2,2).'-'.
                  $_POST['day_use_month'].'-'.
                  $_POST['day_use_day'];
+                 
     }
     
 

@@ -71,6 +71,7 @@ function retrieve_all_rooms($date) {
     	$active_bookings = retrieve_active_dbBookings($date);
     else 
     	$active_bookings = retrieve_past_active_dbBookings($date);
+    	
     $my_rooms = array();
 	foreach ($room_data as $room => $capacity){
 	    $room_no = substr($room, 0, 3);
@@ -79,6 +80,78 @@ function retrieve_all_rooms($date) {
 		else $my_rooms[] =  $room_no . ":";
 	}
 	
+	if ($date >= date('y-m-d'))
+	{
+		$day_use_pendingBookings = retrieve_pendingDayUse_dbBookings($date);
+		
+		$day_use_activeBookings = retrieve_active_day_use_dbBookings($date);
+		$total_day_use_rooms_to_make = count($day_use_activeBookings) + count($day_use_pendingBookings);
+		$numOfActive =  count($day_use_activeBookings);
+		for($i=0; $i<($total_day_use_rooms_to_make/7); $i++)
+		{
+			for($j=0; $j<7; $j++)
+			{
+				$room_num = "0".$i.$j;
+				if( (7*$i+$j) == ($total_day_use_rooms_to_make))
+				{
+					break;
+				}
+				
+				if(isset($day_use_activeBookings[$room_num]))
+				{					
+					$my_rooms[] = $room_num . ":" . $day_use_activeBookings[$room_num];
+					//since its an active booking retrieve its room's status.
+					$currentRoom = retrieve_dbRooms($room_num);
+					$currentStatus = $currentRoom->get_status();
+					$currentBookingID = $currentRoom->get_booking_id();
+					
+					$day_use_room = new Room($room_num, null, null, null, $currentStatus, $currentBookingID, "");
+				}
+				else
+				{
+					$my_rooms[] =  $room_num . ":";
+					$day_use_room = new Room($room_num, null, null, null, "clean", null, "");
+				}
+					
+				insert_dbRooms($day_use_room);
+			}
+		}
+	}
+	
+	else
+	{
+		$day_use_past_active_bookings = retrieve_past_active_day_use_dbBookings($date);
+		$total_day_use_rooms_to_make = count($day_use_past_active_bookings);
+		echo("<script>");
+		echo("alert('$total_day_use_rooms_to_make');");
+		echo("</script>");
+		for($i=0; $i<$total_day_use_rooms_to_make/7; $i++)
+		{
+			for($j=0; $j<7; $j++)
+			{
+				if( (7*$i+$j) == ($total_day_use_rooms_to_make))
+				{
+					break;
+				}
+				$room_num = "0".$i.$j;
+				if(isset($day_use_past_active_bookings[$room_num]))
+				{
+					$my_rooms[] = $room_num . ":" . $day_use_past_active_bookings[$room_num];
+					$currentRoom = retrieve_dbRooms($room_num);
+					$currentStatus = $currentRoom->get_status();
+					$currentBookingID = $currentRoom->get_booking_id();
+					
+					$day_use_room = new Room($room_num, null, null, null, $currentStatus, $currentBookingID, "");
+				}
+				else
+				{
+					$my_rooms[] =  $room_num . ":";
+					$day_use_room = new Room($room_num, null, null, null, "clean", null, "");
+				}
+				insert_dbRooms($day_use_room);
+			}
+		}
+	}
 	return $my_rooms;
 }
 
@@ -141,6 +214,7 @@ function retrieve_dbRooms($room_no){
 	// Search for the entry
 	$query="SELECT * FROM dbRooms WHERE room_no =\"".$room_no."\"";
 	$result = mysql_query($query);
+	
 	// check if it was found
 	if(mysql_num_rows($result) !==1){
 		// It wasnt found. 

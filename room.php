@@ -1,3 +1,4 @@
+
 <?php
 /*
  * Copyright 2011 by Alex Lucyk, Jesus Navarro, and Allen Tucker.
@@ -6,6 +7,7 @@
  * modify it under the terms of the GNU Public License as published
  * by the Free Software Foundation (see <http://www.gnu.org/licenses/).
 */
+
 session_start();
 session_cache_expire(30);
 include_once(dirname(__FILE__)."/database/dbBookings.php");
@@ -42,10 +44,6 @@ $date = $_GET['date'];
 	<?php 
 	// Prep work for the room
 	// Retrieve the room object
-	if ($roomID=="day") {
-	    
-	}
-	else {
 	$currentRoom = retrieve_dbRooms($roomID);
 	// Check if the room is valid and if any data was recently change
 	// by the user
@@ -61,7 +59,6 @@ $date = $_GET['date'];
 		}
 		// Display the room's information
 		include_once("roomView.inc");
-	}
 	}
 	?>
 		<!-- include the footer at the end -->
@@ -133,6 +130,10 @@ function update_room_info($currentRoom){
 			    $currentRoom->set_status("dirty");
 				//retrieve the booking and check it out
 				$newBooking = retrieve_dbBookings($currentRoom->get_booking_id());
+				$temp = $currentRoom->get_booking_id();
+				echo("<script>");
+		echo("alert('$temp');");
+		echo("</script>");
 				if ($newBooking) {
 				    $newBooking->check_out(date($date), false);		//not deceased		
 				    // Add a log to show that the family was checked out
@@ -143,7 +144,7 @@ function update_room_info($currentRoom){
 				
 				        // Create the log message
 				        $message = "<a href='viewPerson.php?id=".$_SESSION['_id']."'>".$name."</a>".
-						" has checked out <a href='viewPerson.php?id=".$pGuests[0]."'>".
+						" has checked out <a href='viewPerson.php?id=".$pGuest->get_id()."'>".
 				        $guestName."</a>";
 				        add_log_entry($message);
 				    }
@@ -162,7 +163,7 @@ function update_room_info($currentRoom){
 				        $guestName = $pGuest->get_first_name()." ".$pGuest->get_last_name();
 				        // Create the log message
 				        $message = "<a href='viewPerson.php?id=".$_SESSION['_id']."'>".$name."</a>".
-						" has checked out (deceased) <a href='viewPerson.php?id=".$pGuests[0]."'>".
+						" has checked out (deceased) <a href='viewPerson.php?id=".$pGuest->get_id()."'>".
 				        $guestName."</a>";
 				   	    add_log_entry($message);
 				   	}
@@ -178,35 +179,42 @@ function update_room_info($currentRoom){
 				$guestName = $pGuest->get_first_name()." ".$pGuest->get_last_name();
 				// Create the log message
 				$message = "<a href='viewPerson.php?id=".$_SESSION['_id']."'>".$name."</a>".
-				" has checked in <a href='viewPerson.php?id=".$pGuests[0]."'>".
+				" has checked in <a href='viewPerson.php?id=".$pGuest->get_id()."'>".
 				$guestName."</a>";
 				// quick fix: don't add a log if the reservation was not successful
 				if ($newBooking->book_room($currentRoom->get_room_no(),$date)){
 					add_log_entry($message);
 				}
 				else add_log_entry("<a href='viewPerson.php?id=".$_SESSION['_id']."'>".$name."</a>".
-				" failed to check in <a href='viewPerson.php?id=".$pGuests[0]."'>".
+				" failed to check in <a href='viewPerson.php?id=".$pGuest->get_id()."'>".
 				$guestName."</a>");
 			}
 			else{  // reserving a previously empty room
+				
 				// retrieve the booking and update it
+				
 				$newBooking = retrieve_dbBookings($newBooking);
+				//echo("<script>");
+				//echo("alert('$newBooking');");
+				//echo("</script>");
 				
 				// Add a log to show that the family was checked in
 				// Get the info of the primary guest
 				$pGuest = retrieve_dbPersons($newBooking->get_guest_id());
 				$guestName = $pGuest->get_first_name()." ".$pGuest->get_last_name();
 				
+				var_dump($pGuest);
+				
 				// Create the log message
 				$message = "<a href='viewPerson.php?id=".$_SESSION['_id']."'>".$name."</a>".
-				" has reserved <a href='viewPerson.php?id=".$pGuests[0]."'>".
+				" has reserved <a href='viewPerson.php?id=".$pGuest->get_id()."'>".
 				$guestName."</a>";
 				// quick fix: don't add a log if the reservation was not successful
 				if ($newBooking->reserve_room($currentRoom->get_room_no(),$date)){
 					add_log_entry($message);
 				}
 				else add_log_entry("<a href='viewPerson.php?id=".$_SESSION['_id']."'>".$name."</a>".
-				" failed to reserve <a href='viewPerson.php?id=".$pGuests[0]."'>".
+				" failed to reserve <a href='viewPerson.php?id=".$pGuest->get_id()."'>".
 				$guestName."</a>");
 			}
 		}

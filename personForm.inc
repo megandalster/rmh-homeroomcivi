@@ -14,6 +14,8 @@
  *	@version 9/1/2008
  */
 
+var_dump($person);
+
 if($_SESSION['access_level']<1) {  
         echo("<p id=\"error\">You do not have sufficient permissions to add a person to the database.</p>");
 	    ('footer.inc');

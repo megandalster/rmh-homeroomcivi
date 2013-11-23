@@ -80,7 +80,7 @@ h1 {padding-left: 0px; padding-right:165px;}
 	        echo ('| <a href="'.$path.'log.php">log</a> | <a href="'.$path.'data.php?date='.date('y-01-01').'&enddate='.date('y-m-d').'">data</a>');
 	    }
 		if($_SESSION['access_level']>=1) { // volunteers, social workers, and managers
-		    echo('<br><a href="roomLog.php?date=today">room logs</a>');
+		    echo('<br><a href="roomLog.php?date=today">Room Logs</a>');
 			echo(' | <a href="'.$path.'help.php?helpPage='.$current_page.'" target="_BLANK">help</a>');
 		}
 		echo(		' | <a href="'.$path.'logout.php">logout</a> <br>');

@@ -1,6 +1,6 @@
 <?php 
 /*
- * Copyright 2011 by Alex Lucyk, Jesus Navarro, and Allen Tucker.
+ * Copyright 2011 by Alex Lucyk, Jesus Naero, and Allen Tucker.
  * This program is part of RMH Homeroom, which is free software.
  * It comes with absolutely no warranty.  You can redistribute and/or
  * modify it under the terms of the GNU Public License as published
@@ -108,9 +108,7 @@ for($i = 0; $i < $day_rows; $i++){
 				
 				$currentRoom = retrieve_dbRooms($currentRoomID);
 				$currentBooking = retrieve_dbBookings($currentBookingID);
-				//echo("<script>");
-				//echo("alert('$currentBookingID');");
-				//echo("</script>");
+				
 			
 				// This begins a "link" where the link is actually
 				// the entire box. It only does this if date is

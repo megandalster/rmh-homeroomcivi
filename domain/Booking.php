@@ -191,7 +191,7 @@ class Booking {
     function day_use(){
         return $this->day;
     }
-function get_day_use_date(){
+	function get_day_use_date(){
         return $this->day_use_date;
     }
     
@@ -235,9 +235,6 @@ function get_day_use_date(){
             if ($this->status=="active") { // changing back from active to closed
                 if($deceased) {
                     $this->status = "closed-deceased";
-                    echo("<script>");
-				echo("alert('ENTERED THE CHKOT DEC');");
-				echo("</script>");
                 } else {
                    $this->status = "closed";
             }

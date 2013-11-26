@@ -198,7 +198,8 @@ function retrieve_past_active_dbBookings ($date) {
 function retrieve_past_active_day_use_dbBookings ($date) {
 	connect();
 	$query = "SELECT * FROM dbBookings WHERE (status = 'active' AND date_in <= '".$date. "' AND day_use = 'yes')" .
-    		 			" OR (status = 'closed' AND date_in <= '".$date. "' AND date_out > '" . $date . "' AND day_use = 'yes')" . 
+    		 			" OR (status = 'closed' AND date_in <= '".$date. "' AND date_out > '" . $date . "' AND day_use = 'yes')" .
+						" OR (status = 'pending' AND day_use_date = '".$date. "' AND day_use = 'yes')" .
              			" ORDER BY room_no";
     $result = mysql_query ($query);
     $theBookings = array();

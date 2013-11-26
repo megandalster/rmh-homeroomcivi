@@ -23,6 +23,7 @@ include_once(dirname(__FILE__)."/domain/Person.php");
 // get the room id and filter it
 $roomID = sanitize($_GET['room']);
 $date = $_GET['date'];
+$day = $_GET['day'];
 ?>
 <!-- html header stuff -->
 <html>
@@ -130,10 +131,6 @@ function update_room_info($currentRoom){
 			    $currentRoom->set_status("dirty");
 				//retrieve the booking and check it out
 				$newBooking = retrieve_dbBookings($currentRoom->get_booking_id());
-				$temp = $currentRoom->get_booking_id();
-				echo("<script>");
-		echo("alert('$temp');");
-		echo("</script>");
 				if ($newBooking) {
 				    $newBooking->check_out(date($date), false);		//not deceased		
 				    // Add a log to show that the family was checked out
@@ -203,7 +200,7 @@ function update_room_info($currentRoom){
 				$pGuest = retrieve_dbPersons($newBooking->get_guest_id());
 				$guestName = $pGuest->get_first_name()." ".$pGuest->get_last_name();
 				
-				var_dump($pGuest);
+				//var_dump($pGuest);
 				
 				// Create the log message
 				$message = "<a href='viewPerson.php?id=".$_SESSION['_id']."'>".$name."</a>".

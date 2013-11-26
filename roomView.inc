@@ -100,17 +100,22 @@ if($currentRoom->get_status()=="reserved"|| $currentRoom->get_status()=="booked"
 	    echo ("<br />");
 	}
 }
-else if ($_SESSION['access_level']!=2) {
+else if ($_SESSION['access_level']!=2) 
+{
 	echo "</fieldset><br>";
 	// add options to assign a booking
 	echo ("Reserve this room: <select name='assign_booking'>");
 	// First option is to leave the room alone
 	echo ("<option selected='yes'>Leave Room Unassigned</option>");
 	// Grab a list of all pending bookings
-	$pendingBookings = retrieve_all_pending_dbBookings($date);
-	if($pendingBookings){
+	if($day == 'yes')
+	{
+		$pendingBookings = retrieve_pendingDayUse_dbBookings($date);
+		if($pendingBookings)
+		{
 		// Make each booking id a menu item
-		foreach($pendingBookings as $booking){
+		foreach($pendingBookings as $booking)
+		{
 			echo ("<option value='" . $booking->get_id() . "'>");
 			$person = retrieve_dbPersons(substr($booking->get_id(), 8));
 			if ($person)
@@ -118,6 +123,27 @@ else if ($_SESSION['access_level']!=2) {
 			else echo($booking->get_id());
 			echo ("</option>");
 		}
+		}
+	}
+	else 
+	{
+		$pendingBookings = retrieve_all_pending_dbBookings($date);
+		if($pendingBookings)
+		{
+		// Make each booking id a menu item
+		foreach($pendingBookings as $booking){
+			if(!$booking->day_use() == 'yes')
+			{
+				echo ("<option value='" . $booking->get_id() . "'>");
+				$person = retrieve_dbPersons(substr($booking->get_id(), 8));
+				if ($person)
+					echo ($person->get_first_name() . " " . $person->get_last_name() . " (" .date_string(substr($booking->get_id(),0,8)).")");
+				else echo($booking->get_id());
+				echo ("</option>");
+			}
+		}
+	}
+	
 	}
 	echo("</select><br />");
 }

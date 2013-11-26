@@ -16,18 +16,22 @@
 		</title>
 	</head>
 	<body>
-		<p><strong><i>Homeroom</i> Help Pages</strong></p>
+		
 <ol>
 		<li>	<a href="?helpPage=login.php">Signing in and out of the System</a></li><br>
-			<ul><li><a href="?helpPage=index.php">About your Personal Home Page</a></li></ul><br>
-		<li>	<strong>Working with People in the Database</strong> (Managers Only)</li><br>
-			<ul><li><a href="?helpPage=searchPeople.php">Searching for People</a></li>
-			    <li><a href="?helpPage=edit.php">Editing People</a></li>
-			    <li><a href="?helpPage=rmh.php">Adding People </a></li>
+			
+		<li>For Managers and Social Workers</li><br>
+			<ul><li><a href="?helpPage=personEdit.php">How to add a guest </a></li>
+			    <li><a href="?helpPage=bookingEdit.php">How to create a new booking</a></li>
+				<li><a href="?helpPage=searchBookings<.php">How to search for prior bookings (and create a new one for the same person)</a></li>
+			    <li><a href="?helpPage=data.php">How to use the data page</a></li>
+			    <li><a href="?helpPage=searchPeople.php">How to search for guests</a></li>
 			</ul><br>
-		<li>	<a href="?helpPage=roomLog.php">Working with Room Logs</a> (Volunteers and Managers)</li><br>
-				<br>
-		 <li>   <a href="?helpPage=viewBookings.php">Working with Bookings and Referral Forms</a> (Social Workers and Managers)</li>
+		<li>For Managers and Volunteers</li><br>
+		    <ul>
+		        <li><a href="?helpPage=room.php">How to use room logs: check in/out, change status, "off-line"</a></li>
+		        <li><a href="?helpPage=roomLog.php">How to look at and edit past room logs</a></li>
+		 </ul>
 </ol>
 		<p>If these help pages don't answer your questions, please contact the <a href="mailto:housemngr@rmhportland.org">House Manager</a>.</p>
 	</body>

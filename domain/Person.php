@@ -18,6 +18,7 @@ class Person {
     private $last_name;        // last name - string
     private $first_name;       // first name - string
     private $gender;			//gender of person - string
+    private $employer;			//employer of the person - string
     private $address;              // address - string
     private $city;                 // city - string
     private $state;                // state - string
@@ -38,12 +39,13 @@ class Person {
         /**
          * constructor for a Person
          */
-    function __construct($last_name, $first_name, $gender, $address, $city, $state, $zip, $phone1, $phone2, $email,
+    function __construct($last_name, $first_name, $gender, $employer, $address, $city, $state, $zip, $phone1, $phone2, $email,
                          $type, $prior_bookings, $patient_name, $patient_birthdate, $patient_relation, $password){                
         $this->id = $first_name . $phone1; 
         $this->last_name = $last_name;
         $this->first_name = $first_name;
         $this->gender = $gender;
+        $this->employer = $employer;
         $this->address = $address;
         $this->city = $city;
         $this->state = $state;
@@ -52,7 +54,7 @@ class Person {
         $this->phone2 = $phone2;
         $this->email = $email;
       
-        $this->patient_name = explode(',',$patient_name);
+        $this->patient_name = $patient_name;
         $this->patient_birthdate = $patient_birthdate;
         $this->patient_relation = $patient_relation;
                 
@@ -78,7 +80,9 @@ class Person {
     function get_gender() {
     	return $this->gender;
     }
-    
+	function get_employer() {
+    	return $this->employer;
+    }
     function get_address() {
         return $this->address;
     }
@@ -141,6 +145,9 @@ class Person {
     }
     function set_gender($g) {
     	$this->gender = $g;
+    }
+	function set_employer($e) {
+    	$this->employer = $e;
     }
     function set_address($ad) {
         $this->address = $ad;

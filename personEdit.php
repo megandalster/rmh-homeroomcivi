@@ -21,7 +21,7 @@
     include_once('database/dbLog.php');
 	$id = $_GET["id"];
 	if ($id=='new') {
-	 	     $person = new Person('person','new',null,null,null,null,null,null,null,null,null,null,'new',null,null,md5('new'));
+	 	     $person = new Person('person','new',null,null,null,null,null,null,null,null,null,null,null,'new',null,null,md5('new'));
 	}
 	else {
 		$person = retrieve_dbPersons($id);
@@ -82,6 +82,8 @@ function process_form($id,$person)	{
 	 else $first_name = $person->get_first_name();
 	
 		$last_name = trim(str_replace("'","\'", htmlentities($_POST['last_name'])));
+		$gender = $_POST['gender'];
+		$employer = trim(str_replace("'","\'", htmlentities($_POST['employer'])));
 		$address = trim(str_replace("'","\'", htmlentities($_POST['address'])));
 		$city = trim(str_replace("'","\'", htmlentities($_POST['city'])));
 		$state = $_POST['state'];
@@ -92,9 +94,9 @@ function process_form($id,$person)	{
 	   // }
         //else 
        //     $phone1 = $person->get_phone1();
-        //$clean_phone1 = ereg_replace("[^0-9]", "", $phone1);
+        $clean_phone1 = ereg_replace("[^0-9]", "", $phone1);
 		//$phone2 = trim(str_replace(' ','',htmlentities($_POST['phone2'])));
-		//$clean_phone2 = ereg_replace("[^0-9]", "", $phone2);
+		$clean_phone2 = ereg_replace("[^0-9]", "", $phone2);
 		//$email = trim(str_replace("'","\'", htmlentities($_POST['email'])));
         //$patient_name = array(trim(str_replace("'","\'", htmlentities($_POST['patient_name0']))));
         if ($_POST['patient_name1']) {
@@ -108,7 +110,7 @@ function process_form($id,$person)	{
       
         $type = implode(',',$_POST['type']);
         $prior_bookings = implode(',',$person->get_prior_bookings());
-		$newperson = new Person($last_name, $first_name, "", $address, $city, $state, $zip, $clean_phone1, $clean_phone2, 
+		$newperson = new Person($last_name, $first_name, $gender, $employer, $address, $city, $state, $zip, $clean_phone1, $clean_phone2, 
                                    $email, $type, $prior_bookings, implode(',',$patient_name), $patient_birthdate,$patient_relation,"");   
         if(!retrieve_dbPersons($newperson->get_id())){
            insert_dbPersons($newperson);
@@ -160,7 +162,7 @@ function process_form($id,$person)	{
 			$id = $_POST['old_id'];
 			// $result = delete_dbPersons($id);
 			// $pass = $first_name . $phone1;
-            $person = new Person($last_name, $first_name, "", $address, $city, $state, $zip, $clean_phone1, $clean_phone2, 
+            $person = new Person($last_name, $first_name, $gender, $employer, $address, $city, $state, $zip, $clean_phone1, $clean_phone2, 
                                $email, $type, implode(',',$person->get_prior_bookings()), implode(',',$person->get_patient_name()), $patient_birthdate,$patient_relation,"");
             $result = insert_dbPersons($person);
 			if (!$result)

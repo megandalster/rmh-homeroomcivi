@@ -114,8 +114,7 @@ if($roomLog instanceof RoomLog){
 
 	// Display a form that let's you choose another date
 	display_navigation($date);
-
-
+	
 	// display the 21 rooms
 	//echo ("<table align=\"center\">");
 	include_once("roomLogView.inc");

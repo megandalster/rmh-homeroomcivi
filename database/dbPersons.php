@@ -18,9 +18,9 @@ include_once(dirname(__FILE__).'/dbinfo.php');
 function create_dbPersons() {
     connect();
     mysql_query("DROP TABLE IF EXISTS dbPersons");
-    $result = mysql_query("CREATE TABLE dbPersons (id TEXT NOT NULL, first_name TEXT, last_name TEXT, gender TEXT, address TEXT,
-    					  city TEXT, state TEXT, zip TEXT, phone1 VARCHAR(12) NOT NULL, phone2 VARCHAR(12), email TEXT,
-    					  patient_name TEXT, patient_birthdate TEXT, patient_relation TEXT, prior_bookings TEXT,
+    $result = mysql_query("CREATE TABLE dbPersons (id TEXT NOT NULL, first_name TEXT, last_name TEXT, gender TEXT,
+    					  employer TEXT, address TEXT, city TEXT, state TEXT, zip TEXT, phone1 VARCHAR(12) NOT NULL, 
+    					  phone2 VARCHAR(12), email TEXT, patient_name TEXT, patient_birthdate TEXT, patient_relation TEXT, prior_bookings TEXT,
     					  mgr_notes TEXT, county TEXT, type TEXT, password TEXT)");
     mysql_close();
     if (!$result) {
@@ -48,6 +48,7 @@ function insert_dbPersons ($person){
                 $person->get_first_name()."','".
                 $person->get_last_name()."','".
                 $person->get_gender()."','".
+                $person->get_employer()."','".
                 $person->get_address()."','".
                 $person->get_city()."','".
                 $person->get_state()."','".
@@ -83,7 +84,8 @@ function retrieve_dbPersons ($id) {
         return false;
     }
     $result_row = mysql_fetch_assoc($result);
-    $thePerson = new Person($result_row['last_name'], $result_row['first_name'], $result_row['gender'], $result_row['address'], 
+    $thePerson = new Person($result_row['last_name'], $result_row['first_name'],
+     	$result_row['gender'], $result_row['employer'], $result_row['address'], 
         $result_row['city'],$result_row['state'], $result_row['zip'],
         $result_row['phone1'], $result_row['phone2'], $result_row['email'],
         $result_row['type'], $result_row['prior_bookings'], $result_row['patient_name'],
@@ -100,7 +102,8 @@ function getall_persons () {
     $result = mysql_query ($query);
     $thePersons = array();
     while ($result_row = mysql_fetch_assoc($result)) {
-        $thePerson = new Person($result_row['last_name'], $result_row['first_name'], $result_row['gender'], $result_row['address'], 
+        $thePerson = new Person($result_row['last_name'], $result_row['first_name'],
+         	$result_row['gender'], $result_row['employer'], $result_row['address'], 
             $result_row['city'],$result_row['state'], $result_row['zip'],
             $result_row['phone1'], $result_row['phone2'], $result_row['email'],
             $result_row['type'], $result_row['prior_bookings'], $result_row['patient_name'],

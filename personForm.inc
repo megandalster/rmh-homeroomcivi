@@ -14,6 +14,8 @@
  *	@version 9/1/2008
  */
 
+var_dump($person);
+
 if($_SESSION['access_level']<1) {  
         echo("<p id=\"error\">You do not have sufficient permissions to add a person to the database.</p>");
 	    ('footer.inc');
@@ -46,10 +48,24 @@ else {
     else echo '</td><td>'.$person->get_first_name().'</td></tr>';
  ?>
 		<tr><td><span style='font-size:x-small;color:FF0000'>* </span>Last Name:</td><td> <input type="text" name="last_name" tabindex=2 value="<?PHP echo($person->get_last_name())?>"></td></tr>
-		<tr><td><span style='font-size:x-small;color:FF0000'>* </span>Address:</td><td> <input type="text" name="address" tabindex=3 value="<?PHP echo($person->get_address())?>"></td></tr>
-		<tr><td><span style='font-size:x-small;color:FF0000'>* </span>City:</td><td> <input type="text" name="city" tabindex=4 value="<?PHP echo($person->get_city())?>"></td></tr>
+		
+		<tr><td>Gender:</td>
+		<td><select name="gender" tabindex=3> 
+		<?php
+		echo '<option value = " "> </option>'; 
+		if($person->get_gender() == "Male") echo '<option value = "Male" selected>Male</option>';
+		else 									echo '<option value = "Male">Male</option>';
+		 
+		if($person->get_gender() == "Female") echo '<option value = "Female" selected>Female</option>';
+		else 									echo '<option value = "Female">Female</option>';
+		?>
+		</select></td></tr>
+		
+		<tr><td><span style='font-size:x-small;color:FF0000'> </span>Employer:</td><td> <input type="text" name="employer" tabindex=3 value="<?PHP echo($person->get_employer())?>"></td></tr>
+		<tr><td><span style='font-size:x-small;color:FF0000'>* </span>Address:</td><td> <input type="text" name="address" tabindex=4 value="<?PHP echo($person->get_address())?>"></td></tr>
+		<tr><td><span style='font-size:x-small;color:FF0000'>* </span>City:</td><td> <input type="text" name="city" tabindex=5 value="<?PHP echo($person->get_city())?>"></td></tr>
 		<tr><td>State, Zip:</td>
-		<td><select name="state" tabindex=5>
+		<td><select name="state" tabindex=6>
 		<?PHP
 
 			$states = array("AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA",

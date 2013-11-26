@@ -54,7 +54,7 @@ class Booking {
 	private $payment;       // the paymant arrangement for this booking, typically $10/night
 	private $overnight;     // marks approval for overnight use (yes/no)
 	private $day;           // marks approval for day use (yes/no)
-	private $day_use_date;		//string with with format "yyyy-mm-dd"
+	private $day_use_date;		//string with with format "yy-mm-dd"
     private $mgr_notes;		// (optional) notes from the manager/social worker
 	private $flag;        // to mark whether this booking has been viewed since submission
 	                        
@@ -191,7 +191,7 @@ class Booking {
     function day_use(){
         return $this->day;
     }
-function get_day_use_date(){
+	function get_day_use_date(){
         return $this->day_use_date;
     }
     
@@ -200,7 +200,7 @@ function get_day_use_date(){
      */
     function reserve_room ($room_no, $date) {
     	$r = retrieve_dbRooms($room_no);
-        if ($r && $r->get_status()=="clean") {  
+        if ($r && ($r->get_status()=="clean") ) {  
             $r->reserve_me($this->id);
             $this->date_in = $date;	
             $this->room_no = $room_no;

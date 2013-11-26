@@ -95,6 +95,7 @@ class OccupancyData {
 				$this->guestcounts[$bRoom] += $bGuests;
 				if($aBooking->get_status() == "closed-deceased") {
 					$this->bookingcounts_d[$bRoom] += 1;
+					var_dump(works);
 				}
 			}
 		}

@@ -55,7 +55,7 @@ class Room {
 	function get_status () {
 		return $this->status;
 	}
-	function get_booking_id () {
+	function get_booking_id() {
 		return $this->booking;
 	}
     function get_room_notes () {
@@ -66,6 +66,9 @@ class Room {
         if ($r && $r->status == "clean") {
         	$r->status = "reserved";
             $r->booking = $booking_id;
+            echo("<script>");
+				echo("alert('$booking_id');");
+				echo("</script>");
             update_dbRooms($r);   
             return $r;
         }

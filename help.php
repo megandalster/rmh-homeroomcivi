@@ -13,9 +13,8 @@
 
 	<body>
 		<div id="container">
-			<?PHP include('header.php');?>
-			<div id="content">
-				<div align="center"><p><a href="?">Help Home</a></p></div>
+	<div id="content">
+				<div align="left"><p><a href="?">Homeroom Help Index</a></p></div>
 
 				<?PHP
 					//This array associates pages a person might be viewing
@@ -27,23 +26,17 @@
 
 					//basic pages
 					$assocHelp['login.php']='login.inc.php';
-					$assocHelp['index.php']='index.inc.php';
-					$assocHelp['about.php']='index.inc.php';
-
-					//person  viewing, editing, searching, adding
-					$assocHelp['viewPerson.php']='viewPersonHelp.inc.php';
-					$assocHelp['edit.php']='editPersonHelp.inc.php';
+					
+					//managers and social workers
+					$assocHelp['personEdit.php']='editPersonHelp.inc.php';
+					$assocHelp['bookingEdit.php']='viewBookingsHelp.inc.php';
+					$assocHelp['searchBookings.php']='searchBookingHelp.inc.php';
+					$assocHelp['data.php']='dataHelp.inc.php';
 					$assocHelp['searchPeople.php']='searchPersonHelp.inc.php';
-					$assocHelp['rmh.php']='addPersonHelp.inc.php';
 					
-					// room logs
-					$assocHelp['roomLog.php']='roomLogHelp.inc.php';
-					
-					// bookings and referrals
-					$assocHelp['viewBookings.php']='viewBookingsHelp.inc.php';
-					
-					//personal home page
-					$assocHelp['index.php']='indexHelp.inc.php';
+					// managers and volunteers
+					$assocHelp['room.php']='roomLogHelp.inc.php';
+					$assocHelp['roomLog.php']='pastRoomLogsHelp.inc.php';
 					
 					//Now if we have an undefined array value for the key they've passed us,
 					//we pass them to the index page to see if they can find help from there.

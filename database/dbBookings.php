@@ -231,6 +231,13 @@ function retrieve_pending_dbBookings ($date) {
 	return $theBookings;
 }
 
+/**
+ * Retrieves an array of day use Bookings that are "pending" on a certain $date.
+ * A day use booking is pending on a certain date if 
+ *      status = "pending", day_use = "yes", and day_use_date = $date
+ * @param $date 
+ * @return array of pending day use bookings on $date
+ */
 function retrieve_pendingDayUse_dbBookings ($date) {
 	connect();
 	$query = "SELECT * FROM dbBookings WHERE status = 'pending' AND day_use = 'yes' AND day_use_date = '".$date."' ";

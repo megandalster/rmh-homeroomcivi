@@ -31,6 +31,7 @@
 					$assocHelp['personEdit.php']='editPersonHelp.inc.php';
 					$assocHelp['bookingEdit.php']='viewBookingsHelp.inc.php';
 					$assocHelp['searchBookings.php']='searchBookingHelp.inc.php';
+					$assocHelp['editPendingActiveBookings.php'] ='editBookingHelp.inc.php';
 					$assocHelp['data.php']='dataHelp.inc.php';
 					$assocHelp['searchPeople.php']='searchPersonHelp.inc.php';
 					

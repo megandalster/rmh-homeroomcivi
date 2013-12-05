@@ -80,6 +80,7 @@ function retrieve_all_rooms($date) {
 		else $my_rooms[] =  $room_no . ":";
 	}
 	
+	//After getting all of the regular bookings we find the day use boookings
 	if ($date >= date('y-m-d'))
 	{
 		$day_use_pendingBookings = retrieve_pendingDayUse_dbBookings($date);

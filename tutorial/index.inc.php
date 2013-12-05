@@ -23,7 +23,8 @@
 		<li>For Managers and Social Workers</li><br>
 			<ul><li><a href="?helpPage=personEdit.php">How to add a guest </a></li>
 			    <li><a href="?helpPage=bookingEdit.php">How to create a new booking</a></li>
-				<li><a href="?helpPage=searchBookings<.php">How to search for prior bookings (and create a new one for the same person)</a></li>
+				<li><a href="?helpPage=searchBookings.php">How to search for prior bookings</a></li>
+				<li><a href="?helpPage=editPendingActiveBookings.php">How to edit a pending or active booking</a></li>
 			    <li><a href="?helpPage=data.php">How to use the data page</a></li>
 			    <li><a href="?helpPage=searchPeople.php">How to search for guests</a></li>
 			</ul><br>

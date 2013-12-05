@@ -12,11 +12,11 @@
 				  <a href="tutorial/screenshots/searchPersonStep3.png" class="image" title="searchPersonStep3.png"
 				  	target="tutorial/screenshots/searchPersonStep3.png">
 				 	&nbsp&nbsp&nbsp&nbsp<img src="tutorial/screenshots/searchPersonStep3.png" width="10%" border="1px"  align="middle"></a></p>
-				  <p> If this list has the name of the person you want to view or edit, then select <B>view</B> or <B>edit</B> or
+				  <p> If this list has the name of the person you want to view or edit, then select <B>view</B> or <B>edit</B>
 									 to the right of that name.  <br>
 
-				<p> <B>Step 4:</B> If you don't see what you were looking for, you can try again again.  The
-									search box always reappears at the bottom of the page below the results, like this:<BR><BR>
+				<p> <B>Step 4:</B> If you don't see what you were looking for, you can try again.  The
+									search box always reappears at the top of the page above the results, like this:<BR><BR>
 				  <a href="tutorial/screenshots/searchPersonStep4.png" class="image" title="searchPersonStep4.png"
 					horizontalalign="center" target="tutorial/screenshots/searchPersonStep4.png">
 					&nbsp&nbsp&nbsp&nbsp<img src="tutorial/screenshots/searchPersonStep4.png" width="10%" border="1px" align="middle"></a></p>

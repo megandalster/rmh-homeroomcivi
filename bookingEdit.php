@@ -74,13 +74,13 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
            		$patient_DOB = $guest->get_patient_birthdate();
            		$patient_gender = $guest->get_gender();
                 $allBookingIDs = $guest->get_prior_bookings();
-                var_dump($allBookingIDs);
                 if(!$allBookingIDs[0] == "") {
                     //Get last Booking ID
                     $lastBookingID = end($allBookingIDs);
                     $lastBooking = retrieve_dbBookings($lastBookingID);
                     
                     if($lastBooking != "") {
+					    $last_occupants = $lastBooking->get_occupants();
                         $last_hospital = $lastBooking->get_hospital();
                         $last_department = $lastBooking->get_department();
                         $last_auto_make =   $lastBooking->get_auto_make();

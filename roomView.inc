@@ -27,7 +27,7 @@ if ($booking)
 
 <!--  input fields for everything in the room -->
 <?php
-if($_SESSION['access_level']>2) { 
+if($_SESSION['access_level']>2 && !day) { 
 	echo "
 	Beds: <input type='text' name='beds' value='".$currentRoom->get_beds()."'/><br />
 	Room Capacity: <input type='text' name='capacity' value='".$currentRoom->get_capacity()."'/><br />
@@ -42,7 +42,7 @@ if($_SESSION['access_level']>2) {
 		}
 	echo "</select><br />";
 }
-else {
+else if(!day){
 	echo "
 	Beds: <input type='text' name='beds' value='".$currentRoom->get_beds()."' disabled/><br />
 	Room Capacity: <input type='text' name='capacity' value='".$currentRoom->get_capacity()."' disabled/><br />

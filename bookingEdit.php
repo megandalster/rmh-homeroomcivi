@@ -194,7 +194,7 @@ function build_POST_booking($primaryGuest,$referralid) {
        $date_in = "Will Call";
     }
     else if ($_POST['date_in_year'] && $_POST['date_in_month'] && $_POST['date_in_day']) {
-       $date_in = $_POST['date_in_year'].'-'.
+       $date_in = substr($_POST['date_in_year'], 2,2).'-'.
                  $_POST['date_in_month'].'-'.
                  $_POST['date_in_day'];
     }

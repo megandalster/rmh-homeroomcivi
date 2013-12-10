@@ -31,7 +31,6 @@
 		<li>For Managers and Volunteers</li><br>
 		    <ul>
 		        <li><a href="?helpPage=room.php">How to use room logs: check in/out, change status, "off-line"</a></li>
-		        <li><a href="?helpPage=roomLog.php">How to look at and edit past room logs</a></li>
 		 </ul>
 </ol>
 		<p>If these help pages don't answer your questions, please contact the <a href="mailto:housemngr@rmhportland.org">House Manager</a>.</p>

@@ -260,14 +260,14 @@ echo "<br />";
 		'<input type="text" size="25" name = "additional_guest_'.($counter).'" value = "'.$occupant_name.'"/>' . ' / '.
 		'<input type="text" size="15" name = "additional_guest_'.($counter).'_relation" value = "'.$occupant_relation.'"/>' . ' / ' .
 		'<select name= "additional_guest_'.($counter).'_gender"> 
-     	<option value = "---"> </option>';
+     	<option value = "Gender Not Specified"> </option>';
      	if($occupant_gender == 'Male')	echo '<option value = "Male" selected>Male</option>';
      	else 							echo '<option value = "Male">Male</option>';
      	if($occupant_gender == 'Female')	echo '<option value = "Female" selected>Female</option>';
      	else 								echo '<option value = "Female">Female</option>';
      	echo '</select>';
      	if($occupant_present == "Present") echo '<input type="checkbox" name="additional_guest_'.($counter).'_present" value="Present" checked>Present<br>';
-     	else 							   echo '<input type="checkbox" name="additional_guest_'.($counter).'_present" value="Present">Present<br>';
+     	else 							   echo '<input type="checkbox" name="additional_guest_'.($counter).'_present" value="Absent">Present<br>';
 		echo '<br />';
   }
 ?>

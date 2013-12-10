@@ -66,9 +66,6 @@ class Room {
         if ($r && $r->status == "clean") {
         	$r->status = "reserved";
             $r->booking = $booking_id;
-            echo("<script>");
-				echo("alert('$booking_id');");
-				echo("</script>");
             update_dbRooms($r);   
             return $r;
         }

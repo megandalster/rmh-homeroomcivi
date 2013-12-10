@@ -123,9 +123,7 @@ function retrieve_all_rooms($date) {
 	{
 		$day_use_past_active_bookings = retrieve_past_active_day_use_dbBookings($date);
 		$total_day_use_rooms_to_make = count($day_use_past_active_bookings);
-		echo("<script>");
-		echo("alert('$total_day_use_rooms_to_make');");
-		echo("</script>");
+		
 		for($i=0; $i<$total_day_use_rooms_to_make/7; $i++)
 		{
 			for($j=0; $j<7; $j++)

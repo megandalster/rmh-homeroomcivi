@@ -359,7 +359,13 @@ if ($tempBooking->get_status()!="active") {
       </select>
       /
     
-    <input type="text" size = "1" maxLength = "2" name="date_in_year" value= "<?php if ($tempBooking->get_date_in() != "Will Call") echo (substr($date_in,0,2))?>"/> <br />
+    <input type="text" size = "3" maxLength = "4" name="date_in_year" value= "<?php 
+    if ($tempBooking->get_date_in() != "Will Call") 
+    if(substr($date_in,0,2) < 40)
+    echo ("20".substr($date_in,0,2));
+    else
+    echo ("19".substr($date_in,0,2));
+    ?>"/> <br />
     
     
  <input type="radio" name="visitOrWC" value="Will Call" <?php if($tempBooking->get_date_in()== "Will Call") echo('checked')?>/> Will Call 

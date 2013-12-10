@@ -200,8 +200,6 @@ function update_room_info($currentRoom){
 				$pGuest = retrieve_dbPersons($newBooking->get_guest_id());
 				$guestName = $pGuest->get_first_name()." ".$pGuest->get_last_name();
 				
-				//var_dump($pGuest);
-				
 				// Create the log message
 				$message = "<a href='viewPerson.php?id=".$_SESSION['_id']."'>".$name."</a>".
 				" has reserved <a href='viewPerson.php?id=".$pGuest->get_id()."'>".

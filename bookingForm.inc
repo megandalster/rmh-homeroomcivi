@@ -229,7 +229,7 @@ echo "<br />";
  <b>Additional Guests </b>(Name / Relation to Patient / Gender):<br>
 <br />
 <?php
-  if(empty($lastOccupants)) $occupants = $tempBooking->get_occupants();
+  if(empty($last_occupants)) $occupants = $tempBooking->get_occupants();
   else $occupants = $last_occupants;
   for ($counter = 1; $counter <= 6; $counter++){
   	  //Before getting information from the occupants array we need to sanitize it

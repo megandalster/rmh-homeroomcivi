@@ -180,9 +180,13 @@
               echo('<td align="center" bgcolor='.$color.'>'.$date.'</td>');
 		      echo('<td align="center" bgcolor='.$color.'>'.$current_booking->get_flag().'</td>');
 						    
-			  //prints links for viewing and editing			           
+			  //prints links for viewing and editing		
+			  //confirms on click if user wants to delete the guest    
+			  
+		  $guestName = $current_guest->get_first_name()." ".$current_guest->get_last_name();
 			  echo('<td> <a href="viewBookings.php?id=update&bookingid='.$current_booking->get_id().'">view</a>
-						 <a href="viewBookings.php?id=delete&bookingid='.$current_booking->get_id().'">delete</a></td>');	
+						 <a href="viewBookings.php?id=delete&bookingid='.$current_booking->get_id().'" onclick= " if (!confirm(\'Are you sure you want to delete '.$guestName.'?\')) return false;">delete</a></td>');	
+			  
 			  echo("</tr>");
 			  echo("\n");
 		    }
@@ -403,3 +407,4 @@ function get_sort_string($s){
 
 
 ?>
+

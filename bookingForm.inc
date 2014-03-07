@@ -173,7 +173,7 @@ echo "<br />";
   <legend><b>Primary Guest:</b></legend>
 <?php    if ($id!="new") {
     echo '<a  target="_blank" href="personEdit.php?id='.$guest->get_id().'">'.$guest->get_first_name().' '.$guest->get_last_name().'</a><br>';
-    echo 'Relationship to Patient: '.$guest->get_patient_relation().'<br />';
+    echo 'Relationship to Patient: '.$guest->get_patient_gender().'<br />';
     echo 'Address: '.$guest->get_address().', '. $guest->get_city().', '.$guest->get_state().' '.$guest->get_zip(). '<br />';
     echo 'E-mail: '.$guest->get_email().'<br />';
     $phone1 = $guest->get_phone1();
@@ -195,7 +195,7 @@ echo "<br />";
         echo '<span style="font-size:x-small;color:FF0000">* </span>First Name: <input type="text" size="30" name="first_name_1" value='.$guest->get_first_name().'><br />' ;
         echo '<span style="font-size:x-small;color:FF0000">* </span>Last Name: <input type="text" size="30" name="last_name_1" value='.$guest->get_last_name().'><br />' ;
         //echo '<select name= .$guest->get_first_name().';
-        echo '<span style="font-size:x-small;color:FF0000">* </span>Relationship to Patient: <input type="text" size = "30" name = "patient_relation_1" value='.$guest->get_patient_relation().'><br />' ;
+        echo '<span style="font-size:x-small;color:FF0000">* </span>Relationship to Patient: <input type="text" size = "30" name = "patient_gender_1" value='.$guest->get_patient_gender().'><br />' ;
         echo 'Home Address: <input type="text" size="40" name = "address_1" value='.$guest->get_address().'><br />' ;
         echo 'City (or Country if outside US): <input type = "text" size = "15" name = "city_1" value='.$guest->get_city().'><br />' ;
         echo 'State: <select name = "state_1">';

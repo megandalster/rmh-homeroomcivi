@@ -106,12 +106,12 @@ function process_form($id,$person)	{
             $patient_name[] = trim(str_replace("'","\'", htmlentities($_POST['patient_name2'])));
         }
 	    $patient_birthdate = $_POST['DateOfBirth_Year'].'-'.$_POST['DateOfBirth_Month'].'-'.$_POST['DateOfBirth_Day'];
-        $patient_relation = trim(str_replace('\\\'','\'',htmlentities($_POST['patient_relation'])));
+        $patient_gender = trim(str_replace('\\\'','\'',htmlentities($_POST['patient_gender'])));
       
         $type = implode(',',$_POST['type']);
         $prior_bookings = implode(',',$person->get_prior_bookings());
 		$newperson = new Person($last_name, $first_name, $gender, $employer, $address, $city, $state, $zip, $clean_phone1, $clean_phone2, 
-                                   $email, $type, $prior_bookings, implode(',',$patient_name), $patient_birthdate,$patient_relation,"");   
+                                   $email, $type, $prior_bookings, implode(',',$patient_name), $patient_birthdate,$patient_gender,"");   
         if(!retrieve_dbPersons($newperson->get_id())){
            insert_dbPersons($newperson);
            return $newperson;
@@ -163,7 +163,7 @@ function process_form($id,$person)	{
 			// $result = delete_dbPersons($id);
 			// $pass = $first_name . $phone1;
             $person = new Person($last_name, $first_name, $gender, $employer, $address, $city, $state, $zip, $clean_phone1, $clean_phone2, 
-                               $email, $type, implode(',',$person->get_prior_bookings()), implode(',',$person->get_patient_name()), $patient_birthdate,$patient_relation,"");
+                               $email, $type, implode(',',$person->get_prior_bookings()), implode(',',$person->get_patient_name()), $patient_birthdate,$patient_gender,"");
             $result = insert_dbPersons($person);
 			if (!$result)
             	echo ('<p class="error">Unable to reset ' .$first_name.' '.$last_name. "'s password.. <br>Please report this error to the House Manager.");

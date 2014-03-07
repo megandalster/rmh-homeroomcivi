@@ -21,9 +21,9 @@ class testdbPersons extends UnitTestCase {
         
         //creates some people to add to the database
         $person1 = new Person("Smith", "John", "male", "123 College Street","Brunswick", "ME", "04011", 2075551234, "", 
-    				           "email@bowdoin.edu", "guest", "", "Jane Smith", "98-01-01", "parent", "");
+    				           "email@bowdoin.edu", "guest", "", "Jane Smith", "98-01-01", "Female", "");
         $person2 = new Person("Jones", "Bob", "male", "100 Union Street","Bangor", "ME", "04401", 2075555678, null, 
-    				           "bjones@gmail.com", "guest", "", "Dan Jones", "95-07-15", "grandfather", "" );
+    				           "bjones@gmail.com", "guest", "", "Dan Jones", "95-07-15", "Male", "" );
         $person3 = new Person("Adams", "Will", "male", "12 River Road","Augusta", "ME", "04330", 207551212, 2075553434, 
     				           "wadams@yahoo.com", "socialworker", "", null, null, null, "" );
         $person4 = new Person("Williams", "Elizabeth", "female", "50 Main Street","Portland", "ME", "04110", 2075555432, null, 
@@ -51,7 +51,7 @@ class testdbPersons extends UnitTestCase {
         $this->assertEqual(retrieve_dbPersons($person1->get_id())->get_email(), "email@bowdoin.edu");
         $this->assertEqual(retrieve_dbPersons($person1->get_id())->getith_patient_name (0), "Jane Smith");
         $this->assertEqual(retrieve_dbPersons($person1->get_id())->get_patient_birthdate (), "98-01-01");    
-        $this->assertEqual(retrieve_dbPersons($person1->get_id())->get_patient_relation(), "parent");
+        $this->assertEqual(retrieve_dbPersons($person1->get_id())->get_patient_gender(), "Female");
         $this->assertTrue(retrieve_dbPersons($person1->get_id())->check_type("guest"));
                  
         //tests the update function

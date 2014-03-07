@@ -110,9 +110,9 @@ p.error {color: #FF0000;}
 
 #header{
 	height: 155px;
-	border-left:2px solid #264576;
-	border-top:2px solid #264576;
-	border-right:2px solid #264576;
+	border-left:1px solid #264576;
+	border-top:1px solid #264576;
+	border-right:1px solid #264576;
 	padding: 10px;
 	background: url("images/rmhHeader.gif") #ffffff; 
 	background-repeat:no-repeat;
@@ -122,15 +122,15 @@ p.error {color: #FF0000;}
 
 #navigationLinks{
 	font-size:11pt;
-	border-left:2px solid #264576;
-	border-right:2px solid #264576;
+	border-left:1px solid #264576;
+	border-right:1px solid #264576;
 	background:#ffffff;
 }
 
 #content{
-	border-left:2px solid #264576;
-	border-bottom:2px solid #264576;
-	border-right:2px solid #264576;
+	border-left:1px solid #264576;
+	border-bottom:1px solid #264576;
+	border-right:1px solid #264576;
 	align:center;
 	padding: 10px;
 	background:#ffffff;

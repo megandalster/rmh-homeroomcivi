@@ -40,7 +40,7 @@
  
   <a href = <?php  echo("personEdit.php?id=".$current_id);?> ><?php echo($current_guest->get_first_name()." ".$current_guest->get_last_name())?> </a>
     <br/>
-    <?php  echo '&nbsp;&nbsp;&nbsp;&nbsp;Relationship to Patient: '.$current_guest->get_patient_relation().'<br />' ;
+    <?php  echo '&nbsp;&nbsp;&nbsp;&nbsp;Relationship to Patient: '.$current_guest->get_patient_gender().'<br />' ;
     ?>
     <br/>
     Additional Guests: <br/>

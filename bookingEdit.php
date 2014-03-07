@@ -132,12 +132,12 @@ function process_form($id,$referralid)	{
         $guest = retrieve_dbPersons($guestid);
    	    $first_name = $guest->get_first_name();
 		$phone1 = $guest->get_phone1();
-		$patient_relation = $guest->get_patient_relation();
+		$patient_gender = $guest->get_patient_gender();
    	}
    	else if ($id=="new"){ // creating a new booking from scratch -- edit everything
         $first_name = trim(str_replace("'","\'", htmlentities(str_replace('&','and',$_POST['first_name_1']))));
 		$last_name = trim(str_replace("'","\'", htmlentities($_POST['last_name_1'])));
-		$patient_relation = trim(str_replace('\\\'','\'',htmlentities($_POST['patient_relation_1'])));	
+		$patient_gender = trim(str_replace('\\\'','\'',htmlentities($_POST['patient_gender_1'])));	
         $address = trim(str_replace("'","\'", htmlentities($_POST['address_1'])));
 		$city = trim(str_replace("'","\'", htmlentities($_POST['city_1'])));
 		$state = $_POST['state_1'];
@@ -151,7 +151,7 @@ function process_form($id,$referralid)	{
    	    $guest = retrieve_dbPersons($id);
    	    $first_name = $guest->get_first_name();
 		$phone1 = $guest->get_phone1();
-		$patient_relation = $guest->get_patient_relation();
+		$patient_gender = $guest->get_patient_gender();
     }
     $patient_name = array(trim(str_replace("'","\'", htmlentities($_POST['patient_name0']))));
     if ($_POST['patient_name1']!="") 
@@ -170,12 +170,12 @@ function process_form($id,$referralid)	{
     $currentEntry = retrieve_dbPersons($first_name.$phone1);
     if(!$currentEntry) {
             $currentEntry = new Person($last_name, $first_name, "", "", $address, $city,$state, $zip, $phone1, $phone2, 
-                                   $email, "guest", date("y-m-d").$first_name.$phone1, $patient_name,$patient_birthdate,$patient_relation,"");
+                                   $email, "guest", date("y-m-d").$first_name.$phone1, $patient_name,$patient_birthdate,$patient_gender,"");
     }
     else {
             $currentEntry->set_patient_name($patient_name);
             $currentEntry->set_patient_birthdate($patient_birthdate);
-            $currentEntry->set_patient_relation($patient_relation);
+            $currentEntry->set_patient_gender($patient_gender);
             $currentEntry->set_gender($patient_gender);
             $currentEntry->add_type("guest");
             $currentEntry->add_prior_booking($referralid);

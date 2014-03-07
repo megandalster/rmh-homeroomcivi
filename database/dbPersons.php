@@ -20,7 +20,7 @@ function create_dbPersons() {
     mysql_query("DROP TABLE IF EXISTS dbPersons");
     $result = mysql_query("CREATE TABLE dbPersons (id TEXT NOT NULL, first_name TEXT, last_name TEXT, gender TEXT,
     					  employer TEXT, address TEXT, city TEXT, state TEXT, zip TEXT, phone1 VARCHAR(12) NOT NULL, 
-    					  phone2 VARCHAR(12), email TEXT, patient_name TEXT, patient_birthdate TEXT, patient_relation TEXT, prior_bookings TEXT,
+    					  phone2 VARCHAR(12), email TEXT, patient_name TEXT, patient_birthdate TEXT, patient_gender TEXT, prior_bookings TEXT,
     					  mgr_notes TEXT, county TEXT, type TEXT, password TEXT)");
     mysql_close();
     if (!$result) {
@@ -58,7 +58,7 @@ function insert_dbPersons ($person){
                 $person->get_email()."','".
                 implode(',',$person->get_patient_name())."','".
                 $person->get_patient_birthdate()."','".
-                $person->get_patient_relation()."','".
+                $person->get_patient_gender()."','".
                 implode(',',$person->get_prior_bookings())."','".
                 $person->get_mgr_notes()."','".
                 $person->get_county()."','".
@@ -89,7 +89,7 @@ function retrieve_dbPersons ($id) {
         $result_row['city'],$result_row['state'], $result_row['zip'],
         $result_row['phone1'], $result_row['phone2'], $result_row['email'],
         $result_row['type'], $result_row['prior_bookings'], $result_row['patient_name'],
-        $result_row['patient_birthdate'],$result_row['patient_relation'],
+        $result_row['patient_birthdate'],$result_row['patient_gender'],
         $result_row['password']);
     $thePerson->set_mgr_notes($result_row['mgr_notes']);
     $thePerson->set_county($result_row['county']);
@@ -107,7 +107,7 @@ function getall_persons () {
             $result_row['city'],$result_row['state'], $result_row['zip'],
             $result_row['phone1'], $result_row['phone2'], $result_row['email'],
             $result_row['type'], $result_row['prior_bookings'], $result_row['patient_name'],
-            $result_row['patient_birthdate'],$result_row['patient_relation'],
+            $result_row['patient_birthdate'],$result_row['patient_gender'],
             $result_row['password']);
         $thePerson->set_mgr_notes($result_row['mgr_notes']);
         $thePerson->set_county($result_row['county']);

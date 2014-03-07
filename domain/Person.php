@@ -25,14 +25,14 @@ class Person {
     private $zip;                  // zip code - integer
     private $phone1;               // primary phone
     private $phone2;               // alternate phone
-    private $email;            // email address
+    private $email;             // email address
     
-    private $patient_name;     // array of up to 3 patients for this person
-    private $patient_birthdate; // format: 11-03-12
-    private $patient_relation;  // person's relation to patient; e.g., parent, uncle, etc.
+    private $patient_name;      // array of up to 3 patients for this person
+    private $patient_birthdate; // format: 11-03-12 for the first patient only
+    private $patient_gender;    // "Male" "Female" or "Unknown" for the first patient only.
     private $prior_bookings;    // array of booking ids; e.g., '11-02-08John2077291234'
     private $mgr_notes;         // manager's notes
-    private $county;               // county in Maine; otherwise blank
+    private $county;           // county in Maine; otherwise blank
     private $type;             // array of 'manager', 'socialworker', 'guest', 'volunteer'
     private $password;         // password for database access: default = $id
 
@@ -40,7 +40,7 @@ class Person {
          * constructor for a Person
          */
     function __construct($last_name, $first_name, $gender, $employer, $address, $city, $state, $zip, $phone1, $phone2, $email,
-                         $type, $prior_bookings, $patient_name, $patient_birthdate, $patient_relation, $password){                
+                         $type, $prior_bookings, $patient_name, $patient_birthdate, $patient_gender, $password){                
         $this->id = $first_name . $phone1; 
         $this->last_name = $last_name;
         $this->first_name = $first_name;
@@ -56,7 +56,7 @@ class Person {
       
         $this->patient_name = $patient_name;
         $this->patient_birthdate = $patient_birthdate;
-        $this->patient_relation = $patient_relation;
+        $this->gender = $patient_gender;
                 
         $this->prior_bookings = explode(',',$prior_bookings);
         $this->mgr_notes = "";
@@ -113,8 +113,8 @@ class Person {
     function get_patient_birthdate(){
         return $this->patient_birthdate;
     }
-    function get_patient_relation(){
-        return $this->patient_relation;
+    function get_patient_gender(){
+        return $this->patient_gender;
     }
     function get_type(){
         return $this->type;
@@ -180,8 +180,8 @@ class Person {
     function set_patient_birthdate ($pbd){
         $this->patient_birthdate = $pbd;
     }
-    function set_patient_relation ($pr){
-        $this->patient_relation = $pr;
+    function set_patient_gender ($pr){
+        $this->patient_gender = $pr;
     }
     function set_password ($new_password) {
         $this->password = $new_password;

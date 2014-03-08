@@ -54,9 +54,9 @@ class Person {
         $this->phone2 = $phone2;
         $this->email = $email;
       
-        $this->patient_name = $patient_name;
+        $this->patient_name = explode(',',$patient_name);
         $this->patient_birthdate = $patient_birthdate;
-        $this->gender = $patient_gender;
+        $this->patient_gender = $patient_gender;
                 
         $this->prior_bookings = explode(',',$prior_bookings);
         $this->mgr_notes = "";

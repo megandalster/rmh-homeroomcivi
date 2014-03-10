@@ -1,7 +1,7 @@
 <?php
 include_once(dirname(__FILE__).'/database/dbPersons.php');
 include_once(dirname(__FILE__).'/domain/Person.php');
-    $filename = "file:///Users/allen/Desktop/guests1_50.csv";
+    $filename = "file:///Users/allen/Desktop/00-14guestsfinal.csv";
 	$handle = fopen($filename, "r");
 	if ($handle==false) echo "failed to open";
 	$keys = fgetcsv($handle,0,',','"');
@@ -28,11 +28,11 @@ include_once(dirname(__FILE__).'/domain/Person.php');
 function build_patients($p1, $p2, $p3, $g1, $g2, $g3, $b1, $b2, $b3) {
 	$p = array();
 	$b = ""; $g = "";
-	if ($p1!="") {
+	if ($p1>" ") {
 	    $p[]=$p1; $b = date_fix($b1);$g = $g1;
-		if ($p2!="")
+		if ($p2>" ")
 			$p[]=$p2;
-		if ($p3!="")
+		if ($p3>" ")
 			$p[]=$p3;
 			
 	}

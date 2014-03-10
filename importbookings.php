@@ -5,7 +5,7 @@ include_once(dirname(__FILE__).'/domain/Person.php');
 include_once(dirname(__FILE__).'/database/dbPersons.php');
 //echo dirname(__FILE__);
 
-$filename = "file:///Users/allen/Desktop/bookings1_50.csv";
+$filename = "file:///Users/allen/Desktop/00-14bookingsfinal.csv";
 	$handle = fopen($filename, "r");
 	if ($handle==false) echo "failed to open";
 	$keys = fgetcsv($handle,0,',','"');

@@ -38,13 +38,13 @@ h1 {padding-left: 0px; padding-right:165px;}
 		//pages clients can view
 		$permission_array['index.php']=0;
 		$permission_array['about.php']=0;
-		$permission_array['request.php']=0;
 		//pages volunteers can view
+		$permission_array['searchPeople.php']=1;
 		$permission_array['roomLog.php']=1;
 		$permission_array['room.php']=1;
 		//additional pages social workers can view
-		$permission_array['bookingEdit.php']=1;
-		$permission_array['people.php']=1;
+		$permission_array['bookingEdit.php']=2;
+		$permission_array['personEdit.php']=2;
 		//additional pages managers can view
 		$permission_array['log.php']=3;
 		$permission_array['data.php']=3;

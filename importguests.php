@@ -6,28 +6,30 @@ include_once(dirname(__FILE__).'/domain/Person.php');
 	if ($handle==false) echo "failed to open";
 	$keys = fgetcsv($handle,0,',','"');
 	$values = fgetcsv($handle,0,',','"');
+	$count=0;
 	while ($values) {
 	    $g = array_combine($keys,$values);
-	    echo "<br><br>";var_dump($g);
+	   // echo "<br><br>";var_dump($g);
 	    $pgb = build_patients($g['patient1'], $g['patient2'], $g['patient3'],
 	                        $g['gender1'], $g['gender2'], $g['gender3'],
 							$g['birthday1'], $g['birthday2'], $g['birthday3']);
-		echo "<br><br>";var_dump($pgb);
+		// echo "<br><br>";var_dump($pgb);
 	    $p = new Person($g['last_name'], $g['first_name'], "", "", $g['address'], $g['city'], $g['state'], $g['zip'], $g['phone1'], 
 					$g['phone2'], $g['email'], "guest", "", implode(',',$pgb[0]), $pgb[2], $pgb[1], '');
 	    $p->set_mgr_notes($g['mgr_notes']);
-	    echo "<br><br>";var_dump($p);
-	    insert_dbPersons($p);
+	    if (!insert_dbPersons($p))
+	        echo "<br><br>did not import :".$g['last_name']." ". $g['first_name'];
+	    else $count++;
 	    $values = fgetcsv($handle,0,',','"');
 	}
 	fclose($handle);
+	echo "<br><br>".$count." guests imported";
 	
 function build_patients($p1, $p2, $p3, $g1, $g2, $g3, $b1, $b2, $b3) {
 	$p = array();
 	$b = ""; $g = "";
 	if ($p1!="") {
-	    echo "we are here,b1=".$b1;
-		$p[]=$p1; $b = date_fix($b1);$g = $g1;
+	    $p[]=$p1; $b = date_fix($b1);$g = $g1;
 		if ($p2!="")
 			$p[]=$p2;
 		if ($p3!="")

@@ -100,7 +100,7 @@ if($date==date('y-m-d')){
 $currentDate = strtotime($date);
 
 // String of this date, including the weekday and such
-$formattedDate = date("l, F j, Y",$currentDate);
+$formattedDate = date("l F j, Y",$currentDate);
 //NEW WAY - David Phipps
 //if room log doesn't exist, build it
 //then if that fails, we say we can't find it

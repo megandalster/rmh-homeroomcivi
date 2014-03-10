@@ -1,4 +1,3 @@
-
 <?php
 /*
  * Copyright 2011 by Alex Lucyk, Jesus Navarro, and Allen Tucker.

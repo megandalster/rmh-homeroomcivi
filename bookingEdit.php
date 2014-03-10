@@ -54,7 +54,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
             $guestid = $tempBooking->get_guest_id();
             $guest = retrieve_dbPersons($guestid);
             $patient_DOB = $guest->get_patient_birthdate();
-            $patient_gender = $guest->get_gender(); 
+            $patient_gender = $guest->get_patient_gender(); 
 	  }
 	  else { // id is a guest id... create a new booking for that guest
 	       $status = "pending";
@@ -72,7 +72,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
            else 
            {
            		$patient_DOB = $guest->get_patient_birthdate();
-           		$patient_gender = $guest->get_gender();
+           		$patient_gender = $guest->get_patient_gender();
                 $allBookingIDs = $guest->get_prior_bookings();
                 if(!$allBookingIDs[0] == "") {
                     //Get last Booking ID
@@ -133,11 +133,13 @@ function process_form($id,$referralid)	{
    	    $first_name = $guest->get_first_name();
 		$phone1 = $guest->get_phone1();
 		$patient_gender = $guest->get_patient_gender();
+		$guest_gender = $guest->get_gender();
    	}
    	else if ($id=="new"){ // creating a new booking from scratch -- edit everything
         $first_name = trim(str_replace("'","\'", htmlentities(str_replace('&','and',$_POST['first_name_1']))));
 		$last_name = trim(str_replace("'","\'", htmlentities($_POST['last_name_1'])));
-		$patient_gender = trim(str_replace('\\\'','\'',htmlentities($_POST['patient_gender_1'])));	
+		$patient_gender = trim(str_replace('\\\'','\'',htmlentities($_POST['patient_gender_1'])));
+		$guest_gender = trim(str_replace('\\\'','\'',htmlentities($_POST['gender_1'])));		
         $address = trim(str_replace("'","\'", htmlentities($_POST['address_1'])));
 		$city = trim(str_replace("'","\'", htmlentities($_POST['city_1'])));
 		$state = $_POST['state_1'];
@@ -149,6 +151,7 @@ function process_form($id,$referralid)	{
     else { //creating a new booking from an old one -- pull old guest information
     	$tempBooking = retrieve_dbBookings($referralid);
    	    $guest = retrieve_dbPersons($id);
+   	    $guest_gender = $guest->get_gender();
    	    $first_name = $guest->get_first_name();
 		$phone1 = $guest->get_phone1();
 		$patient_gender = $guest->get_patient_gender();
@@ -161,10 +164,6 @@ function process_form($id,$referralid)	{
     $patient_birthdate = substr($_POST['patient_birth_year'], 2,2).'-'. 
                              $_POST['patient_birth_month'].'-'.
                              $_POST['patient_birth_day'];
-                             
-							 
-							 
-
                              
     $patient_gender = $_POST['patient_gender'];
     $currentEntry = retrieve_dbPersons($first_name.$phone1);

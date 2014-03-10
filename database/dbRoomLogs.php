@@ -61,12 +61,12 @@ function build_room_log($date){
     // Check if the room log already exists
     $query = "SELECT * FROM dbRoomLogs WHERE id = '".$date."'";
     $result = mysql_query($query);
+    mysql_close();
     // If room log does not yet exist
     if(mysql_num_rows($result) == 0){
     	// rebuild the past room log using functions in the RoomLog class
     	$new_roomLog = new RoomLog($date);
-    	echo "build_room_log date=".$date;
-        insert_dbRoomLog($new_roomLog);
+    	insert_dbRoomLog($new_roomLog);
         /*
         $query = "SELECT * FROM dbBookings WHERE room_no <> '' AND '".$date."' >= date_in AND ('".$date."' < date_out OR date_out = '')";
         $result = mysql_query($query);
@@ -88,8 +88,7 @@ function build_room_log($date){
         }
         */
     }
-    mysql_close();
-	return retrieve_dbRoomLog($date);
+    return retrieve_dbRoomLog($date);
 }
 
 /**

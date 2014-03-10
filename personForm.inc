@@ -32,15 +32,15 @@ else {
 }
 
 ?>
-<form method="POST">
+<form method="POST"><fieldset>
+<legend> (<span style="font-size:x-small;color:FF0000">*</span> denotes required fields) </legend>
 	<input type="hidden" name="old_id" value=<?PHP echo("\"".$id."\"");?>>
 	<input type="hidden" name="old_pass" value=<?PHP echo("\"".$person->get_password()."\"");?>>
 	<input type="hidden" name="_form_submit" value="1">
-<p><span style="font-size:x-small;color:FF0000">*</span> denotes required fields
-	<span class="bigTable">
-	<table>
+	<p>
+	<table border="0px">
 		<?php 
-  echo "<tr><td><span style='font-size:x-small;color:FF0000'>* </span>First Name";
+  echo "<tr><td><span style='font-size:x-small;color:FF0000'>* </span>First Name:";
     if ($id=='new')
         echo ':</td><td> 
         	<input type="text" name="first_name" tabindex=1 value="'.$person->get_first_name().'"></td></tr>';
@@ -115,7 +115,6 @@ else {
 		<tr><td>Email:</td><td><input type="text" name="email" tabindex=9 value="<?PHP echo($person->get_email())?>"></td></tr>
        
 	</table>
-	</span>
 <?PHP
 	if($_SESSION['access_level'] > 1) {
     $st = implode(',',$person->get_type());
@@ -172,7 +171,7 @@ else {
 					'<input type="submit" value="Reset Password" name="Reset Password"> to reset this user\'s password.</p>';
 		}
 		?>
-</form>
+</fieldset></form>
 <script>
 function moveOnMax(field,nextFieldID){
   if(field.value.length >= field.maxLength){

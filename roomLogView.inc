@@ -184,8 +184,8 @@ function get_booking($room){
 function print_booking_info($booking){
 
 	$guests = $booking->get_occupants();
-	$primary = retrieve_dbPersons($booking->get_guest_id());
-	echo ($primary->get_first_name()." ".$primary->get_last_name()."<br />");
+	//$primary = retrieve_dbPersons($booking->get_guest_id());
+	//echo ($primary->get_first_name()." ".$primary->get_last_name()."<br />");
 	// Print each occupant
 	foreach($guests as $currentGuest){
 		echo ($currentGuest."<br />");

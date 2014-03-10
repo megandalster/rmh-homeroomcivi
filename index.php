@@ -86,7 +86,7 @@
 
 				//We have a manager authenticated	 
 				if($_SESSION['access_level']==3) {
-					$two_weeks = $today + 14*86400; 
+				//	$two_weeks = $today + 14*86400; 
 				    echo('<div class="logBox"><p><strong>Recent bookings, referrals, and room log changes:</strong><br />');
 					echo('<table class="searchResults">');
 					echo('<tr><td class="searchResults"><u>Time</u></td><td class="searchResults"><u>Message</u></td></tr>');

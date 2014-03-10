@@ -103,7 +103,7 @@ include_once("database/dbPersons.php");
 					$pName[$foundcount] = $primaryGuest->get_first_name()." ".$pLastName;
 					$pPatient[$foundcount] = $thisRow['patient'];
 					$pStatus[$foundcount] = $thisRow['status'];
-					$pDateIn[$foundcount] = "20".substr($thisRow['date_submitted'],0,8);
+					$pDateIn[$foundcount] = $thisRow['date_submitted'];
 					$pRoomNo[$foundcount] = $thisRow['room_no'];
 					$pId[$foundcount] = $thisRow['id'];
 					$foundcount++;
@@ -118,14 +118,14 @@ include_once("database/dbPersons.php");
 			echo ('<tr><td class=searchResults><strong>Guest</strong></td>');
 			echo ("<td class=searchResults><strong>Patient</strong></td>");
 			echo ("<td class=searchResults><strong>Status</strong></td>");
-			echo ("<td class=searchResults><strong>Submitted</strong></td>");
+			echo ("<td class=searchResults><strong>Date Submitted</strong></td>");
 			echo ("<td class=searchResults><strong>Room</strong></td></tr>");
 		    for ($i=0; $i<$foundcount; $i++) {
 			    echo ("<tr><td class=searchResults>");
 				echo "<tr><td class=searchResults>".$pName[$i]."</td>".
 					"<td class=searchResults>".$pPatient[$i]."</td>".
 					"<td class=searchResults>".$pStatus[$i]."</td>".
-					"<td class=searchResults>".$pDateIn[$i]."</td>".
+					"<td class=searchResults>".nice_date($pDateIn[$i])."</td>".
 					"<td class=searchResults>".$pRoomNo[$i]."</td>".
 					"<td class=searchResults><a href=\"viewBookings.php?id=update&bookingid=".$pId[$i].
 					"\">view</td>";
@@ -152,6 +152,9 @@ include_once("database/dbPersons.php");
 //Function to santize strings for searching bookings
 function sanitize($string){
 	return trim(str_replace('\'','&#39;',htmlentities($string)));
+}
+function nice_date ($d) {
+    return date('M d, Y', mktime(0,0,0,substr($d,3,2),substr($d,6,2),substr($d,0,2)));
 }
 ?>
 </body>

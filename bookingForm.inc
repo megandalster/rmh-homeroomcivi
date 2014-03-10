@@ -1,7 +1,3 @@
-
-
-
-
 <form method="POST">
 <?php     
 if ($_SESSION['access_level']==0)
@@ -173,7 +169,7 @@ echo "<br />";
   <legend><b>Primary Guest:</b></legend>
 <?php    if ($id!="new") {
     echo '<a  target="_blank" href="personEdit.php?id='.$guest->get_id().'">'.$guest->get_first_name().' '.$guest->get_last_name().'</a><br>';
-    echo 'Relationship to Patient: '.$guest->get_patient_gender().'<br />';
+    echo 'Gender: '.$guest->get_gender().'<br />';
     echo 'Address: '.$guest->get_address().', '. $guest->get_city().', '.$guest->get_state().' '.$guest->get_zip(). '<br />';
     echo 'E-mail: '.$guest->get_email().'<br />';
     $phone1 = $guest->get_phone1();
@@ -194,8 +190,13 @@ echo "<br />";
     else {
         echo '<span style="font-size:x-small;color:FF0000">* </span>First Name: <input type="text" size="30" name="first_name_1" value='.$guest->get_first_name().'><br />' ;
         echo '<span style="font-size:x-small;color:FF0000">* </span>Last Name: <input type="text" size="30" name="last_name_1" value='.$guest->get_last_name().'><br />' ;
-        //echo '<select name= .$guest->get_first_name().';
-        echo '<span style="font-size:x-small;color:FF0000">* </span>Relationship to Patient: <input type="text" size = "30" name = "patient_gender_1" value='.$guest->get_patient_gender().'><br />' ;
+        echo '<span style="font-size:x-small;color:FF0000">* </span>Gender: <select name = "gender_1"> <option value = " "> </option>';	 
+		 if($guest_gender == "Male") echo '<option value = "Male" selected>Male</option>';
+		 else 						echo '<option value = "Male">Male</option>'; 
+		 if($guest_gender == "Female") echo '<option value = "Female" selected>Female</option>';
+		 else 						echo '<option value = "Female">Female</option>';
+		 echo '</select><br />';
+		echo '<span style="font-size:x-small;color:FF0000">* </span>Relationship to Patient: <input type="text" size = "30" name = "patient_gender_1" value='.$guest->get_patient_gender().'><br />' ;
         echo 'Home Address: <input type="text" size="40" name = "address_1" value='.$guest->get_address().'><br />' ;
         echo 'City (or Country if outside US): <input type = "text" size = "15" name = "city_1" value='.$guest->get_city().'><br />' ;
         echo 'State: <select name = "state_1">';

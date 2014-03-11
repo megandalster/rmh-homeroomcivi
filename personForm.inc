@@ -145,7 +145,7 @@ else {
 	  	  //  echo(' disabled="true"');
 	  	
 	  	if ($id !== 'new') {
-	  	    echo('<p>Prior Bookings:<br />');
+	  	    echo('<p><b>Prior Bookings:</b><br />');
 	  	    foreach ($person->get_prior_bookings() as $prior_booking_id) {
 	  	    	 $date = substr($prior_booking_id,0,8);
 	  	    	 if ($date!="")

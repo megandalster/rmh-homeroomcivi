@@ -10,21 +10,24 @@ $filename = "file:///Users/allen/Desktop/00-14bookingsfinal.csv";
 	if ($handle==false) echo "failed to open";
 	$keys = fgetcsv($handle,0,',','"');
 	$g = fgetcsv($handle,0,',','"');
-	$count=0;
+	$count=0; $pcount=0;
 	while ($g) {
 	//    $g = array_combine($keys,$values);
 	//    echo "<br><br>";var_dump($g);
 	    $p = retrieve_dbPersons($g[0]);
 	//    echo "<br><br>";var_dump($p);
-	    if ($p)
+	    if ($p) {
+	      $pcount++;
+	      echo "<br>".$pcount;
 	      for ($i=6; $i<=64; $i+=2) 
 	        if ($g[$i]!="" && $g[$i+60]<="14-03-09") {
 	            $b = makenew_booking($p, $g[1],$g[2],$g[3],$g[5],
 	                            $g[$i],$g[$i+60],room_fix($g[$i+1]));
-	 //           echo "<br><br>";var_dump($b);
 	            if (!insert_dbBookings($b)) {echo "<br><br>booking not added: b = ";var_dump($b);}
-	            else $count++;
+	            else {$p->add_prior_booking($b->get_id()); $count++;}
 	        }
+	      update_dbPersons($p); 
+	    }
 	    $g = fgetcsv($handle,0,',','"');
 	}
 	fclose($handle);

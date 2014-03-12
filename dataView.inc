@@ -63,6 +63,8 @@ $tg = 0;
 echo "<br><th>Patient Age</th> <th>Bookings (Deceased)</th><th>Guests</th>";
 foreach($ac as $age => $bookings){
 	echo ("<tr>");
+	if (strpos($bookings,")")>0)
+	    $bookings = substr($bookings,0,strpos($bookings,")")+1);
 	echo ("<td align='center';>". $age . "</td>" . 
 	    "<td align='center';>". $bookings . "</td>" . 
 	    "<td align='center';>". $ag[$age] . "</td>");

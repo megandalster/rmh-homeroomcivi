@@ -278,6 +278,21 @@ function retrieve_all_closed_dbBookings ($date, $enddate) {
 	return $theBookings;
 }
 
+//retrieve all bookings that were closed for a person with id=$id
+function retrieve_persons_closed_dbBookings ($id) {
+	connect();
+    $query = "SELECT * FROM dbBookings WHERE status LIKE '%closed%' AND id LIKE '%"
+             .$id."%' ORDER BY date_out DESC";
+    $result = mysql_query ($query);
+    $theBookings = array();
+	while ($result_row = mysql_fetch_assoc($result)) {
+	    $theBooking = build_booking($result_row);
+	    $theBookings[] = $theBooking;
+	}
+	mysql_close();
+	return $theBookings[0];
+}
+
 /**
  * Updates a Booking in the dbBookings table by deleting it and re-inserting it
  * @param $booking the Booking to update

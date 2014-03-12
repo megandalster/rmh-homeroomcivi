@@ -158,12 +158,22 @@ else
     </select>
     <input type="text" size = "3" maxLength = "4" name="date_submitted_year" value= "<?php echo("20".substr($tempBooking->get_date_submitted(),0,2))?>"/><br />
 
-
+<br><b>Status: </b>
 <?php
-echo "<br><b>Status: </b>". $tempBooking->get_status(); 
-echo "<br />";
+if ($tempBooking->get_status()=="closed" || $tempBooking->get_status()=="closed-deceased") {
+    echo '<select name="status">';
+    $status_options = array("closed","closed-deceased");
+    echo("<option></option>");
+    foreach ($status_options as $status_option)
+      if ($status_option==$tempBooking->get_status())
+        echo "<option value=".$status_option." selected='yes'>".$status_option."</option>";
+      else echo "<option value=".$status_option.">".$status_option."</option>";
+    echo "</select>";
+}
+else echo $tempBooking->get_status();
 ?>
-<br/>
+
+<br /><br/>
 
 <fieldset>
   <legend><b>Primary Guest:</b></legend>
@@ -227,7 +237,7 @@ echo "<br />";
 </fieldset>
 
 <br>
- <b>Additional Guests </b>(Name / Relation to Patient / Gender):<br>
+ <b>Occupants </b>(Name / Relation to Patient / Gender):<br>
 <br />
 <?php
   if(empty($last_occupants)) $occupants = $tempBooking->get_occupants();

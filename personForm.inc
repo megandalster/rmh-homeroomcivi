@@ -145,7 +145,7 @@ else {
 	  	  //  echo(' disabled="true"');
 	  	
 	  	if ($id !== 'new') {
-	  	    echo('<p><b>Prior Bookings:</b><br />');
+	  	    echo('<p> Prior Bookings: <br />');
 	  	    foreach ($person->get_prior_bookings() as $prior_booking_id) {
 	  	    	 $date = substr($prior_booking_id,0,8);
 	  	    	 if ($date!="")
@@ -153,7 +153,7 @@ else {
 	  	    }
 	  	    echo "<br><a href=bookingEdit.php?id=".$id." target='_blank'>Create new booking</a>";
 	  	}
-	  	echo('<p>Manager\'s Notes:<br />');
+	  	echo('<p><b>Manager\'s Notes:</b><br />');
 	  	echo('<textarea name="mgr_notes" rows="3" cols="60"');
 	  	echo('>'. $person->get_mgr_notes() . '</textarea>');
 	  	

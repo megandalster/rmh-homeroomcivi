@@ -63,6 +63,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
            $flag = "new";
            $guestid = $id;
 	       $guest = retrieve_dbPersons($id);
+	   //    $last_booking = retrieve_persons_closed_dbBookings($id);
            if (!$guest){
                 echo("The guest with id '".$id."' does not exist in the database. Please fill out a blank form below:");
                 $guest = new Person("","","","","","","","","","","","","","","","","");
@@ -73,25 +74,23 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
            {
            		$patient_DOB = $guest->get_patient_birthdate();
            		$patient_gender = $guest->get_patient_gender();
-                $allBookingIDs = $guest->get_prior_bookings();
-                if(!$allBookingIDs[0] == "") {
-                    //Get last Booking ID
-                    $lastBookingID = end($allBookingIDs);
-                    $lastBooking = retrieve_dbBookings($lastBookingID);
-                    
-                    if($lastBooking != "") {
+                $lastBooking = retrieve_persons_closed_dbBookings($id);
+                if($lastBooking) {
 					    $last_occupants = $lastBooking->get_occupants();
                         $last_hospital = $lastBooking->get_hospital();
                         $last_department = $lastBooking->get_department();
-                        $last_auto_make =   $lastBooking->get_auto_make();
-                        $last_auto_model=   $lastBooking->get_auto_model();
-                        $last_auto_color=   $lastBooking->get_auto_color();
-                        $last_auto_state=   $lastBooking->get_auto_state();
-                    }
+                        $last_auto =   $lastBooking->get_auto();
                 }
-           }
-           $tempBooking = new Booking(date("y-m-d"), "Will Call", $guest->get_id(), $status, "", $guest->get_patient_name(), "", "",  
-               "","","","","","00000000000", "", "", "", "", "","new");                            
+                else {
+					    $last_occupants = array();
+                        $last_hospital = "";
+                        $last_department = "";
+                        $last_auto =  "";
+                }
+                $tempBooking = new Booking(date("y-m-d"), "Will Call", $guest->get_id(), $status, "", $guest->get_patient_name(), 
+           		    $last_occupants, $last_auto,  
+                    "","","",$last_hospital,$last_department,"00000000000", "", "", "", "", "","new");  
+           }                          
 	  }
 	  include('bookingForm.inc'); 
 	}

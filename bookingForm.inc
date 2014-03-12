@@ -3,7 +3,7 @@
 if ($_SESSION['access_level']==0)
     echo "<b> To request a room at the Ronald McDonald House, please fill out the following form</b> ";
 else if ($id=='update') {
-    echo "<b> Editing a pending or active booking " ;
+    echo "<b> Editing an existing booking " ;
 	echo ("</b> ");
 }
 else {
@@ -102,7 +102,7 @@ $hospitals = array("", "Maine Medical Center", "Mercy Hospital", "Specialist", "
 <br><span style='font-size:x-small;color:FF0000'>* </span>Department of Treatment  
 <select name="dept">
 			<?php 
-$departments = array("", "BBCH", "CARDIOLOGY", "MCCP", "NEEDS", "NICU/CCN", "PRENATAL", "SCU", "SPRING HARBOR", "Other", "Outpatient");			
+$departments = array("BBCH", "CARDIOLOGY", "MCCP", "NEEDS", "NICU/CCN", "PRENATAL", "SCU", "SPRING HARBOR", "Other", "Outpatient");			
 			foreach($departments as $department){
 				echo ("<option value='");
 				echo ($department. "' ");
@@ -110,6 +110,11 @@ $departments = array("", "BBCH", "CARDIOLOGY", "MCCP", "NEEDS", "NICU/CCN", "PRE
 				    echo "SELECTED";
 				echo (">".$department."</option>");
 			}
+			if (!in_array($tempBooking->get_department(),$departments)){
+			    echo ("<option value='");
+				echo ($tempBooking->get_department(). "' SELECTED");
+				echo (">".$tempBooking->get_department()."</option>");
+			}   
 			?>
 </select><br>
 

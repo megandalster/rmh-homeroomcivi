@@ -5,7 +5,7 @@ include_once(dirname(__FILE__).'/domain/Person.php');
 include_once(dirname(__FILE__).'/database/dbPersons.php');
 //echo dirname(__FILE__);
 
-$filename = "file:///Users/allen/Desktop/00-14bookingsfinal.csv";
+$filename = "file:///Users/allen/Desktop/00-14bookings3001-3478.csv";
 	$handle = fopen($filename, "r");
 	if ($handle==false) echo "failed to open";
 	$keys = fgetcsv($handle,0,',','"');
@@ -20,7 +20,7 @@ $filename = "file:///Users/allen/Desktop/00-14bookingsfinal.csv";
 	      $pcount++;
 	      echo "<br>".$pcount;
 	      for ($i=6; $i<=64; $i+=2) 
-	        if ($g[$i]!="" && $g[$i+60]<="14-03-09") {
+	        if ($g[$i]>="00-01-01" && $g[$i]<="14-03-09" && $g[$i+60]>=$g[$i]) {
 	            $b = makenew_booking($p, $g[1],$g[2],$g[3],$g[5],
 	                            $g[$i],$g[$i+60],room_fix($g[$i+1]));
 	            if (!insert_dbBookings($b)) {echo "<br><br>booking not added: b = ";var_dump($b);}

@@ -40,15 +40,14 @@
  
   <a href = <?php  echo("personEdit.php?id=".$current_id);?> ><?php echo($current_guest->get_first_name()." ".$current_guest->get_last_name())?> </a>
     <br/>
-    <?php  echo '&nbsp;&nbsp;&nbsp;&nbsp;Relationship to Patient: '.$current_guest->get_patient_gender().'<br />' ;
-    ?>
+    
     <br/>
-    Additional Guests: <br/>
+    Additional Guests: 
     <?php $occupants = $booking->get_occupants();
-    for($i=0 ; $i< sizeof($occupants) ; $i++){
+    for($i=1 ; $i< sizeof($occupants) ; $i++){
         echo($occupants[$i]);
         if ($i < sizeof($occupants)-1)
-            echo '<br/>';
+            echo ', ';
         else echo '<br>';
      }?>
         

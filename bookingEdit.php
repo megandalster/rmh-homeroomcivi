@@ -201,11 +201,8 @@ function build_POST_booking($primaryGuest,$referralid) {
     if($_POST['day']=="yes" && $_POST['day_use_year'] && $_POST['day_use_month'] && $_POST['day_use_day']){
     	$day_use_date = substr($_POST['day_use_year'],2,2).'-'.
                  $_POST['day_use_month'].'-'.
-                 $_POST['day_use_day'];
-                 
+                 $_POST['day_use_day'];               
     }
-    
-
      
     $referred_by = trim(str_replace("'","\'", htmlentities($_POST['referred_by'])));
     if($_POST['payment'] != "other")
@@ -237,6 +234,7 @@ function build_POST_booking($primaryGuest,$referralid) {
         $pendingBooking->set_payment_arrangement($payment);
         $pendingBooking->set_overnight_use($_POST['overnight']);
         $pendingBooking->set_day_use($_POST['day']);
+        $pendingBooking->set_status($_POST['status']);
         $pendingBooking -> set_day_use_date($day_use_date);
         $pendingBooking->set_mgr_notes($notes);
         $pendingBooking->set_referred_by($referred_by);

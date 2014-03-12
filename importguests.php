@@ -36,13 +36,13 @@ function build_patients($p1, $p2, $p3, $g1, $g2, $g3, $b1, $b2, $b3) {
 			$p[]=$p3;
 			
 	}
-	else if ($p2!="")
+	else if ($p2>" ")
 	{
 		$p[]=$p2; $b = date_fix($b2);$g = $g2;
-		if ($p3!="")
+		if ($p3>" ")
 			$p[]=$p3;
 	}
-	else if ($p3!="") {
+	else if ($p3>" ") {
 		$p[]=$p3; $b = date_fix($b3);$g = $g3;
 	}
 	return array($p,$g,$b);

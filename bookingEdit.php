@@ -32,7 +32,8 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
 	$user_phone = $user->get_phone1();
 
 	$id = $_GET['id'];
-	if (!$_GET['referralid']) $referralid = date("y-m-d").$id; // new booking from an old one
+	if (!$_GET['referralid']) 
+	    $referralid = date("y-m-d").$id; // new booking from an old one
 	else $referralid = $_GET['referralid'];
 	// prepare to update a new or existing referral that has not yet been edited
 	// set up the proper form for the user to fill out
@@ -72,6 +73,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
            }
            else 
            {
+           		$patient_name = $guest->get_patient_name();
            		$patient_DOB = $guest->get_patient_birthdate();
            		$patient_gender = $guest->get_patient_gender();
                 $lastBooking = retrieve_persons_closed_dbBookings($id);
@@ -82,7 +84,8 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
                         $last_auto =   $lastBooking->get_auto();
                 }
                 else {
-					    $last_occupants = array();
+					    $last_occupants = array($guest->get_first_name()." ".$guest->get_last_name().
+					                    "::".$guest->get_gender().":");
                         $last_hospital = "";
                         $last_department = "";
                         $last_auto =  "";
@@ -105,7 +108,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
         // okay, good to go
         else{
             $primaryGuest = process_form($id,$referralid);
-            $booking = build_POST_booking($primaryGuest,$referralid);
+            $booking = build_POST_booking($id,$primaryGuest,$referralid);
             echo("This booking has been "); if ($id=="new") echo "submitted."; else echo "updated.";
             echo '<a href = "bookingEdit.php?id=update&referralid='.$booking->get_id().'" > (Edit this booking) </a><br>';
 			// Create the log message
@@ -167,23 +170,22 @@ function process_form($id,$referralid)	{
     $patient_gender = $_POST['patient_gender'];
     $currentEntry = retrieve_dbPersons($first_name.$phone1);
     if(!$currentEntry) {
-            $currentEntry = new Person($last_name, $first_name, "", "", $address, $city,$state, $zip, $phone1, $phone2, 
-                                   $email, "guest", date("y-m-d").$first_name.$phone1, $patient_name,$patient_birthdate,$patient_gender,"");
+            $currentEntry = new Person($last_name, $first_name, $guest_gender, "", $address, $city,$state, $zip, $phone1, $phone2, 
+                                   $email, "guest", "", implode(',',$patient_name),$patient_birthdate,$patient_gender,"");
     }
     else {
             $currentEntry->set_patient_name($patient_name);
             $currentEntry->set_patient_birthdate($patient_birthdate);
             $currentEntry->set_patient_gender($patient_gender);
-            $currentEntry->set_gender($patient_gender);
+            $currentEntry->set_gender($guest_gender);
             $currentEntry->add_type("guest");
-            $currentEntry->add_prior_booking($referralid);
     }
     insert_dbPersons($currentEntry);
     return $currentEntry;
     
 }
 // build a booking from the posted data and save it
-function build_POST_booking($primaryGuest,$referralid) {
+function build_POST_booking($id,$primaryGuest,$referralid) {
 	$date_submitted = substr($_POST['date_submitted_year'],2,2).'-'.
                  $_POST['date_submitted_month'].'-'.
                  $_POST['date_submitted_day']; 
@@ -250,6 +252,8 @@ function build_POST_booking($primaryGuest,$referralid) {
                                   
                             
     }
+    if ($id=="new")
+        $pendingBooking-> add_occupant($primaryGuest->get_first_name()." ".$primaryGuest->get_last_name(),"",$primaryGuest->get_gender(),"");
     for($count = 1 ; $count <= 6 ; $count++){
         if($_POST['additional_guest_'.$count] != "")
            $pendingBooking->add_occupant($_POST['additional_guest_'.$count], $_POST['additional_guest_'.$count.'_relation'],

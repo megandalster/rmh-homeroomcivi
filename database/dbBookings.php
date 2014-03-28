@@ -278,7 +278,7 @@ function retrieve_all_closed_dbBookings ($date, $enddate) {
 	return $theBookings;
 }
 
-//retrieve all bookings that were closed for a person with id=$id
+//retrieve most recent booking that was closed for a person with id=$id
 function retrieve_persons_closed_dbBookings ($id) {
 	connect();
     $query = "SELECT * FROM dbBookings WHERE status LIKE '%closed%' AND id LIKE '%"

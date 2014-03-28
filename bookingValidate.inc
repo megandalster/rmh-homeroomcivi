@@ -28,7 +28,7 @@ function validate_form($id){
 	if ($id=='new') {
   	   if(trim($_POST['first_name_1'])==null) $errors[] = 'Please enter a first name for the primary guest ';
 	   if($_POST['last_name_1']==null || $_POST['first_name']=='volunteer') $errors[] = 'Please enter a last name for the primary guest ';   
-       if($_POST['patient_gender_1'] == null) $errors[] = 'Please enter a patient gender ';
+  //     if($_POST['patient_gender_1'] == "") $errors[] = 'Please enter a patient gender ';
        
 	   $phone1 = $_POST['phone1_area_1'].$_POST['phone1_middle_1'].$_POST['phone1_end_1'];
 	   $phone2 = $_POST['phone2_area_1'].$_POST['phone2_middle_1'].$_POST['phone2_end_1'];

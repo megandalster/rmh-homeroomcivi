@@ -36,7 +36,6 @@ include_once("database/dbPersons.php");
 		// Grab each search string from the form and
 		// sanitize it
 		$primaryFirstName = sanitize($_POST['p_first_name']);
-		$primaryLastName = sanitize($_POST['p_last_name']);
 		$roomNumber = sanitize($_POST['room_no']);
 		$month = sanitize($_POST['month']);
 		$day = sanitize($_POST['day']);

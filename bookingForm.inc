@@ -205,13 +205,13 @@ else echo $tempBooking->get_status();
     else {
         echo '<span style="font-size:x-small;color:FF0000">* </span>First Name: <input type="text" size="30" name="first_name_1" value='.$guest->get_first_name().'><br />' ;
         echo '<span style="font-size:x-small;color:FF0000">* </span>Last Name: <input type="text" size="30" name="last_name_1" value='.$guest->get_last_name().'><br />' ;
-        echo '<span style="font-size:x-small;color:FF0000">* </span>Gender: <select name = "gender_1"> <option value = " "> </option>';	 
+        echo 'Gender: <select name = "gender_1"> <option value = " "> </option>';	 
 		 if($guest_gender == "Male") echo '<option value = "Male" selected>Male</option>';
 		 else 						echo '<option value = "Male">Male</option>'; 
 		 if($guest_gender == "Female") echo '<option value = "Female" selected>Female</option>';
 		 else 						echo '<option value = "Female">Female</option>';
 		 echo '</select><br />';
-		echo '<span style="font-size:x-small;color:FF0000">* </span>Relationship to Patient: <input type="text" size = "30" name = "patient_gender_1" value='.$guest->get_patient_gender().'><br />' ;
+//		echo '<span style="font-size:x-small;color:FF0000">* </span>Relationship to Patient: <input type="text" size = "30" name = "patient_gender_1" value='.$guest->get_patient_gender().'><br />' ;
         echo 'Home Address: <input type="text" size="40" name = "address_1" value='.$guest->get_address().'><br />' ;
         echo 'City (or Country if outside US): <input type = "text" size = "15" name = "city_1" value='.$guest->get_city().'><br />' ;
         echo 'State: <select name = "state_1">';
@@ -276,7 +276,7 @@ else echo $tempBooking->get_status();
 		'<input type="text" size="25" name = "additional_guest_'.($counter).'" value = "'.$occupant_name.'"/>' . ' / '.
 		'<input type="text" size="15" name = "additional_guest_'.($counter).'_relation" value = "'.$occupant_relation.'"/>' . ' / ' .
 		'<select name= "additional_guest_'.($counter).'_gender"> 
-     	<option value = "Gender Not Specified"> </option>';
+     	<option value = ""> </option>';
      	if($occupant_gender == 'Male')	echo '<option value = "Male" selected>Male</option>';
      	else 							echo '<option value = "Male">Male</option>';
      	if($occupant_gender == 'Female')	echo '<option value = "Female" selected>Female</option>';

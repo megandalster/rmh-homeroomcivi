@@ -13,11 +13,6 @@ echo ("<td><input type=\"text\" name=\"p_first_name\" value=\"".$_POST['p_first_
 echo ("</tr>");
 
 echo ("<tr>");
-echo ("<td>Primary Guest's Last Name: </td>");
-echo ("<td><input type=\"text\" name=\"p_last_name\" value=\"".$_POST['p_last_name']."\"></td>");
-echo ("</tr>");
-
-echo ("<tr>");
 echo ("<td>Patient's Name: </td>");
 echo ("<td><input type=\"text\" name=\"pat_first_name\" value=\"".$_POST['pat_first_name']."\"></td>");
 echo ("</tr>");
@@ -50,6 +45,7 @@ echo ("<td>Status: </td>");
 echo ("<td><select name=\"type\">");
 echo ("<option value=\"\"></option>");
 echo ("<option value=\"active\" ".($_POST['type']=='active'?'selected':'').">active</option>");
+echo ("<option value=\"reserved\" ".($_POST['type']=='reserved'?'selected':'').">reserved</option>");
 echo ("<option value=\"pending\" ".($_POST['type']=='pending'?'selected':'').">pending</option>");
 echo ("<option value=\"closed\" ".($_POST['type']=='closed'?'selected':'').">closed</option>");	
 echo ("<option value=\"closed-deceased\" ".($_POST['type']=='closed-deceased'?'selected':'').">closed-deceased</option>");	

@@ -40,12 +40,10 @@
  
   <a href = <?php  echo("personEdit.php?id=".$current_id);?> ><?php echo($current_guest->get_first_name()." ".$current_guest->get_last_name())?> </a>
     <br/>
-    
-    <br/>
     Additional Guests: 
     <?php $occupants = $booking->get_occupants();
     for($i=1 ; $i< sizeof($occupants) ; $i++){
-        echo($occupants[$i]);
+        echo(substr($occupants[$i],0,strpos($occupants[$i],":")));
         if ($i < sizeof($occupants)-1)
             echo ', ';
         else echo '<br>';

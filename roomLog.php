@@ -40,7 +40,6 @@ if($_POST['submit'] == "Submit"){
 	$dateDay = $_POST['day'];
 	$dateMonth = $_POST['month'];
 	$dateYear = substr($_POST['year'], 2, 2);
-
 	if($dateDay && $dateMonth && $dateYear){
 		// construct a date string
 		$date = $dateYear."-".$dateMonth."-".$dateDay;
@@ -48,19 +47,7 @@ if($_POST['submit'] == "Submit"){
 		$date = trim(str_replace('\\\'','',htmlentities(str_replace('&','and',$date))));
 	}
 }
-// Check if today's room log has been saved before: if not, save it.
-if(!retrieve_dbRoomLog($roomLogID) && $roomLogID == date("y-m-d")){
-	if (insert_dbRoomLog($roomLog))
-	echo ("<h3 style=\"text-align:center\">Today's room log has been saved.</h3>");
-	else echo ("<h3 style=\"text-align:center;color:red\">Today's room log has not been saved.</h3>");
-}
-if($date==date('y-m-d')){
-	// Today's date, so pull up today's roomLog.
-	$roomLogID = date("y-m-d");
-	$roomLog = new RoomLog($roomLogID);
-	// change the $date variable to an actual date
-	$date = $roomLogID;
-	echo '<form name="chooseBooking" action="viewBookings.php" target="_blank">
+echo '<form name="chooseBooking" action="viewBookings.php" target="_blank">
 		<p style="text-align: center"><b>&nbsp;&nbsp;&nbsp;&nbsp;Pending
 		Bookings: </b> <select name="bookingid">';
 
@@ -76,56 +63,42 @@ if($date==date('y-m-d')){
 			}
 			else echo($booking->get_id());
 			echo ("</option>");
+		}
+	    // Then add a button
+	    echo ("<input type=\"submit\" value=\"View Booking\"/>");
 	}
-	// Then add a button
-	echo ("<input type=\"submit\" value=\"View Booking\"/>");
-}	
-}else if ($date < date("y-m-d")){
+echo '</select></form>';
+
+if($date==date('y-m-d')){
+	// Today's date, so pull up today's roomLog.
+	$roomLogID = date("y-m-d");
+	$roomLog = new RoomLog($roomLogID);	
+}
+else if ($date < date("y-m-d")){
 	// Search for the room log in the database
 	// old $roomLog = retrieve_dbRoomLog($date);
 	$roomLog = build_room_log($date);
 	$roomLogID = $date;
-}else{
+}
+else{
 	// future date, create a new room log like today's
 	$roomLogID = $date;
 	$roomLog = new RoomLog($roomLogID);
 }
 ?>
-</select>
 
-</form>
 <!-- Display the room log --> <?php 
-
-// Generate a date object from the given date
-$currentDate = strtotime($date);
-
-// String of this date, including the weekday and such
-$formattedDate = date("l F j, Y",$currentDate);
-//NEW WAY - David Phipps
-//if room log doesn't exist, build it
-//then if that fails, we say we can't find it
-if(!$roomLog instanceof RoomLog) {
-	$roomLog = build_room_log($date);
-}
-// Only display the room log if one exists
-if($roomLog instanceof RoomLog){
+    $formattedDate = date("l F j, Y",strtotime($date));
+//    if(!$roomLog instanceof RoomLog) {
+    	$roomLog = build_room_log($date);
+    	update_dbRoomLog($roomLog);
+//    }
 	echo ("<h3 style=\"text-align:center\">");
 	echo ("Room Log for ".$formattedDate."</h3>");
 
-	// Display a form that let's you choose another date
 	display_navigation($date);
-	
 	// display the 21 rooms
-	//echo ("<table align=\"center\">");
 	include_once("roomLogView.inc");
-	//echo ("</table>");
-}
-else{
-	echo ("<h3 style=\"text-align:center\">Roomlog for ".
-	$formattedDate." not found</h3><br>");
-	// Display a form that let's you choose another date
-	display_navigation($date);
-}
 ?>
 <!--  the footer goes here now --></div>
 <?php include_once("footer.inc");?></div>
@@ -168,7 +141,7 @@ function display_navigation($now){
 	echo ("<td align=\"right\">");
 	echo ("<a href=\"roomLog.php?date=".date("y-m-d",$tomorrow)."\">");
 	echo ("Next day's Room Log >></a></td></tr>");
-	echo ("</table>");
+	echo ("</table><br>");
 }
 
 ?>

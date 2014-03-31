@@ -197,15 +197,21 @@ class Booking {
     }
     
     /*
-     *  assign a room to a booking after client has confirmed
+     *  assign a room to a booking after client has confirmed -- book it immediately if the date is past
      */
     function reserve_room ($room_no, $date) {
-    	$r = retrieve_dbRooms($room_no);
-        if ($r && ($r->get_status()=="clean") ) {  
-            $r->reserve_me($this->id);
+    	$r = retrieve_dbRooms($room_no,$date,"");
+        if ($r) {
+            if ($date<date('y-m-d')) {
+            //    $r->book_me($this->id);
+                $this->status = "active";
+            }
+            else { 
+                $r->reserve_me($this->id);
+                $this->status = "reserved";
+            }
             $this->date_in = $date;	
             $this->room_no = $room_no;
-            $this->status = "reserved";
             update_dbBookings($this);
             return $this;
         }
@@ -213,9 +219,10 @@ class Booking {
     }
     
     function book_room ($room_no, $date) {
-    	$r = retrieve_dbRooms($room_no);
-        if ($r && $r->get_status()=="reserved" && $r->get_booking_id()==$this->id) {
-            $r->book_me($this->id);  
+    	$r = retrieve_dbRooms($room_no,$date,"");
+        if ($r) {
+            if ($date==date('y-m-d'))
+                $r->book_me($this->id);  
             $this->date_in = $date;	
             $this->room_no = $room_no;
             $this->status = "active";
@@ -230,15 +237,17 @@ class Booking {
      *  check a client out of the room and update the client's record.
      */
     function check_out ($date, $deceased){
-        $r = retrieve_dbRooms($this->room_no);
+        $r = retrieve_dbRooms($this->room_no,$date,"");
         $p = retrieve_dbPersons(substr($this->id,8));
-        if ($r && $r->unbook_me($this->id)) {  
+        if ($r) { 
+            if ($date==date('y-m-d'))
+                $r->unbook_me($this->id); 
             if ($this->status=="active") { // changing back from active to closed
                 if($deceased) {
                     $this->status = "closed-deceased";
                 } else {
                    $this->status = "closed";
-            }
+                }
                 $this->date_out = $date;  
             }
             else {                        // changing back from reserved to pending

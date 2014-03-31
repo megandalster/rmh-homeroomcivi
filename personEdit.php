@@ -91,8 +91,8 @@ function process_form($id,$person)	{
 	    
 	    $phone1 = $_POST['phone1_area_1'].$_POST['phone1_middle_1'].$_POST['phone1_end_1'];
 		$phone2 = $_POST['phone2_area_1'].$_POST['phone2_middle_1'].$_POST['phone2_end_1'];
-        $clean_phone1 = ereg_replace("[^0-9]", "", $phone1);
-		$clean_phone2 = ereg_replace("[^0-9]", "", $phone2);
+        $clean_phone1 = preg_replace("/[^0-9]/", "", $phone1);
+		$clean_phone2 = preg_replace("/[^0-9]/", "", $phone2);
 		$email = trim(str_replace("'","\'", htmlentities($_POST['email'])));
         /*$patient_name = array(trim(str_replace("'","\'", htmlentities($_POST['patient_name0']))));
         if ($_POST['patient_name1']) {
@@ -129,7 +129,7 @@ function process_form($id,$person)	{
 				if(strpos($type,'manager')!==false){
 				//They're a manager, we need to check that they can be deleted
 					$managers = getall_type('manager');
-					if (!$managers || mysql_num_rows($managers) <= 1)
+					if (!$managers || count($managers) <= 1)
 						echo('<p class="error">You cannot remove the last remaining manager from the database.</p>');
 					else {
 						$result = delete_dbPersons($id);

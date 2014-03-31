@@ -68,7 +68,7 @@ echo '(<span style="font-size:x-small;color:FF0000">*</span> denotes required fi
             	echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value= \"19$tempYear\"/><br />");
             
         }
-        else echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value= \"\"/><br />");
+        else echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value= \"".date('Y')."\"/><br />");
     ?>
  Gender:  
 <?php  
@@ -174,6 +174,7 @@ if ($tempBooking->get_status()=="closed" || $tempBooking->get_status()=="closed-
         echo "<option value=".$status_option." selected='yes'>".$status_option."</option>";
       else echo "<option value=".$status_option.">".$status_option."</option>";
     echo "</select>";
+    
 }
 else echo $tempBooking->get_status();
 ?>
@@ -314,7 +315,9 @@ else if($last_auto_color != "") echo($last_auto_color);
 				"NV","NY","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VA","VT","WA","WI",
 				"WV","WY");
 			foreach ($states as $st) {
-			    if ($st == $tempBooking->get_auto_state() || $last_auto_state == $st)
+			    if ($st=="ME" && ("" == $tempBooking->get_auto_state() || $last_auto_state == ""))
+			       echo "<option selected='yes'>" . $st ."</option>"; 
+			    else if ($st == $tempBooking->get_auto_state() || $last_auto_state == $st)
 			       echo "<option selected='yes'>" . $st ."</option>";
 			    else
 				   echo "<option>" . $st ."</option>";

@@ -23,6 +23,8 @@ include_once(dirname(__FILE__)."/domain/Person.php");
 $roomID = sanitize($_GET['room']);
 $date = $_GET['date'];
 $day = $_GET['day'];
+$bookingID = $_GET['bookingID'];
+$roomStatus = $_GET['status'];
 ?>
 <!-- html header stuff -->
 <html>
@@ -43,19 +45,17 @@ $day = $_GET['day'];
 	<div id="content">
 	<?php 
 	// Prep work for the room
-	// Retrieve the room object
-	$currentRoom = retrieve_dbRooms($roomID);
-	// Check if the room is valid and if any data was recently change
-	// by the user
+	$currentRoom = retrieve_dbRooms($roomID,$date,$bookingID);
+	// Check if the room is valid and if any data was recently changed
 	if($currentRoom instanceof Room){
 		// Check if the room has been modified
 		if($_POST['submit'] == "Submit"){
 			//update the room
-			update_room_info($currentRoom);
+			update_room_info($currentRoom,$date);
 			echo ("<h3 style=\"text-align:center\">Room has been updated</h3>");
 			// get the updated room
-			$currentRoom = retrieve_dbRooms($roomID);
-			echo ("<script>location.href='roomLog.php?date=today'</script>");
+			$currentRoom = retrieve_dbRooms($roomID,$date,$bookingID);
+			echo ("<script>location.href='roomLog.php?date=".$date."'</script>");
 		}
 		// Display the room's information
 		include_once("roomView.inc");
@@ -74,7 +74,7 @@ function sanitize($string){
 }
 
 // Function that grabs all of the submitted values and updates the room
-function update_room_info($currentRoom){
+function update_room_info($currentRoom,$date){
 	// Get the info of the user who is making the update
 	$user = retrieve_dbPersons($_SESSION['_id']);
 	$name = $user->get_first_name()." ".$user->get_last_name();
@@ -91,16 +91,7 @@ function update_room_info($currentRoom){
 	$newStatus = sanitize($_POST['status']);
 	$newRoomNotes = sanitize($_POST['room_notes']);
 	$newBooking = sanitize($_POST['assign_booking']);
-	if($newBooking == "Leave Room Unassigned" ||
-		$newBooking == "No"){
-		// don't update the booking
-		$newBooking = false;
-	}
-	// Now update the current room object.
-	// Update the booking last
-	// Note that the room class automatically updates the database
-	
-	
+		
 	// Only update the status if you're a volunteer or manager
 	// social workers cannot edit rooms
     if($_SESSION['access_level'] != 2){
@@ -124,9 +115,8 @@ function update_room_info($currentRoom){
 		$currentRoom->set_bath($newBath);
 		$currentRoom->set_room_notes($newRoomNotes);
 		
-		if($newBooking){
-			// Checkout the booking if the option was selected
-			if($newBooking == "Checkout"){
+		// Checkout the booking if the option was selected (or checkout deceased)
+		if($newBooking == "Checkout"){
 			    $currentRoom->set_status("dirty");
 				//retrieve the booking and check it out
 				$newBooking = retrieve_dbBookings($currentRoom->get_booking_id());
@@ -145,8 +135,8 @@ function update_room_info($currentRoom){
 				        add_log_entry($message);
 				    }
 				}
-			}
-			else if($newBooking == "Checkout (Deceased)") { //closing a booking for deceased patient
+		}
+		else if($newBooking == "Checkout (Deceased)") { //closing a booking for deceased patient
 			    $currentRoom->set_status("dirty");
 				//retrieve the booking and check it out
 				$newBooking = retrieve_dbBookings($currentRoom->get_booking_id());
@@ -164,8 +154,8 @@ function update_room_info($currentRoom){
 				   	    add_log_entry($message);
 				   	}
 				}
-			}
-		    else if($newBooking == "Checkin"){  // booking a previously reserved room
+		}
+		else if($newBooking == "Checkin"){  // booking a previously reserved room
 				// retrieve the booking and update it
 				$newBooking = retrieve_dbBookings($currentRoom->get_booking_id());
 				
@@ -184,18 +174,10 @@ function update_room_info($currentRoom){
 				else add_log_entry("<a href='viewPerson.php?id=".$_SESSION['_id']."'>".$name."</a>".
 				" failed to check in <a href='viewPerson.php?id=".$pGuest->get_id()."'>".
 				$guestName."</a>");
-			}
-			else{  // reserving a previously empty room
-				
-				// retrieve the booking and update it
-				
-				$newBooking = retrieve_dbBookings($newBooking);
-				//echo("<script>");
-				//echo("alert('$newBooking');");
-				//echo("</script>");
-				
-				// Add a log to show that the family was checked in
-				// Get the info of the primary guest
+		}
+		else{  // reserving a previously empty room
+		    $newBooking = retrieve_dbBookings($newBooking);
+			if ($newBooking) {
 				$pGuest = retrieve_dbPersons($newBooking->get_guest_id());
 				$guestName = $pGuest->get_first_name()." ".$pGuest->get_last_name();
 				

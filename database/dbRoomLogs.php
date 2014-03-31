@@ -63,7 +63,7 @@ function build_room_log($date){
     $result = mysql_query($query);
     mysql_close();
     // If room log does not yet exist
-    if(mysql_num_rows($result) == 0){
+ //   if(mysql_num_rows($result) == 0){
     	// rebuild the past room log using functions in the RoomLog class
     	$new_roomLog = new RoomLog($date);
     	insert_dbRoomLog($new_roomLog);
@@ -87,7 +87,7 @@ function build_room_log($date){
             return false;
         }
         */
-    }
+//    }
     return retrieve_dbRoomLog($date);
 }
 

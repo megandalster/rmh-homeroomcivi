@@ -83,8 +83,7 @@ function retrieve_all_rooms($date) {
 	//After getting all of the regular bookings we find the day use boookings
 	if ($date >= date('y-m-d'))
 	{
-		$day_use_pendingBookings = retrieve_pendingDayUse_dbBookings($date);
-		
+		$day_use_pendingBookings = retrieve_pendingDayUse_dbBookings($date);		
 		$day_use_activeBookings = retrieve_active_day_use_dbBookings($date);
 		$total_day_use_rooms_to_make = count($day_use_activeBookings) + count($day_use_pendingBookings);
 		$numOfActive =  count($day_use_activeBookings);
@@ -102,7 +101,7 @@ function retrieve_all_rooms($date) {
 				{					
 					$my_rooms[] = $room_num . ":" . $day_use_activeBookings[$room_num];
 					//since its an active booking retrieve its room's status.
-					$currentRoom = retrieve_dbRooms($room_num);
+					$currentRoom = retrieve_dbRooms($room_num,$date,$day_use_activeBookings[$room_num]);
 					$currentStatus = $currentRoom->get_status();
 					$currentBookingID = $currentRoom->get_booking_id();
 					
@@ -136,7 +135,7 @@ function retrieve_all_rooms($date) {
 				if(isset($day_use_past_active_bookings[$room_num]))
 				{
 					$my_rooms[] = $room_num . ":" . $day_use_past_active_bookings[$room_num];
-					$currentRoom = retrieve_dbRooms($room_num);
+					$currentRoom = retrieve_dbRooms($room_num,$date,$day_use_past_active_bookings[$room_num]);
 					$currentStatus = $currentRoom->get_status();
 					$currentBookingID = $currentRoom->get_booking_id();
 					
@@ -207,7 +206,7 @@ function insert_dbRooms($room){
  * @param $room_no the room number to retrieve
  * @return mysql entry for the room number, or false
  */
-function retrieve_dbRooms($room_no){
+function retrieve_dbRooms($room_no,$date,$currentBookingID){
 	// connect to the database
 	connect();
 	// Search for the entry
@@ -225,13 +224,29 @@ function retrieve_dbRooms($room_no){
 	// Return the entry
 	$result_row = mysql_fetch_assoc($result);
 	mysql_close();
-	$theRoom = new Room($result_row['room_no'],
+	if ($date==date('y-m-d')) 
+	    $theRoom = new Room($result_row['room_no'],
 						$result_row['beds'],
 						$result_row['capacity'],
 						$result_row['bath'],
 						$result_row['status'],
 						$result_row['booking'],
 						$result_row['room_notes']);
+	else if ($currentBookingID=="")
+	    $theRoom = new Room($result_row['room_no'],
+						$result_row['beds'],
+						$result_row['capacity'],
+						$result_row['bath'],
+						"clean",
+						"",
+						"");
+	else $theRoom = new Room($result_row['room_no'],
+						$result_row['beds'],
+						$result_row['capacity'],
+						$result_row['bath'],
+						"booked",
+						$currentBookingID,
+						"");
 	return $theRoom;
 }
 

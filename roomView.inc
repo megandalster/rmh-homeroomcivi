@@ -10,8 +10,7 @@
 
 <!-- Begin printing out the data of the room as a form -->
 <?php
-// Grab the booking id and retrieve the booking object
-$bookingID = $currentRoom->get_booking_id();
+// Grab the booking object
 $booking = retrieve_dbBookings($bookingID);
 
 echo ("<h3>Viewing Status of Room ".$roomID);
@@ -27,7 +26,7 @@ if ($booking)
 
 <!--  input fields for everything in the room -->
 <?php
-if($_SESSION['access_level']>2 && !day) { 
+if($_SESSION['access_level']>2 && !$day) { 
 	echo "
 	Beds: <input type='text' name='beds' value='".$currentRoom->get_beds()."'/><br />
 	Room Capacity: <input type='text' name='capacity' value='".$currentRoom->get_capacity()."'/><br />
@@ -42,7 +41,7 @@ if($_SESSION['access_level']>2 && !day) {
 		}
 	echo "</select><br />";
 }
-else if(!day){
+else if(!$day){
 	echo "
 	Beds: <input type='text' name='beds' value='".$currentRoom->get_beds()."' disabled/><br />
 	Room Capacity: <input type='text' name='capacity' value='".$currentRoom->get_capacity()."' disabled/><br />
@@ -58,13 +57,13 @@ else if(!day){
 ?>
 <?php
 // Only allow changing the status if it isnt reserved. If it is reserved, only
-if($currentRoom->get_status() != "reserved"){
+if($roomStatus != "reserved"){
 	echo ("Status: <select name=\"status\">"); 
 	$statusArray = array("clean", "reserved", "booked", "dirty","off-line");
 	foreach($statusArray as $status){
-		if($currentRoom->get_status() == $status){
+		if($roomStatus == $status){
 			echo ("<option selected='yes'>".$status."</option>");
-		}else if ($currentRoom->get_status()!="booked" && $currentRoom->get_status()!="reserved") {
+		}else if ($roomStatus!="booked" && $roomStatus!="reserved") {
 			echo ("<option>".$status."</option>");
 		}
 	}
@@ -82,7 +81,7 @@ Room Notes: <input type="text" size="50" name="room_notes" value="<?php echo($cu
 // or not we have a booking
 
 // If successful, display the guests and add options to add or remove them.
-if($currentRoom->get_status()=="reserved"|| $currentRoom->get_status()=="booked")
+if($roomStatus=="reserved" || $roomStatus=="booked")
 {
 	// Print booking information
 	if ($booking) 
@@ -90,7 +89,7 @@ if($currentRoom->get_status()=="reserved"|| $currentRoom->get_status()=="booked"
 	echo "</fieldset>";
 	// Add an option to checkout the family
 	echo ("<br />");
-	if ($_SESSION['access_level']!=2) {
+	if ($_SESSION['access_level']!=2 && substr($booking->get_status(),0,6)!="closed") {
 	    echo ("Checkout/Checkin Family?: <select name='assign_booking'>");
 	    echo ("<option selected='yes'>No</option>");
 	    echo ("<option>Checkout</option>");

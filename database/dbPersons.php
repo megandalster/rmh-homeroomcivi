@@ -115,8 +115,28 @@ function getall_persons () {
     }
  //   mysql_close();
     return $thePersons; 
-}
+} 
 
+function getall_type($type) {
+   connect();
+    $query = "SELECT * FROM dbPersons WHERE type like '%".$type."%' ORDER BY last_name";
+    $result = mysql_query ($query);
+    $thePersons = array();
+    while ($result_row = mysql_fetch_assoc($result)) {
+        $thePerson = new Person($result_row['last_name'], $result_row['first_name'],
+         	$result_row['gender'], $result_row['employer'], $result_row['address'], 
+            $result_row['city'],$result_row['state'], $result_row['zip'],
+            $result_row['phone1'], $result_row['phone2'], $result_row['email'],
+            $result_row['type'], $result_row['prior_bookings'], $result_row['patient_name'],
+            $result_row['patient_birthdate'],$result_row['patient_gender'],
+            $result_row['password']);
+        $thePerson->set_mgr_notes($result_row['mgr_notes']);
+        $thePerson->set_county($result_row['county']);
+        $thePersons[] = $thePerson;
+    }
+ //   mysql_close();
+    return $thePersons;  
+}
 function update_dbPersons ($person) {
 if (! $person instanceof Person) {
 		echo ("Invalid argument for update_dbPersons function call");

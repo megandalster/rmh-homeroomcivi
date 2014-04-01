@@ -243,9 +243,10 @@ else echo $tempBooking->get_status();
 </fieldset>
 
 <br>
- <b>Occupants </b>(Name / Relation to Patient / Gender):<br>
-<br />
+
 <?php
+  if ($id=="new") echo "<b>Additional </b>";
+  echo  "<b>Occupants </b>(Name / Relation to Patient / Gender):<br><br />";
   if(empty($last_occupants)) $occupants = $tempBooking->get_occupants();
   else $occupants = $last_occupants;
   for ($counter = 1; $counter <= 6; $counter++){
@@ -266,12 +267,11 @@ else echo $tempBooking->get_status();
       
       $lengthOfRelation = $secondColonPosition - $startingColonPosition - 1;
       $lengthOfGender = $thirdColonPosition - $secondColonPosition - 1;
-      $lengthOfPresent = strlen($occupants[$counter-1]) - thirdColonPosition - 1;
        
       $occupant_name = substr($occupants[$counter-1],0,$startingColonPosition);
       $occupant_relation = substr($occupants[$counter-1],$startingColonPosition+1,$lengthOfRelation);
       $occupant_gender = substr($occupants[$counter-1], $secondColonPosition+1, $lengthOfGender);
-      $occupant_present = substr($occupants[$counter-1], $thirdColonPosition+1, $lengthOfPresent);
+      $occupant_present = substr($occupants[$counter-1], $thirdColonPosition+1);
       
      echo
 		'<input type="text" size="25" name = "additional_guest_'.($counter).'" value = "'.$occupant_name.'"/>' . ' / '.
@@ -283,8 +283,9 @@ else echo $tempBooking->get_status();
      	if($occupant_gender == 'Female')	echo '<option value = "Female" selected>Female</option>';
      	else 								echo '<option value = "Female">Female</option>';
      	echo '</select>';
-     	if($occupant_present == "Present") echo '<input type="checkbox" name="additional_guest_'.($counter).'_present" value="Present" checked>Present<br>';
-     	else 							   echo '<input type="checkbox" name="additional_guest_'.($counter).'_present" value="Absent">Present<br>';
+     //	echo "occupant_present = ".$occupant_present;
+     	if($occupant_present == ""||$occupant_present == "Absent") echo '<input type="checkbox" name="additional_guest_'.($counter).'_present" value="Present">Present<br>';
+     	else 							   echo '<input type="checkbox" name="additional_guest_'.($counter).'_present" value="Present" checked>Present<br>';
 		echo '<br />';
   }
 ?>
@@ -507,18 +508,6 @@ function add(){
     <script>
     add(); 
     </script>
-          
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
  
 <br />
 <b>Additional Notes/Special Requests:</b><br />

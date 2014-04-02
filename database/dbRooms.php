@@ -230,7 +230,7 @@ function retrieve_dbRooms($room_no,$date,$currentBookingID){
 						$result_row['capacity'],
 						$result_row['bath'],
 						$result_row['status'],
-						$result_row['booking'],
+						$currentBookingID,
 						$result_row['room_notes']);
 	else if ($currentBookingID=="")
 	    $theRoom = new Room($result_row['room_no'],

@@ -27,6 +27,7 @@ class OccupancyData {
 	private $date;		  // start date
 	private $enddate;     // end date
 	private $roomcounts;   // array of room=>days booked pairs for each room, over all dates in the range
+	private $familycounts;   // array of room=>distinct family pairs for each room, over all dates in the range
 	private $bookingcounts;   // array of room=>bookings pairs for each room, over all dates in the range
 	private $guestcounts;  // array of room=>totalguests pairs for each room, over all dates in the range
 	private $addresscounts;// array of zip=>count pairs for each zip code, over all dates in the range
@@ -63,18 +64,21 @@ class OccupancyData {
 		$this->guestcounts = array();
 		$allRooms = retrieve_all_rooms($this->date);
 		foreach ($allRooms as $aRoom) {
+		    $this->familycounts[substr($aRoom,0,3)] = 0;
 		    $this->bookingcounts[substr($aRoom,0,3)] = 0;
 		    $this->roomcounts[substr($aRoom,0,3)] = 0;
 		    $this->guestcounts[substr($aRoom,0,3)] = 0;
 		    $this->bookingcounts_d[substr($aRoom,0,3)] = 0;
 		}
+		$this->familycounts["unknown"] = 0;
 		$this->bookingcounts["unknown"] = 0;
 		$this->roomcounts["unknown"] = 0;
 		$this->guestcounts["unknown"] = 0;
 		$this->bookingcounts_d["unknown"] = 0;
-		
+		$distinctfamilies = array();
+			
 		foreach ($allBookings as $aBooking){
-			if ($aBooking->get_date_in() < $this->date) 
+		    if ($aBooking->get_date_in() < $this->date) 
 				$bStart = mktime(0,0,0,substr($this->date,3,2),substr($this->date,6,2),substr($this->date,0,2));
 			else 
 				$bStart = mktime(0,0,0,substr($aBooking->get_date_in(),3,2),substr($aBooking->get_date_in(),6,2),substr($aBooking->get_date_in(),0,2));
@@ -89,6 +93,10 @@ class OccupancyData {
 			    if($aBooking->get_status() == "closed-deceased") {
 			    	$this->bookingcounts_d["unknown"] += 1;
 			    }
+			    if (!in_array($aBooking->get_guest_id(),$distinctfamilies)) {
+			        $distinctfamilies[] = $aBooking->get_guest_id();
+			        $this->familycounts["unknown"] += 1;
+			    }
 			}
 			else {
 				$this->bookingcounts[$bRoom] += 1;
@@ -97,6 +105,10 @@ class OccupancyData {
 				if($aBooking->get_status() == "closed-deceased") {
 					$this->bookingcounts_d[$bRoom] += 1;
 				}
+			    if (!in_array($aBooking->get_guest_id(),$distinctfamilies)) {
+			        $distinctfamilies[] = $aBooking->get_guest_id();
+			        $this->familycounts[$bRoom] += 1;
+			    }
 			}
 		}
 		foreach ($allRooms as $aRoom) {
@@ -250,6 +262,9 @@ class OccupancyData {
 	// return count of occupancy days for a given room_no
 	function get_booking_counts() {
 		return $this->bookingcounts;
+	}
+    function get_family_counts() {
+		return $this->familycounts;
 	}
     function get_room_counts() {
 		return $this->roomcounts;

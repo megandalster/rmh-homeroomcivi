@@ -28,8 +28,8 @@
          echo('Date submitted: '.date_string($booking->get_date_submitted())."<br>");
     }
     else if($booking->get_status()== "active" || $booking->get_status()== "confirmed"){
-         echo('Date In: '.date_string($booking->get_date_in()).', ');
-         echo('Room Number: '.$booking->get_room_no().', ');     
+         echo('Date In: '.date_string($booking->get_date_in()).'<br>');
+         echo('Room Number: '.$booking->get_room_no().'<br>');     
     } 
     else if($booking->get_status()== "closed" || $booking->get_status()== "closed-deceased")
          echo('Date In: '.date_string($booking->get_date_in()).
@@ -43,14 +43,17 @@
     Additional Guests: 
     <?php $occupants = $booking->get_occupants();
     for($i=1 ; $i< sizeof($occupants) ; $i++){
-        echo(substr($occupants[$i],0,strpos($occupants[$i],":")));
+        $j = strpos($occupants[$i],":");
+        if (!$j) $j=strlen($occupants[$i]);
+        echo(substr($occupants[$i],0,$j));
+        if ($j+3<strlen($occupants[$i]))
+                echo " (".str_replace(":"," ",substr($occupants[$i],$j+1)).")";
         if ($i < sizeof($occupants)-1)
-            echo ', ';
+            echo '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         else echo '<br>';
      }?>
         
-     <br>
-     Automobile: <?php echo $booking->get_auto_make()." ".$booking->get_auto_model()." ".
+     <br>Automobile: <?php echo $booking->get_auto_make()." ".$booking->get_auto_model()." ".
                              $booking->get_auto_color()." ".$booking->get_auto_state() ;
 		?>
     <br />

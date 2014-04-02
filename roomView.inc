@@ -56,10 +56,10 @@ else if(!$day){
 }
 ?>
 <?php
-// Only allow changing the status if it isnt reserved. If it is reserved, only
-if($roomStatus != "reserved"){
+// Only allow changing the status if it isnt reserved or booked
+if(!$booking){
 	echo ("Status: <select name=\"status\">"); 
-	$statusArray = array("clean", "reserved", "booked", "dirty","off-line");
+	$statusArray = array("clean", "dirty","off-line");
 	foreach($statusArray as $status){
 		if($roomStatus == $status){
 			echo ("<option selected='yes'>".$status."</option>");
@@ -81,7 +81,7 @@ Room Notes: <input type="text" size="50" name="room_notes" value="<?php echo($cu
 // or not we have a booking
 
 // If successful, display the guests and add options to add or remove them.
-if($roomStatus=="reserved" || $roomStatus=="booked")
+if($booking)
 {
 	// Print booking information
 	if ($booking) 
@@ -164,7 +164,9 @@ function print_booking_info($booking){
 	$guests = $booking->get_occupants();
 	// Print each occupant
 	foreach($guests as $currentGuest){
-		echo ("<br>".$currentGuest);
+	    $i = strpos($currentGuest,":");
+	    if (!$i) $i = strlen($currentGuest);
+		echo ("<br>".substr($currentGuest,0,$i));
 	}
 	// Print the patient(s) associated with the booking
 	echo "<br><br><b>Patient: </b><br>". $booking->getith_patient(0);

@@ -55,7 +55,7 @@ for($i = 0; $i < 3; $i++){
 		}else if($roomStatus == "off-line"){
 			$statusColor = "blue";
 		}
-		if($date == date("y-m-d"))  {
+		if($date == date("y-m-d") && !$currentBooking)  {
 			echo ("<b style=\"float:right; color:".$statusColor."\">");
 			echo ($roomStatus."</b>");
 		}
@@ -186,15 +186,17 @@ function print_booking_info($booking){
 	//echo ($primary->get_first_name()." ".$primary->get_last_name()."<br />");
 	// Print each occupant
 	foreach($guests as $currentGuest){
-		echo ($currentGuest."<br />");
+	    $j = strpos($currentGuest,":");
+	    if (!$j) $j = strlen($currentGuest);
+		echo (substr($currentGuest,0,$j)."<br>");
 	}
 
 	// Print the patient associated with the booking
 	$patient = $booking->getith_patient(0);
-	echo ("<b>Patient: </b><br />".$patient);
+	echo ("<b>Patient: </b><br>".$patient);
 	for ($i=1; $i<3; $i++)
 	    if ($booking->getith_patient($i))
-	        echo ", ".$booking->getith_patient($i);echo ("<br />");
+	    {echo ("<br>");echo $booking->getith_patient($i);}
 }
 ?>
 <!-- END OF THE SECTION THAT PRINTS OUT THE 21 ROOMS -->

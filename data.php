@@ -91,12 +91,13 @@ function export_data ($od, $date, $enddate, $formattedDate, $formattedEndDate) {
 	$myArray = array("Occupancy ", "Data for ",$formattedDate." to ", $formattedEndDate);
 	fputcsv($handle, $myArray);
 				
+	$fc = $od->get_family_counts();
 	$bc = $od->get_booking_counts();
 	$gc = $od->get_guest_counts();
-	$myArray = array("Room #", "Bookings", "Nights", "Guests");
+	$myArray = array("Room #", "Families", "Bookings", "Nights", "Guests");
 	fputcsv($handle, $myArray);
 	foreach ($od->get_room_counts() as $room_no=>$count){
-		$myArray = array($room_no, $bc[$room_no], $count, $gc[$room_no]);
+		$myArray = array($room_no, $fc[$room_no], $bc[$room_no], $count, $gc[$room_no]);
 		fputcsv($handle, $myArray);
 	}
 	$gc = $od->get_address_guest_counts();
@@ -127,7 +128,7 @@ function show_options(){
 	echo ("<br />"); // new line break
 	echo ("<form name=\"chooseDate\" method=\"post\">");
 	echo ("<p style=\"text-align:left\">");
-	echo ("(To view different data, choose a different<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start date ");
+	echo ("To view data for a different time period, choose a different<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start date ");
 	
 	 echo ("Month: <select name=\"month\">");
       $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
@@ -145,17 +146,6 @@ function show_options(){
              echo ("<option value=".$i.">".$months[$i-1]."</option>");
       }
     echo("</select>");
-	/*
-	echo ("<option value=''></option>");
-	for($i = 1; $i<=12; $i++){
-		echo ("<option value=\"");
-		if($i < 10){
-			echo ("0".$i."\">".$i."</option>");
-		}else{
-			echo($i."\">".$i."</option>");
-		}
-	}
-	echo ("</select>");*/
 	
 	echo (" Day: <select name=\"day\">");
 	echo ("<option value=''></option>");
@@ -203,7 +193,9 @@ function show_options(){
 	echo (" Year: <input type=\"text\" size=\"3\" maxLength=\"4\" name=\"endyear\"/>");
 	
 	echo (" and hit ");
-	echo ("<input type=\"submit\" name=\"submit\" value=\"Submit\"/>".".)");
+	echo ("<input type=\"submit\" name=\"submit\" value=\"Submit\"/>".".");
+	
+	echo "<br>(To view more details for a single room, select it in the table below.)";
 	echo ("</form>");
 }
 ?>

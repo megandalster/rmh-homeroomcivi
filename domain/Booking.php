@@ -203,7 +203,7 @@ class Booking {
     	$r = retrieve_dbRooms($room_no,$date,"");
         if ($r) {
             if ($date<date('y-m-d')) {
-            //    $r->book_me($this->id);
+                $r->book_me($this->id);
                 $this->status = "active";
             }
             else { 
@@ -221,8 +221,7 @@ class Booking {
     function book_room ($room_no, $date) {
     	$r = retrieve_dbRooms($room_no,$date,"");
         if ($r) {
-            if ($date==date('y-m-d'))
-                $r->book_me($this->id);  
+            $r->book_me($this->id);  
             $this->date_in = $date;	
             $this->room_no = $room_no;
             $this->status = "active";
@@ -240,8 +239,7 @@ class Booking {
         $r = retrieve_dbRooms($this->room_no,$date,"");
         $p = retrieve_dbPersons(substr($this->id,8));
         if ($r) { 
-            if ($date==date('y-m-d'))
-                $r->unbook_me($this->id); 
+            $r->unbook_me($this->id); 
             if ($this->status=="active") { // changing back from active to closed
                 if($deceased) {
                     $this->status = "closed-deceased";

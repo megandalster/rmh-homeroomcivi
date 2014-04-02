@@ -15,22 +15,26 @@ echo ("<h3>");
 echo ("Summary of closed bookings for ".$formattedDate." to ".$formattedEndDate."</h3>");		
 echo ("<table>");
 $rc = $od->get_room_counts();
+$fc = $od->get_family_counts();
 $bc = $od->get_booking_counts();
 $gc = $od->get_guest_counts();
-$tr = $tb = $tg = 0;
-echo "<th>Room #</th> <th>Bookings (Deceased)</th> <th>Nights</th> <th>Guests</th>";
+$tr = $tf = $tb = $tg = 0;
+echo "<th>Room #</th> <th>Families</th> <th>Bookings (Deceased)</th> <th>Nights</th> <th>Guests</th>";
 foreach($rc as $room_no => $days){
 	echo ("<tr>");
 	echo ("<td align='center';>". $room_no . "</td>" . 
+	    "<td align='center';>". $fc[$room_no] . "</td>". 
 	    "<td align='center';>". $bc[$room_no] . "</td>". 
 	    "<td align='center';>". $days . "</td>". 
 	    "<td align='center';>". $gc[$room_no] . "</td>");
 	echo ("</tr>");
+	$tf += $fc[$room_no];
 	$tb += $bc[$room_no];
 	$tr += $days;
 	$tg += $gc[$room_no];
 }
 echo "<tr> <td align='center';><strong>Totals:</strong></td><td align='center';>".
+      $tf."</td><td align='center';>".
       $tb."</td><td align='center';>".
       $tr."</td><td align='center';>".
       $tg."</td></tr>";

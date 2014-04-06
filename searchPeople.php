@@ -49,7 +49,7 @@
 							while($thisRow = mysql_fetch_array($result, MYSQL_ASSOC)){
 								echo('<tr><td class="searchResults">'.$thisRow['last_name'].", ".
 									$thisRow['first_name'].'</td><td class="searchResults">'.$thisRow['patient_name'].'</td><td class="searchResults"><a href=viewPerson.php?id='.
-									$thisRow['id'].">view</td><td class=searchResults><a href=personEdit.php?id=".
+									$thisRow['id'].">view</a></td><td class=searchResults><a href=personEdit.php?id=".
 									$thisRow['id'].">edit</a></td><td class=searchResults><a href=bookingEdit.php?id=".
 									$thisRow['id'].">create new booking</a></td></tr>");
 							}

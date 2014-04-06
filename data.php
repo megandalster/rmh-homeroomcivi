@@ -35,6 +35,7 @@ include_once(dirname(__FILE__)."/domain/OccupancyData.php");
 			//$enddate = trim(str_replace('\\\'','',htmlentities(str_replace('&','and',$_GET['date']))));
 			// Check if a custom date was submitted
 			if($_POST['submit'] == "Submit"){
+			    $roomNo = $_POST['roomno'];
 			    $endDay = $_POST['endday'];
 				$endMonth = $_POST['endmonth'];
 				$endYear = substr($_POST['endyear'],2,2);
@@ -62,13 +63,15 @@ include_once(dirname(__FILE__)."/domain/OccupancyData.php");
 				// no date submitted, so set $date and $enddate to today
 				$date = $_GET['date'];
 				$enddate = $_GET['enddate'];
+				$roomNo = "";
 			}		
-			$od = new OccupancyData($date, $enddate);
+			$od = new OccupancyData($date, $enddate, $roomNo);
 			$formattedDate = date("F j, Y",strtotime($date));
 			$formattedEndDate = date("F j, Y",strtotime($enddate));
-	        echo("<p>The data below has been exported.  Set your browser to rmhportland/volunteers/homeroom/dataexport.csv to download it.");
+	        echo("<p>The data below has been exported as a spreadsheet file.  To download and view it, <br>
+	        set your browser to rmhportland/volunteers/homeroom/dataexport.csv.");
 			show_options();	    
-			export_data($od, $date, $enddate, $formattedDate, $formattedEndDate);	
+			export_data($od, $date, $enddate, $formattedDate, $formattedEndDate, $roomNo);	
 			// String of this date, including the weekday and such
 			if ($od instanceof OccupancyData){
 				include_once("dataView.inc");
@@ -84,11 +87,13 @@ include_once(dirname(__FILE__)."/domain/OccupancyData.php");
 </html>
 
 <?php 
-function export_data ($od, $date, $enddate, $formattedDate, $formattedEndDate) {
+function export_data ($od, $date, $enddate, $formattedDate, $formattedEndDate, $roomNo) {
 	// download the data to the desktop
 	$filename = "dataexport.csv";
 	$handle = fopen($filename, "w");
-	$myArray = array("Occupancy ", "Data for ",$formattedDate." to ", $formattedEndDate);
+    if ($roomNo=="") $trailer = " all rooms.";
+    else $trailer = " room ".$roomNo." only.";
+	$myArray = array("Occupancy ", "Data for ",$formattedDate." to ", $formattedEndDate, $trailer);
 	fputcsv($handle, $myArray);
 				
 	$fc = $od->get_family_counts();
@@ -128,9 +133,10 @@ function show_options(){
 	echo ("<br />"); // new line break
 	echo ("<form name=\"chooseDate\" method=\"post\">");
 	echo ("<p style=\"text-align:left\">");
-	echo ("To view data for a different time period, choose a different<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start date ");
-	
-	 echo ("Month: <select name=\"month\">");
+	echo ("To view data for a different time period or a certain room number, choose a different
+			<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start date ");
+	echo ("Month: <select name=\"month\">");
       $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
 	  echo("<option> </option>");
       for ($i = 1 ; $i <= 9 ; $i ++){
@@ -160,7 +166,7 @@ function show_options(){
 	echo ("</select>");
 	echo (" Year: <input type=\"text\" size=\"3\" maxLength=\"4\" name=\"year\"/>");
 	
-	echo ("<br>and/or end date ");
+	echo ("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and/or end date ");
 	echo ("Month: <select name=\"endmonth\">");
 	echo ("<option value=''></option>");
       $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
@@ -192,10 +198,18 @@ function show_options(){
 	echo ("</select>");
 	echo (" Year: <input type=\"text\" size=\"3\" maxLength=\"4\" name=\"endyear\"/>");
 	
-	echo (" and hit ");
+	$rooms = retrieveall_rooms();
+	echo ("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and/or room number: <select name=\"roomno\">");	
+	echo ("<option value=''></option>");
+	foreach ($rooms as $aRoom) {
+		echo ("<option value=\"");
+		echo($aRoom->get_room_no()."\">".$aRoom->get_room_no()."</option>");
+	}
+	echo ("</select>");
+	
+	echo ("<br> and hit ");
 	echo ("<input type=\"submit\" name=\"submit\" value=\"Submit\"/>".".");
 	
-	echo "<br>(To view more details for a single room, select it in the table below.)";
 	echo ("</form>");
 }
 ?>

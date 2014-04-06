@@ -235,7 +235,10 @@ function build_POST_booking($id,$primaryGuest,$referralid) {
         $pendingBooking->set_payment_arrangement($payment);
         $pendingBooking->set_overnight_use($_POST['overnight']);
         $pendingBooking->set_day_use($_POST['day']);
-    //    $pendingBooking->set_status($_POST['status']);
+        if ($_POST['status']=="closed" || $_POST['status']=="closed-deceased") {
+            $pendingBooking->set_status($_POST['status']);
+            $pendingBooking->set_date_out(substr($_POST['date_out_year'],2,2).'-'.$_POST['date_out_month'].'-'.$_POST['date_out_day']);
+        }
         $pendingBooking -> set_day_use_date($day_use_date);
         $pendingBooking->set_mgr_notes($notes);
         $pendingBooking->set_referred_by($referred_by);

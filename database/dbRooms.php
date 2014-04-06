@@ -250,6 +250,25 @@ function retrieve_dbRooms($room_no,$date,$currentBookingID){
 	return $theRoom;
 }
 
+function retrieveall_rooms() {
+    connect();
+	// Search for the entry
+    $query = "SELECT * FROM dbRooms ORDER BY room_no";
+    $result = mysql_query ($query);
+    $theRooms = array();
+    while ($result_row = mysql_fetch_assoc($result)) {
+        $theRoom = $theRoom = new Room($result_row['room_no'],
+				$result_row['beds'],
+				$result_row['capacity'],
+				$result_row['bath'],
+			    $result_row['status'],
+				"",
+				$result_row['room_notes']);
+		$rooms[] = $theRoom;
+    }   	
+    mysql_close();
+    return $rooms; 
+}
 /**
  * Updates a room in the dbRooms table by deleting it and reinserting it.
  * @param $room the room to update

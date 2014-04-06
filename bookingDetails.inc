@@ -33,6 +33,7 @@
     } 
     else if($booking->get_status()== "closed" || $booking->get_status()== "closed-deceased")
          echo('Date In: '.date_string($booking->get_date_in()).
+         	  ', Room No: '.$booking->get_room_no().
               '<br/> Date Out: '.date_string($booking->get_date_out()).', ');
     echo('Submitted by: '.$booking->get_referred_by().'<br/>');?> 
 <br/>

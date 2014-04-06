@@ -18,7 +18,7 @@ echo '(<span style="font-size:x-small;color:FF0000">*</span> denotes required fi
 <div align="left">
 <fieldset>
 <legend>Booking Information:</legend>
-<span style='font-size:x-small;color:FF0000'>* </span>Patient: <input type="text" size="25" name="patient_name0" value= "<?php $patient = $tempBooking->getith_patient(0);
+<span style='font-size:x-small;color:FF0000'>* </span>Patient: <input type="text" size="25" name="patient_name0" value="<?php $patient = $tempBooking->getith_patient(0);
 															 echo($patient);?>"/>
 
 <span style='font-size:x-small;color:FF0000'>* </span>Birth date:  
@@ -63,12 +63,12 @@ echo '(<span style="font-size:x-small;color:FF0000">*</span> denotes required fi
         if($patient_DOB){
             $tempYear = (substr($patient_DOB,0,2));
             if($tempYear < 40)
-           		echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value= \"20$tempYear\"/><br />");
+           		echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value=\"20$tempYear\"/><br />");
             else
-            	echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value= \"19$tempYear\"/><br />");
+            	echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value=\"19$tempYear\"/><br />");
             
         }
-        else echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value= \"".date('Y')."\"/><br />");
+        else echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value=\"".date('Y')."\"/><br />");
     ?>
  Gender:  
 <?php  
@@ -83,7 +83,7 @@ echo '(<span style="font-size:x-small;color:FF0000">*</span> denotes required fi
 ?>
 <br />
 
- Additional patients:    <input type="text" name="patient_name1" value= "<?php echo($tempBooking->getith_patient(1))?>"/>
+ Additional patients:    <input type="text" name="patient_name1" value="<?php echo($tempBooking->getith_patient(1))?>"/>
 <input type="text" name="patient_name2" value= "<?php echo($tempBooking->getith_patient(2))?>"/>
     
 					
@@ -161,7 +161,7 @@ else
       }
     ?>
     </select>
-    <input type="text" size = "3" maxLength = "4" name="date_submitted_year" value= "<?php echo("20".substr($tempBooking->get_date_submitted(),0,2))?>"/><br />
+    <input type="text" size = "3" maxLength = "4" name="date_submitted_year" value="<?php echo("20".substr($tempBooking->get_date_submitted(),0,2))?>"/><br />
 
 <br><b>Status: </b>
 <?php
@@ -174,6 +174,41 @@ if ($tempBooking->get_status()=="closed" || $tempBooking->get_status()=="closed-
         echo "<option value=".$status_option." selected='yes'>".$status_option."</option>";
       else echo "<option value=".$status_option.">".$status_option."</option>";
     echo "</select>";
+    
+    echo "&nbsp;&nbsp;Date Out: <select name = 'date_out_month'>";
+ 
+      $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
+	  echo("<option> </option>");
+      for ($i = 1 ; $i <= 9 ; $i ++){
+          if('0'.$i == substr($tempBooking->get_date_out(),3,2))
+             echo ("<option value='0".$i."' selected = 'yes'>".$months[$i-1]."</option>");
+          else
+             echo ("<option value='0".$i."'>".$months[$i-1]."</option>");
+      }
+      for ($i = 10 ; $i <= 12 ; $i ++){
+          if($i == substr($tempBooking->get_date_out(),3,2))
+             echo ("<option value=".$i." selected = 'yes' >".$months[$i-1]."</option>");
+          else
+             echo ("<option value=".$i.">".$months[$i-1]."</option>");
+      }
+    echo '</select><select name = "date_out_day">';
+ 
+      echo("<option>  </option>");
+      for ($i = 1; $i <= 9 ; $i ++){
+          if($i == substr($tempBooking->get_date_out(),6,2))
+             echo ("<option value='0".$i."' selected = 'yes'>".$i."</option>");
+          else
+             echo ("<option value='0".$i."'>".$i."</option>");
+      }
+      for ($i = 10; $i <= 31 ; $i ++){
+          if($i == substr($tempBooking->get_date_out(),6,2))
+             echo ("<option selected = 'yes'>".$i."</option>");
+          else
+             echo ("<option>".$i."</option>");
+      }
+    echo '</select>
+    	<input type="text" size = "3" maxLength = "4" name="date_out_year" 
+    	value="20'.substr($tempBooking->get_date_out(),0,2).'"/>';
     
 }
 else echo $tempBooking->get_status();

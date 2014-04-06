@@ -27,7 +27,9 @@ class OccupancyData {
 	private $date;		  // start date
 	private $enddate;     // end date
 	private $roomcounts;   // array of room=>days booked pairs for each room, over all dates in the range
-	private $familycounts;   // array of room=>distinct family pairs for each room, over all dates in the range
+	private $room_no;        // a specific room for which distinct family names is being gathered
+	private $familycounts;    // array of room=>families pairs for each room, over all dates in the range 
+	private $family_tags;    // array of tags for each room, of the form $id+$first_name." ".$last_hame for each family's primary guest.
 	private $bookingcounts;   // array of room=>bookings pairs for each room, over all dates in the range
 	private $guestcounts;  // array of room=>totalguests pairs for each room, over all dates in the range
 	private $addresscounts;// array of zip=>count pairs for each zip code, over all dates in the range
@@ -44,11 +46,12 @@ class OccupancyData {
 	 * Construct occupancy data for a particular date range
 	 * 
 	 */
-	function __construct($date, $enddate) {
+	function __construct($date, $enddate, $roomNo) {
 		$this->date = $date;
         $this->enddate = $enddate;
-        $allBookings = retrieve_all_closed_dbBookings($this->date, $this->enddate);
-        $this->compute_roomcounts($allBookings);
+        $this->room_no = $roomNo;
+        $allBookings = retrieve_all_closed_dbBookings($this->date, $this->enddate, $this->room_no);
+        $this->compute_roomcounts($allBookings,$roomNo);
         $this->compute_addresscounts($allBookings);
         ksort($this->addresscounts);
 		$this->compute_agecounts($allBookings);
@@ -57,25 +60,21 @@ class OccupancyData {
         ksort($this->hospitalcounts);
 		return true;
 	}
-	// compute room and guest counts
-	function compute_roomcounts($allBookings) {
+    // compute room and guest counts
+	function compute_roomcounts($allBookings, $roomNo) {
 		$this->roomcounts = array();
 		$this->bookingcounts = array();
 		$this->guestcounts = array();
-		$allRooms = retrieve_all_rooms($this->date);
-		foreach ($allRooms as $aRoom) {
-		    $this->familycounts[substr($aRoom,0,3)] = 0;
-		    $this->bookingcounts[substr($aRoom,0,3)] = 0;
-		    $this->roomcounts[substr($aRoom,0,3)] = 0;
-		    $this->guestcounts[substr($aRoom,0,3)] = 0;
-		    $this->bookingcounts_d[substr($aRoom,0,3)] = 0;
+		$allRooms = retrieveall_rooms();
+		foreach ($allRooms as $room) {
+		    $aRoom = $room->get_room_no();
+		    $this->familycounts[$aRoom] = 0;
+		    $this->family_tags[$aRoom] = array();
+		    $this->bookingcounts[$aRoom] = 0;
+		    $this->roomcounts[$aRoom] = 0;
+		    $this->guestcounts[$aRoom] = 0;
+		    $this->bookingcounts_d[$aRoom] = 0;
 		}
-		$this->familycounts["unknown"] = 0;
-		$this->bookingcounts["unknown"] = 0;
-		$this->roomcounts["unknown"] = 0;
-		$this->guestcounts["unknown"] = 0;
-		$this->bookingcounts_d["unknown"] = 0;
-		$distinctfamilies = array();
 			
 		foreach ($allBookings as $aBooking){
 		    if ($aBooking->get_date_in() < $this->date) 
@@ -86,50 +85,48 @@ class OccupancyData {
 			$days = round(($bEnd-$bStart) / 86400);
 			$bRoom = $aBooking->get_room_no();
 			$bGuests = sizeof($aBooking->get_occupants());
-			if (!$bRoom || $bRoom=="UNK") {
-			    $this->bookingcounts["unknown"] += 1;
-			    $this->roomcounts["unknown"] += $days;
-			    $this->guestcounts["unknown"] += $bGuests;
-			    if($aBooking->get_status() == "closed-deceased") {
-			    	$this->bookingcounts_d["unknown"] += 1;
-			    }
-			    if (!in_array($aBooking->get_guest_id(),$distinctfamilies)) {
-			        $distinctfamilies[] = $aBooking->get_guest_id();
-			        $this->familycounts["unknown"] += 1;
-			    }
+			if ($bRoom=="" || strlen($bRoom)!=3)
+			    $bRoom = "UNK";
+			$this->bookingcounts[$bRoom] += 1;
+			$this->roomcounts[$bRoom] += $days;
+			$this->guestcounts[$bRoom] += $bGuests;
+			if($aBooking->get_status() == "closed-deceased") 
+				$this->bookingcounts_d[$bRoom] += 1;
+		//	var_dump(array_keys($this->family_tags[$bRoom]));
+			if (!strpos(implode("'",$this->family_tags[$bRoom]),$aBooking->get_guest_id())){
+			    $this->familycounts[$bRoom] += 1;    
 			}
-			else {
-				$this->bookingcounts[$bRoom] += 1;
-				$this->roomcounts[$bRoom] += $days;
-				$this->guestcounts[$bRoom] += $bGuests;
-				if($aBooking->get_status() == "closed-deceased") {
-					$this->bookingcounts_d[$bRoom] += 1;
-				}
-			    if (!in_array($aBooking->get_guest_id(),$distinctfamilies)) {
-			        $distinctfamilies[] = $aBooking->get_guest_id();
-			        $this->familycounts[$bRoom] += 1;
-			    }
-			}
+			$next_family = $aBooking->get_date_in()."+".
+			               $aBooking->get_date_out()."+".
+			               $this->pull_details($aBooking->get_guest_id())."+".
+			               $days."+".
+			               $bGuests;
+			$this->family_tags[$bRoom][] = $next_family;	
 		}
-		foreach ($allRooms as $aRoom) {
-			if($this->bookingcounts_d[substr($aRoom,0,3)] > 0) {
+		foreach ($allRooms as $room) {
+		    $aRoom = $room->get_room_no();
+		    if($this->bookingcounts_d[substr($aRoom,0,3)] > 0) {
 				$this->bookingcounts[substr($aRoom,0,3)] = 
 					"{$this->bookingcounts[substr($aRoom,0,3)]} ({$this->bookingcounts_d[substr($aRoom,0,3)]})";
 			}
-		}
-		if($this->bookingcounts_d["unknown"] > 0) {
-			$this->bookingcounts["unknown"] = 
-				"{$this->bookingcounts["unknown"]} ({$this->bookingcounts_d["unknown"]})";
-		}
+		}	
 	}
+	// pull the first and last name of the primary guest for a booking
+    function pull_details ($guest_id) {
+	    $a_guest = retrieve_dbPersons($guest_id);
+	    if (!$a_guest)
+	        return $guest_id."+".$guest_id;
+	    else return $guest_id."+".$a_guest->get_first_name()." ".$a_guest->get_last_name();
+	}
+	
     // compute address counts
 	function compute_addresscounts($allBookings) {
 		$this->addresscounts = array();
 		$this->addressguestcounts = array();
 		$this->addresscounts_d = array();
-		$this->addresscounts["unknown"]=0;
-		$this->addressguestcounts["unknown"]=0;
-		$this->addresscounts_d["unkown"] = 0;
+		$this->addresscounts["UNK"]=0;
+		$this->addressguestcounts["UNK"]=0;
+		$this->addresscounts_d["UNK"] = 0;
 		$addresses = array();
 		foreach ($allBookings as $aBooking){
 			$g = $aBooking->get_guest_id();
@@ -142,7 +139,7 @@ class OccupancyData {
 			    else if ($bGuest->get_state()!="")
 			        $bZip = $bGuest->get_state(); 
 			}
-			else $bZip = "unknown";   
+			else $bZip = "UNK";   
 			if (!in_array($bZip, $addresses))
 				array_push($addresses, $bZip);
 			if (!$this->addresscounts[$bZip]) {
@@ -163,19 +160,19 @@ class OccupancyData {
 					"{$this->addresscounts[$bZip]} ({$this->addresscounts_d[$bZip]})";
 			}
 		}
-		if($this->addresscounts_d["unknown"] > 0) {
-			$this->addresscounts["unknown"] = 
-				"{$this->addresscounts["unknown"]} ({$this->addresscounts_d["unknown"]})";
+		if($this->addresscounts_d["UNK"] > 0) {
+			$this->addresscounts["UNK"] = 
+				"{$this->addresscounts["UNK"]} ({$this->addresscounts_d["UNK"]})";
 		}
 	}
 	// compute age counts
 	function compute_agecounts($allBookings) {
 		$this->agecounts = array();
-		$this->agecounts["unknown"]=0;
+		$this->agecounts["UNK"]=0;
 		$this->agecounts_d = array();
-		$this->agecounts_d["unknown"]=0;
+		$this->agecounts_d["UNK"]=0;
 		$this->ageguestcounts = array();
-		$this->ageguestcounts["unknown"]=0;
+		$this->ageguestcounts["UNK"]=0;
 		$ages = array();
 		foreach ($allBookings as $aBooking){
 			$g = $aBooking->get_guest_id();
@@ -186,7 +183,7 @@ class OccupancyData {
 			    $bDate2 = mktime(0,0,0,substr($aBooking->get_date_out(),3,2),substr($aBooking->get_date_out(),6,2),substr($aBooking->get_date_out(),0,2));
 			    $bAge = ($bDate2 - $bDate1)/31536000; // years = 365*60*60*24 seconds (approximately)
 			}
-			else $bAge = "unknown";
+			else $bAge = "UNK";
 			if (!in_array($bAge, $ages))
 				array_push($ages, $bAge); //$this->ages[] = $bAge;
 			if (!$this->agecounts[$bAge]) {
@@ -208,9 +205,9 @@ class OccupancyData {
 					"{$this->agecounts[$bAge]} ({$this->agecounts_d[$bAge]})";
 			}
 		}
-		if($this->agecounts_d["unknown"] > 0) {
-			$this->agecounts["unkown"] = 
-				"{$this->agecounts["unknown"]} ({$this->agecounts_d["unknown"]})";
+		if($this->agecounts_d["UNK"] > 0) {
+			$this->agecounts["UNK"] = 
+				"{$this->agecounts["UNK"]} ({$this->agecounts_d["UNK"]})";
 		}
 	}
 	// compute hospital counts
@@ -225,7 +222,7 @@ class OccupancyData {
 		foreach ($allBookings as $aBooking){
 			$bHospital = $aBooking->get_hospital();
 			if ($bHospital=="")
-				$bHospital="other";
+				$bHospital="UNK";
 			else $bHospital .= "/".$aBooking->get_department();
 			$bGuests = sizeof($aBooking->get_occupants());
 			if (!in_array($bHospital, $hospitals))
@@ -248,9 +245,9 @@ class OccupancyData {
 					"{$this->hospitalcounts[$bHospital]} ({$this->hospitalcounts_d[$bHospital]})";
 			}
 		}
-		if($this->hospitalcounts_d["unknown"] > 0) {
-			$this->hospitalcounts["unknown"] =
-				"{$this->hospitalcounts["unknown"]} ({$this->hospitalcounts_d["unknown"]})";
+		if($this->hospitalcounts_d["UNK"] > 0) {
+			$this->hospitalcounts["UNK"] =
+				"{$this->hospitalcounts["UNK"]} ({$this->hospitalcounts_d["UNK"]})";
 		}
 	}
 	function get_date() {
@@ -265,6 +262,9 @@ class OccupancyData {
 	}
     function get_family_counts() {
 		return $this->familycounts;
+	}
+	function get_family_tags ($room) {
+	    return $this->family_tags[$room];
 	}
     function get_room_counts() {
 		return $this->roomcounts;

@@ -264,10 +264,10 @@ function retrieve_all_pending_dbBookings () {
 	return $theBookings;
 }
 //retrieve all bookings that were closed between $date and $enddate, inclusive
-function retrieve_all_closed_dbBookings ($date, $enddate) {
+function retrieve_all_closed_dbBookings ($date, $enddate, $room_no) {
 	connect();
     $query = "SELECT * FROM dbBookings WHERE status LIKE '%closed%' AND date_out >= '"
-             .$date."' AND date_out <= '".$enddate."' ORDER BY date_in";
+             .$date."' AND date_out <= '".$enddate."' AND room_no LIKE '%".$room_no."%' ORDER BY date_in";
     $result = mysql_query ($query);
     $theBookings = array();
 	while ($result_row = mysql_fetch_assoc($result)) {
@@ -330,7 +330,7 @@ function delete_dbBookings($id) {
  */ 
 function date_string($date) {
 	$d = mktime(0,0,0,substr($date,3,2),substr($date,6,2),substr($date,0,2));
-	return date("F j, Y",$d);
+	return date("M j, Y",$d);
 }
 function date_select_display($now,$when) {
     $months = array("January","February","March","April","May","June","July","August","September","October","November","December");

@@ -43,7 +43,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
 	        $date_in = "Will Call";
             $room_no = "";
             $flag = "new";
-            $guest = new Person("","","","","","","","","","","","","","","","", "");
+            $guest = new Person("","","","","","","","","","","","","","","","", "", "");
             $tempBooking = new Booking(date("y-m-d"),"Will Call","","pending","","","","","","","","","","00000000000", "", "", "", "", "","new"); 
 	  }
 	  else if ($id=="update") {
@@ -67,29 +67,30 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
 	   //    $last_booking = retrieve_persons_closed_dbBookings($id);
            if (!$guest){
                 echo("The guest with id '".$id."' does not exist in the database. Please fill out a blank form below:");
-                $guest = new Person("","","","","","","","","","","","","","","","","");
+                $guest = new Person("","","","","","","","","","","","","","","","", "","");
                 $patient_DOB = ""; 
-                $patient_gender = "";            
+                $patient_gender = ""; 
+                $patient_relation = "";          
            }
            else 
            {
            		$patient_name = $guest->get_patient_name();
            		$patient_DOB = $guest->get_patient_birthdate();
            		$patient_gender = $guest->get_patient_gender();
+           		$patient_relation = $guest->get_patient_relation();
                 $lastBooking = retrieve_persons_closed_dbBookings($id);
                 if($lastBooking) {
-					    $last_occupants = $lastBooking->get_occupants();
-                        $last_hospital = $lastBooking->get_hospital();
+					    $last_hospital = $lastBooking->get_hospital();
                         $last_department = $lastBooking->get_department();
                         $last_auto =   $lastBooking->get_auto();
                 }
                 else {
-					    $last_occupants = array($guest->get_first_name()." ".$guest->get_last_name().
-					                    "::".$guest->get_gender().":");
-                        $last_hospital = "";
+					    $last_hospital = "";
                         $last_department = "";
                         $last_auto =  "";
                 }
+                $last_occupants = array($guest->get_first_name()." ".$guest->get_last_name().":".
+					                    $guest->get_patient_relation().":".$guest->get_gender().":");
                 $tempBooking = new Booking(date("y-m-d"), "Will Call", $guest->get_id(), $status, "", $guest->get_patient_name(), 
            		    $last_occupants, $last_auto,  
                     "","","",$last_hospital,$last_department,"00000000000", "", "", "", "", "","new");  
@@ -136,12 +137,14 @@ function process_form($id,$referralid)	{
 		$phone1 = $guest->get_phone1();
 		$patient_gender = $guest->get_patient_gender();
 		$guest_gender = $guest->get_gender();
+		$patient_relation = trim(str_replace('\\\'','\'',htmlentities($_POST['patient_relation'])));
    	}
    	else if ($id=="new"){ // creating a new booking from scratch -- edit everything
         $first_name = trim(str_replace("'","\'", htmlentities(str_replace('&','and',$_POST['first_name_1']))));
 		$last_name = trim(str_replace("'","\'", htmlentities($_POST['last_name_1'])));
 		$patient_gender = trim(str_replace('\\\'','\'',htmlentities($_POST['patient_gender_1'])));
 		$guest_gender = trim(str_replace('\\\'','\'',htmlentities($_POST['gender_1'])));		
+        $patient_relation = trim(str_replace('\\\'','\'',htmlentities($_POST['patient_relation'])));		
         $address = trim(str_replace("'","\'", htmlentities($_POST['address_1'])));
 		$city = trim(str_replace("'","\'", htmlentities($_POST['city_1'])));
 		$state = $_POST['state_1'];
@@ -154,7 +157,8 @@ function process_form($id,$referralid)	{
     	$tempBooking = retrieve_dbBookings($referralid);
    	    $guest = retrieve_dbPersons($id);
    	    $guest_gender = $guest->get_gender();
-   	    $first_name = $guest->get_first_name();
+   	    $patient_relation = trim(str_replace('\\\'','\'',htmlentities($_POST['patient_relation'])));		
+        $first_name = $guest->get_first_name();
 		$phone1 = $guest->get_phone1();
 		$patient_gender = $guest->get_patient_gender();
     }
@@ -171,12 +175,13 @@ function process_form($id,$referralid)	{
     $currentEntry = retrieve_dbPersons($first_name.$phone1);
     if(!$currentEntry) {
             $currentEntry = new Person($last_name, $first_name, $guest_gender, "", $address, $city,$state, $zip, $phone1, $phone2, 
-                                   $email, "guest", "", implode(',',$patient_name),$patient_birthdate,$patient_gender,"");
+                                   $email, "guest", "", implode(',',$patient_name),$patient_birthdate,$patient_gender,$patient_relation,"");
     }
     else {
             $currentEntry->set_patient_name($patient_name);
             $currentEntry->set_patient_birthdate($patient_birthdate);
             $currentEntry->set_patient_gender($patient_gender);
+            $currentEntry->set_patient_relation($patient_relation);
             $currentEntry->set_gender($guest_gender);
             $currentEntry->add_type("guest");
     }

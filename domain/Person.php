@@ -30,6 +30,7 @@ class Person {
     private $patient_name;      // array of up to 3 patients for this person
     private $patient_birthdate; // format: 11-03-12 for the first patient only
     private $patient_gender;    // "Male" "Female" or "Unknown" for the first patient only.
+    private $patient_relation;  // relationship of person to the patient, eg "mother"
     private $prior_bookings;    // array of booking ids; e.g., '11-02-08John2077291234'
     private $mgr_notes;         // manager's notes
     private $county;           // county in Maine; otherwise blank
@@ -40,7 +41,7 @@ class Person {
          * constructor for a Person
          */
     function __construct($last_name, $first_name, $gender, $employer, $address, $city, $state, $zip, $phone1, $phone2, $email,
-                         $type, $prior_bookings, $patient_name, $patient_birthdate, $patient_gender, $password){                
+                         $type, $prior_bookings, $patient_name, $patient_birthdate, $patient_gender, $patient_relation, $password){                
         $this->id = $first_name . $phone1; 
         $this->last_name = $last_name;
         $this->first_name = $first_name;
@@ -57,7 +58,8 @@ class Person {
         $this->patient_name = explode(',',$patient_name);
         $this->patient_birthdate = $patient_birthdate;
         $this->patient_gender = $patient_gender;
-                
+        $this->patient_relation = $patient_relation;
+        
         $this->prior_bookings = explode(',',$prior_bookings);
         $this->mgr_notes = "";
         $this->county = $this->compute_county();
@@ -115,6 +117,9 @@ class Person {
     }
     function get_patient_gender(){
         return $this->patient_gender;
+    }
+    function get_patient_relation(){
+        return $this->patient_relation;
     }
     function get_type(){
         return $this->type;
@@ -183,6 +188,10 @@ class Person {
     function set_patient_gender ($pr){
         $this->patient_gender = $pr;
     }
+    function set_patient_relation ($pr){
+        $this->patient_relation = $pr;
+    }
+    
     function set_password ($new_password) {
         $this->password = $new_password;
     }

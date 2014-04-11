@@ -220,7 +220,8 @@ else echo $tempBooking->get_status();
   <legend><b>Primary Guest:</b></legend>
 <?php    if ($id!="new") {
     echo '<a  target="_blank" href="personEdit.php?id='.$guest->get_id().'">'.$guest->get_first_name().' '.$guest->get_last_name().'</a><br>';
-    echo 'Gender: '.$guest->get_gender().'<br />';
+    echo 'Relation to Patient: <input type="text" size="20" name="patient_relation" value='.$guest->get_patient_relation().'><br />' ;
+        echo 'Gender: '.$guest->get_gender().'<br />';
     echo 'Address: '.$guest->get_address().', '. $guest->get_city().', '.$guest->get_state().' '.$guest->get_zip(). '<br />';
     echo 'E-mail: '.$guest->get_email().'<br />';
     $phone1 = $guest->get_phone1();
@@ -241,6 +242,7 @@ else echo $tempBooking->get_status();
     else {
         echo '<span style="font-size:x-small;color:FF0000">* </span>First Name: <input type="text" size="30" name="first_name_1" value='.$guest->get_first_name().'><br />' ;
         echo '<span style="font-size:x-small;color:FF0000">* </span>Last Name: <input type="text" size="30" name="last_name_1" value='.$guest->get_last_name().'><br />' ;
+        echo 'Relation to Patient: <input type="text" size="20" name="patient_relation" value='.$guest->get_patient_relation().'><br />' ;
         echo 'Gender: <select name = "gender_1"> <option value = " "> </option>';	 
 		 if($guest_gender == "Male") echo '<option value = "Male" selected>Male</option>';
 		 else 						echo '<option value = "Male">Male</option>'; 
@@ -249,7 +251,7 @@ else echo $tempBooking->get_status();
 		 echo '</select><br />';
 //		echo '<span style="font-size:x-small;color:FF0000">* </span>Relationship to Patient: <input type="text" size = "30" name = "patient_gender_1" value='.$guest->get_patient_gender().'><br />' ;
         echo 'Home Address: <input type="text" size="40" name = "address_1" value='.$guest->get_address().'><br />' ;
-        echo 'City (or Country if outside US): <input type = "text" size = "15" name = "city_1" value='.$guest->get_city().'><br />' ;
+        echo 'City (or Country if outside US): <input type = "text" size = "20" name = "city_1" value='.$guest->get_city().'><br />' ;
         echo 'State: <select name = "state_1">';
     $states = array(" ", "AL","AK","AR","AZ","CA","CO","CT","DC","DE","FL","GA","HI","IA","ID","IL","IN",
 				"KS","KY","LA","MA","MD","ME","MI","MN","MO", "MS","MT","NC","ND","NE","NH","NJ","NM",
@@ -364,7 +366,7 @@ else if($last_auto_color != "") echo($last_auto_color);
 <b>Payment Arrangement:</b><br />
  <input type="radio" name="payment" value="10 per night" <?php if($tempBooking->get_payment_arrangement() == "10 per night") echo('checked')?>/> $10 per night<br />
  <input type="radio" name="payment" value="other" <?php if($tempBooking->get_payment_arrangement()!= "10 per night" && $tempBooking->get_payment_arrangement()!= ""  ) echo('checked')?>/> Other:  
-       <input type="text" name="payment_description" size="20" value = "<?php if($tempBooking->get_payment_arrangement()!= "10 per night") echo($tempBooking->get_payment_arrangement())?>"/> <br />
+       <input type="text" name="payment_description" size="80" value = "<?php if($tempBooking->get_payment_arrangement()!= "10 per night") echo($tempBooking->get_payment_arrangement())?>"/> <br />
 <br />
 
 <?php 

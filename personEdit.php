@@ -21,7 +21,7 @@
     include_once('database/dbLog.php');
 	$id = $_GET["id"];
 	if ($id=='new') {
-	 	     $person = new Person('person','new',null,null,null,null,null,null,null,null,null,null,null,'new',null,null,md5('new'));
+	 	     $person = new Person('person','new',null,null,null,null,null,null,null,null,null,null,null,'new',null,null,null,md5('new'));
 	}
 	else {
 		$person = retrieve_dbPersons($id);
@@ -108,7 +108,7 @@ function process_form($id,$person)	{
         $prior_bookings = implode(',',$person->get_prior_bookings());
 		$newperson = new Person($last_name, $first_name, $gender, $employer, $address, $city, $state, $zip, $clean_phone1, $clean_phone2, 
                                    $email, $type, $prior_bookings, implode(',',$person->get_patient_name()), 
-                                   $person->get_patient_birthdate(),$person->get_patient_gender(),"");
+                                   $person->get_patient_birthdate(),$person->get_patient_gender(),$person->get_patient_relation(),"");
         $newperson->set_mgr_notes($person->get_mgr_notes());   
         if(!retrieve_dbPersons($newperson->get_id())){
            insert_dbPersons($newperson);
@@ -161,7 +161,7 @@ function process_form($id,$person)	{
 			// $result = delete_dbPersons($id);
 			// $pass = $first_name . $phone1;
             $person = new Person($last_name, $first_name, $gender, $employer, $address, $city, $state, $zip, $clean_phone1, $clean_phone2, 
-                               $email, $type, implode(',',$person->get_prior_bookings()), implode(',',$person->get_patient_name()), $patient_birthdate,$patient_gender,"");
+                               $email, $type, implode(',',$person->get_prior_bookings()), implode(',',$person->get_patient_name()), $patient_birthdate,$patient_gender,$patient_relation,"");
             $result = insert_dbPersons($person);
 			if (!$result)
             	echo ('<p class="error">Unable to reset ' .$first_name.' '.$last_name. "'s password.. <br>Please report this error to the House Manager.");

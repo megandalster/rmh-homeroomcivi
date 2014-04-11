@@ -15,7 +15,7 @@ include_once(dirname(__FILE__).'/domain/Person.php');
 							$g['birthday1'], $g['birthday2'], $g['birthday3']);
 		// echo "<br><br>";var_dump($pgb);
 	    $p = new Person($g['last_name'], $g['first_name'], "", "", $g['address'], $g['city'], $g['state'], $g['zip'], $g['phone1'], 
-					$g['phone2'], $g['email'], "guest", "", implode(',',$pgb[0]), $pgb[2], $pgb[1], '');
+					$g['phone2'], $g['email'], "guest", "", implode(',',$pgb[0]), $pgb[2], $pgb[1],'', '');
 	    $p->set_mgr_notes($g['mgr_notes']);
 	    if (!insert_dbPersons($p))
 	        echo "<br><br>did not import :".$g['last_name']." ". $g['first_name'];

@@ -21,15 +21,15 @@ class testdbPersons extends UnitTestCase {
         
         //creates some people to add to the database
         $person1 = new Person("Smith", "John", "male", "123 College Street","Brunswick", "ME", "04011", 2075551234, "", 
-    				           "email@bowdoin.edu", "guest", "", "Jane Smith", "98-01-01", "Female", "");
+    				           "email@bowdoin.edu", "guest", "", "Jane Smith", "98-01-01", "Female", "", "");
         $person2 = new Person("Jones", "Bob", "male", "100 Union Street","Bangor", "ME", "04401", 2075555678, null, 
-    				           "bjones@gmail.com", "guest", "", "Dan Jones", "95-07-15", "Male", "" );
+    				           "bjones@gmail.com", "guest", "", "Dan Jones", "95-07-15", "Male", "", "" );
         $person3 = new Person("Adams", "Will", "male", "12 River Road","Augusta", "ME", "04330", 207551212, 2075553434, 
-    				           "wadams@yahoo.com", "socialworker", "", null, null, null, "" );
+    				           "wadams@yahoo.com", "socialworker", "", null, null, null, "", "" );
         $person4 = new Person("Williams", "Elizabeth", "female", "50 Main Street","Portland", "ME", "04110", 2075555432, null, 
-    				           "ewilliams@comcast.net", "volunteer", "", null, null, null, "");
+    				           "ewilliams@comcast.net", "volunteer", "", null, null, null, "", "");
         $person5 = new Person("Roberts", "Jill", "female", "200 Main Street","Portland", "ME", "04110", 2075556666, 2075550000, 
-    				           "jroberts@rmh.org", "manager", "", null, null, null, "" );
+    				           "jroberts@rmh.org", "manager", "", null, null, null, "", "" );
         
         // tests the insert function
         $this->assertTrue(insert_dbPersons($person1));

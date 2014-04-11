@@ -145,9 +145,12 @@ else {
 	  	  //  echo(' disabled="true"');
 	  	
 	  	if ($id !== 'new') {
-	  	    echo('<p> Prior Bookings: <br />');
+	  	    echo('<p> Prior Bookings (date checked out): <br />');
 	  	    foreach ($person->get_prior_bookings() as $prior_booking_id) {
-	  	    	 $date = substr($prior_booking_id,0,8);
+	  	         $b = retrieve_dbBookings($prior_booking_id);
+	  	         if (!$b)
+	  	    	     $date = substr($prior_booking_id,0,8);
+	  	    	 else $date = $b->get_date_out();
 	  	    	 if ($date!="")
 	  	         	echo '<a href="viewBookings.php?id=closed&bookingid='.$prior_booking_id.'" target="_blank">'.date_string($date).'</a> <br>';
 	  	    }

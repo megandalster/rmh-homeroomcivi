@@ -97,8 +97,7 @@ function update_room_info($currentRoom,$date){
     if($_SESSION['access_level'] != 2){
 		// add a log only if the status actually changed
 		// then update the status
-		if($newStatus != $currentRoom->get_status() &&
-			$currentRoom->get_status() != "booked" && $currentRoom->get_status() != "reserved"){
+		if($newStatus != $currentRoom->get_status()){
 			$currentRoom->set_status($newStatus);
 			// Create the log message
 			$message = "<a href='viewPerson.php?id=".$_SESSION['_id']."'>".$name."</a>".

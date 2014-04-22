@@ -102,7 +102,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
 	if ($_POST['submit'] == 'Submit') { 
         // check for errors    
         include('bookingValidate.inc');
-        $errors = validate_form($id);
+        $errors = validate_form($id,$referralid);
         if($errors){
             show_errors($errors);                                          
         }
@@ -240,11 +240,17 @@ function build_POST_booking($id,$primaryGuest,$referralid) {
         $pendingBooking->set_payment_arrangement($payment);
         $pendingBooking->set_overnight_use($_POST['overnight']);
         $pendingBooking->set_day_use($_POST['day']);
-        if ($_POST['status']=="closed" || $_POST['status']=="closed-deceased") {
-            $pendingBooking->set_status($_POST['status']);
-            $pendingBooking->set_date_out(substr($_POST['date_out_year'],2,2).'-'.$_POST['date_out_month'].'-'.$_POST['date_out_day']);
+        $pendingBooking->set_status($_POST['status']);
+        $new_room = substr($_POST['room_no'],0,3);
+        if ($new_room!="" && $new_room!=$pendingBooking->get_room_no()) {
+            $pendingBooking->change_room($pendingBooking->get_room_no(),
+                                substr($_POST['room_no'],0,3),date("y-m-d"));
         }
-        $pendingBooking -> set_day_use_date($day_use_date);
+        if ($_POST['status']=="active")
+            $pendingBooking->set_date_out("");
+        else // closed or closed-deceased
+            $pendingBooking->set_date_out(substr($_POST['date_out_year'],2,2).'-'.$_POST['date_out_month'].'-'.$_POST['date_out_day']);
+        $pendingBooking->set_day_use_date($day_use_date);
         $pendingBooking->set_mgr_notes($notes);
         $pendingBooking->set_referred_by($referred_by);
         $pendingBooking->set_hospital($hospital);
@@ -253,12 +259,9 @@ function build_POST_booking($id,$primaryGuest,$referralid) {
         $pendingBooking->remove_occupants();
     }
     else {
-
     	$pendingBooking = new Booking($date_submitted, $date_in, $primaryGuest->get_id(), "pending", "", $primaryGuest->get_patient_name(), 
                                   array(), $auto, "", "", $referred_by, $hospital, $department, 
-                                  $health_questions, $payment, $_POST['overnight'], $_POST['day'], $day_use_date, $notes, "new"); 
-                                  
-                            
+                                  $health_questions, $payment, $_POST['overnight'], $_POST['day'], $day_use_date, $notes, "new");                      
     }
     if ($id=="new")
         $pendingBooking-> add_occupant($primaryGuest->get_first_name()." ".$primaryGuest->get_last_name(),"",$primaryGuest->get_gender(),"");

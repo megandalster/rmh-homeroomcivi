@@ -163,11 +163,10 @@ else
     </select>
     <input type="text" size = "3" maxLength = "4" name="date_submitted_year" value="<?php echo("20".substr($tempBooking->get_date_submitted(),0,2))?>"/><br />
 
-<br><b>Status: </b>
 <?php
-if ($tempBooking->get_status()=="closed" || $tempBooking->get_status()=="closed-deceased") {
+    echo "<br><b>Status: </b>";
     echo '<select name="status">';
-    $status_options = array("closed","closed-deceased");
+    $status_options = array("closed","closed-deceased","active");
     echo("<option></option>");
     foreach ($status_options as $status_option)
       if ($status_option==$tempBooking->get_status())
@@ -175,7 +174,7 @@ if ($tempBooking->get_status()=="closed" || $tempBooking->get_status()=="closed-
       else echo "<option value=".$status_option.">".$status_option."</option>";
     echo "</select>";
     
-    echo "&nbsp;&nbsp;Date Out: <select name = 'date_out_month'>";
+    echo "&nbsp;&nbsp;Check-out Date: <select name = 'date_out_month'>";
  
       $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
 	  echo("<option> </option>");
@@ -209,9 +208,20 @@ if ($tempBooking->get_status()=="closed" || $tempBooking->get_status()=="closed-
     echo '</select>
     	<input type="text" size = "3" maxLength = "4" name="date_out_year" 
     	value="20'.substr($tempBooking->get_date_out(),0,2).'"/>';
-    
-}
-else echo $tempBooking->get_status();
+  
+  if ($tempBooking->get_status()=="active") {
+    echo '<br>Room No: '.$tempBooking->get_room_no().'  (Move family to a different room: ';
+    $rooms = retrieve_all_rooms(date('y-m-d'));
+    echo '<select name="room_no">'; 
+    echo "<option value=''></option>";
+    foreach ($rooms as $room) {
+      $room_no = substr($room,0,3);
+      $booking_id = substr($room,4);
+      if ($room_no!=$tempBooking->get_room_no() && $booking_id=="")
+         echo "<option value=".$room.">".$room_no."</option>";
+    }
+    echo "</select>)";
+  } 
 ?>
 
 <br /><br/>
@@ -369,13 +379,9 @@ else if($last_auto_color != "") echo($last_auto_color);
        <input type="text" name="payment_description" size="80" value = "<?php if($tempBooking->get_payment_arrangement()!= "10 per night") echo($tempBooking->get_payment_arrangement())?>"/> <br />
 <br />
 
-<?php 
-
-if ($tempBooking->get_status()!="active") {
-    ?>
 <br><b>Confirmation: </b> <br />
  <input type="radio" name="visitOrWC" value="visit" <?php if($tempBooking->get_date_in() != "Will Call") echo('checked')?>/> 
- Expected Arrival Date
+ Check-in Date
    
     <select name = "date_in_month">
     <?php
@@ -426,9 +432,7 @@ if ($tempBooking->get_status()!="active") {
     
     
  <input type="radio" name="visitOrWC" value="Will Call" <?php if($tempBooking->get_date_in()== "Will Call") echo('checked')?>/> Will Call 
- <?php } // active booking
-else echo " <b>Check-in date:</b> ".date_string($tempBooking->get_date_in());
- ?>
+
 <br />
 <br />
 <b>Approved Use(s): </b> <br />

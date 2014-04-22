@@ -21,21 +21,22 @@
          Gender: <?php echo($current_guest->get_gender());?> <br/>
          Hospital:  <?php echo($booking->get_hospital());?> <br/>
          Department: <?php echo($booking->get_department());?> <br/>
-       
+     	 Submitted by: <?php echo $booking->get_referred_by();?> <br/>      
  <br/>
  <b>Status: </b> <?php echo($booking->get_status()."<br/>");
     if ($booking->get_status()== "pending"){
          echo('Date submitted: '.date_string($booking->get_date_submitted())."<br>");
+         echo('Room No: '.$booking->get_room_no().'<br>');     
     }
     else if($booking->get_status()== "active" || $booking->get_status()== "confirmed"){
          echo('Date In: '.date_string($booking->get_date_in()).'<br>');
-         echo('Room Number: '.$booking->get_room_no().'<br>');     
+         echo('Room No: '.$booking->get_room_no().'<br>');     
     } 
     else if($booking->get_status()== "closed" || $booking->get_status()== "closed-deceased")
          echo('Date In: '.date_string($booking->get_date_in()).
          	  ', Room No: '.$booking->get_room_no().
               '<br/> Date Out: '.date_string($booking->get_date_out()).', ');
-    echo('Submitted by: '.$booking->get_referred_by().'<br/>');?> 
+?> 
 <br/>
 <b>Primary Guest: </b>
  

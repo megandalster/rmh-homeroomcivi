@@ -228,8 +228,21 @@ class Booking {
             update_dbBookings($this);
             return $this;
         }
-        else return false;
-        	  
+        else return false;    	  
+    }
+    function change_room ($old_room, $new_room, $date) {
+        $r = retrieve_dbRooms($old_room,$date,"");
+    	if ($r) 
+    	   $r->unbook_me($this->id); 
+        $r = retrieve_dbRooms($new_room,$date,"");
+        if ($r) {
+            $r->book_me($this->id);  
+            $this->room_no = $r->get_room_no();
+            $this->status = "active";
+            update_dbBookings($this);
+            return $this;
+        }
+        else return false;   	  
     }
     
     /*

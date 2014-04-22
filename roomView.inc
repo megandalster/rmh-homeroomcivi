@@ -56,21 +56,15 @@ else if(!$day){
 }
 ?>
 <?php
-// Only allow changing the status if it isnt reserved or booked
-if(!$booking){
-	echo ("Status: <select name=\"status\">"); 
+	echo ("Change status: <select name=\"status\">"); 
 	$statusArray = array("clean", "dirty","off-line");
 	foreach($statusArray as $status){
-		if($roomStatus == $status){
+		if($roomStatus == $status)
 			echo ("<option selected='yes'>".$status."</option>");
-		}else if ($roomStatus!="booked" && $roomStatus!="reserved") {
+		else 
 			echo ("<option>".$status."</option>");
-		}
 	}
 	echo ("</select><br />");
-}else{
-	$_POST['status'] = "reserved";
-}
 ?>
 
 Room Notes: <input type="text" size="50" name="room_notes" value="<?php echo($currentRoom->get_room_notes());?>"/><br />

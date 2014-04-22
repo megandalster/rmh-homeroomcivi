@@ -4,7 +4,7 @@
  * it returns an array of the errors with the form (string warnings)
  * this array is null (aka false) if there are no errors
  */
-function validate_form($id){
+function validate_form($id,$referralid){
     if ($_POST['patient_name0'] == null) $errors[] = "Please enter a name for the patient";
     if ($_POST['hospital']== null) $errors[]= "Please enter a hospital name";
     if ($_POST['dept']== null) $errors[]= "Please enter a department";
@@ -12,7 +12,9 @@ function validate_form($id){
 	    || $_POST['patient_birth_month'] == null || $_POST['patient_birth_day'] == null) $errors[] = 'Please enter a valid date of birth for the patient';
 	if($_POST['referred_by'] == null) $errors[] = "Please specify who created this booking";
     if($_POST['date_submitted_day']== "" || $_POST['date_submitted_month']== "" || $_POST['date_submitted_year']== "")
-	    $errors[] = 'Please enter a Date Submitted';   
+	    $errors[] = 'Please enter a Date Submitted';
+	if (strlen($_POST['room_no'])>4 && substr($_POST['room_no'],4)!=$referralid)  // check if somebody else is not in the room selected
+	    $errors[] = 'Please select an unoccupied Room';   
 	if($_POST['visitOrWC']=='visit'){
 	    if($_POST['date_in_day']== "" || $_POST['date_in_month']== "" || $_POST['date_in_year']== ""){
 	        $errors[] = 'Please enter a valid date of arrival. If this date is unknown, please select "Will Call" instead.';
@@ -22,8 +24,7 @@ function validate_form($id){
 	if($_POST['day']=='yes'){
 	    if($_POST['day_use_day']== "" || $_POST['day_use_month']== "" || $_POST['day_use_year']== "" || strlen($_POST['day_use_year']) != 4){
 	        $errors[] = 'Please enter a valid day use date. If this booking is not day use, please uncheck day use';
-	    }
-	    
+	    }   
 	}
 	if ($id=='new') {
   	   if(trim($_POST['first_name_1'])==null) $errors[] = 'Please enter a first name for the primary guest ';

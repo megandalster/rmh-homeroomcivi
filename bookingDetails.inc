@@ -35,7 +35,7 @@
     else if($booking->get_status()== "closed" || $booking->get_status()== "closed-deceased")
          echo('Date In: '.date_string($booking->get_date_in()).
          	  ', Room No: '.$booking->get_room_no().
-              '<br/> Date Out: '.date_string($booking->get_date_out()).', ');
+              '<br/> Date Out: '.date_string($booking->get_date_out()).'<br>');
 ?> 
 <br/>
 <b>Primary Guest: </b>

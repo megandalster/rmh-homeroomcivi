@@ -125,6 +125,7 @@ else if ($_SESSION['access_level']!=2)
 		{
 		// Make each booking id a menu item
 		foreach($pendingBookings as $booking){
+		    if ($booking->get_status()!="pending") continue;
 			if(!$booking->day_use() == 'yes')
 			{
 				echo ("<option value='" . $booking->get_id() . "'>");

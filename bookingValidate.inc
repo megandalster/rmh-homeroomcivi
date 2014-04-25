@@ -11,8 +11,8 @@ function validate_form($id,$referralid){
     if ($_POST['patient_birth_year'] == null || strlen($_POST['patient_birth_year']) != 4 
 	    || $_POST['patient_birth_month'] == null || $_POST['patient_birth_day'] == null) $errors[] = 'Please enter a valid date of birth for the patient';
 	if($_POST['referred_by'] == null) $errors[] = "Please specify who created this booking";
-    if($_POST['date_submitted_day']== "" || $_POST['date_submitted_month']== "" || $_POST['date_submitted_year']== "")
-	    $errors[] = 'Please enter a Date Submitted';
+//    if($_POST['date_submitted_day']== "" || $_POST['date_submitted_month']== "" || $_POST['date_submitted_year']== "")
+//	    $errors[] = 'Please enter a Date Submitted';
 	if (strlen($_POST['room_no'])>4 && substr($_POST['room_no'],4)!=$referralid)  // check if somebody else is not in the room selected
 	    $errors[] = 'Please select an unoccupied Room';   
 	if($_POST['visitOrWC']=='visit'){

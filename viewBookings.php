@@ -82,7 +82,7 @@
         }
         //otherwise, show just pending bookings              
 		else{
-		   echo "<p><strong>Viewing all Pending Bookings</strong><br />";
+		   echo "<p><strong>Viewing all Pending and Reserved Bookings</strong><br />";
 		   echo "(To find other bookings, <a href='searchBookings.php'>search the database</a>!)";
 		//grab the sort parameter
 	       $s = $_GET['sort'];
@@ -93,7 +93,7 @@
 		        //determines whether to append an r parameter to a particular sort link
 			    if ($s ==  'flag')
                    $r5= "&r=r";
-			    elseif ($s ==  'datein')
+			    elseif ($s ==  'status')
                    $r4 = "&r=r";
                 elseif ($s ==  'patient')
                    $r3 = "&r=r";
@@ -107,31 +107,29 @@
 			$num_bookings = sizeof($pending_bookings);
 			//handles the case when there are no pending bookings
 			if($num_bookings == 0){
-				echo ("<p><b> There are currently no pending bookings. </b>");
+				echo ("<p><b> There are currently no pending or reserved bookings. </b>");
 			}
             //otherwise
 			else{
-			   //sort based on the sort parameter
-			   usort($pending_bookings, $sort);
 			   //reverse the sort if r is set
 			   if($_GET['r']=='r')
 				  $pending_bookings = array_reverse($pending_bookings);						     
 				echo("<p>");
 				if ($num_bookings != 1)			
-					echo("There are currently ".$num_bookings." pending bookings: ");
+					echo("There are currently ".$num_bookings." pending or reserved bookings: ");
 				else 
-					echo("There is currently ".$num_bookings." pending booking: ");
+					echo("There is currently ".$num_bookings." pending or reserved booking: ");
 					
 			
 			//headings to the table, clicking a heading sorts by that type of data
 			//or reverses the sort if currently sorted by that type
-			echo('<p><table border="1">');
-			echo('<th> <a href= "viewBookings.php?id=pending'.$r1.'">Date Submitted </a></th>');
-			echo('<th> <a href= "viewBookings.php?id=pending&sort=guest'.$r2.'"> Primary Guests </a></th>');
-			echo('<th> <a href= "viewBookings.php?id=pending&sort=patient'.$r3.'">Patient Name </a></th>');
-			echo('<th> <a href= "viewBookings.php?id=pending&sort=datein'.$r4.'">Date In </a></th>');
-			echo('<th> <a href= "viewBookings.php?id=pending&sort=flag'.$r5.'"> Flags </a></th>');
-			echo('<th> Actions </th>');										
+			echo('<p><table border="0"; align="left"><tr>');
+			echo('<td> <a href= "viewBookings.php?id=pending'.$r1.'">Date Submitted </a></td>');
+			echo('<td> Primary Guest</td>');
+			echo('<td> Patient Name </td>');
+			echo('<td> Status </td>');
+			echo('<td> Flags </td>');
+			echo('<td> Actions </td></tr>');										
 						
 			foreach($pending_bookings as $current_booking){
 			  //updates flags of any bookings that are past arrival date  
@@ -148,7 +146,7 @@
 			  elseif ($flag == "past arrival date")
 				  $color = "LightGrey";
 						    
-			  echo("<tr>");
+			  echo('<tr border="0"; align="left">');
 
 			  //prints the date submitted
 			  echo('<td align="center" bgcolor='.$color.'>'.date_string($current_booking->get_date_submitted()).'</td>'.
@@ -169,15 +167,8 @@
 			  echo('</td>'.
 				   '<td align="center" bgcolor='.$color.'>'.$current_booking->getith_patient(0).'</td>');
 			  
-			  //pulls out date in
-			  $date = $current_booking->get_date_in();
-			  //formats date if not "Will Call"
-			  if($date != "Will Call"){
-			      $date = date_string($date);
-			  }
-			  
-			  //prints datein and flag
-              echo('<td align="center" bgcolor='.$color.'>'.$date.'</td>');
+			  //prints status and flag
+              echo('<td align="center" bgcolor='.$color.'>'.$current_booking->get_status().'</td>');
 		      echo('<td align="center" bgcolor='.$color.'>'.$current_booking->get_flag().'</td>');
 						    
 			  //prints links for viewing and editing		

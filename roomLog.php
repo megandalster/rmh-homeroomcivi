@@ -56,6 +56,7 @@ echo '<form name="chooseBooking" action="viewBookings.php" target="_blank">
 	if($pendingBookings){
 		// Make each booking id a menu item
 		foreach($pendingBookings as $booking){
+		    if ($booking->get_status()!="pending") continue;
 			echo ("<option value='" . $booking->get_id() . "'>");
 			$person = retrieve_dbPersons(substr($booking->get_id(), 8));
 			if ($person) {

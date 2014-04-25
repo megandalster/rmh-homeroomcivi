@@ -125,9 +125,10 @@ if ($tempBooking->get_referred_by()!="")
 else 
 	echo($user_name." (".substr($user_phone,0,3)."-".substr($user_phone,3,3)."-".substr($user_phone,6).")");
 ?>"/>
-<br><span style='font-size:x-small;color:FF0000'>* </span>Date Submitted:  
-    <select name = "date_submitted_month">
+<br>Date Submitted:    
     <?php 
+    if ($id=="new") {
+      echo '<select name = "date_submitted_month">';
       $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
 	  echo("<option> </option>");
       for ($i = 1 ; $i <= 9 ; $i ++){
@@ -141,11 +142,8 @@ else
              echo ("<option value=".$i." selected = 'yes' >".$months[$i-1]."</option>");
           else
              echo ("<option value=".$i.">".$months[$i-1]."</option>");
-      }
-    ?>
-    </select>    
-    <select name = "date_submitted_day">
-    <?php 
+      } 
+      echo '</select><select name = "date_submitted_day">';
       echo("<option>  </option>");
       for ($i = 1; $i <= 9 ; $i ++){
           if($i == substr($tempBooking->get_date_submitted(),6,2))
@@ -159,23 +157,38 @@ else
           else
              echo ("<option>".$i."</option>");
       }
-    ?>
-    </select>
-    <input type="text" size = "3" maxLength = "4" name="date_submitted_year" value="<?php echo("20".substr($tempBooking->get_date_submitted(),0,2))?>"/><br />
-
-<?php
-    echo "<br><b>Status: </b>";
-    echo '<select name="status">';
-    $status_options = array("closed","closed-deceased","active");
-    echo("<option></option>");
-    foreach ($status_options as $status_option)
-      if ($status_option==$tempBooking->get_status())
-        echo "<option value=".$status_option." selected='yes'>".$status_option."</option>";
-      else echo "<option value=".$status_option.">".$status_option."</option>";
-    echo "</select>";
+      echo '</select><input type="text" size = "3" maxLength = "4" name="date_submitted_year" value="20'.substr($tempBooking->get_date_submitted(),0,2).'"/><br />';
+    }
+    else {
+      echo date_string($tempBooking->get_date_submitted());
+      echo "<br><br><b>Status: </b>";
+      if (substr($tempBooking->get_status(),0,6)!="closed") {
+         echo $tempBooking->get_status();
+         if ($tempBooking->get_status()!="pending") {
+          echo '<br>Room No: '.$tempBooking->get_room_no().'  (Move family to a different room: ';
+          $rooms = retrieve_all_rooms(date('y-m-d'));
+          echo '<select name="room_no">'; 
+          echo "<option value=''></option>";
+          foreach ($rooms as $room) {
+           $room_no = substr($room,0,3);
+           $booking_id = substr($room,4);
+           if ($room_no!=$tempBooking->get_room_no() && $booking_id=="")
+              echo "<option value=".$room.">".$room_no."</option>";
+          }
+          echo "</select>)"; 
+         } 
+      }
+      else {
+      echo '<select name="status">';
+      $status_options = array("closed","closed-deceased","active");
+      echo("<option></option>");
+      foreach ($status_options as $status_option)
+        if ($status_option==$tempBooking->get_status())
+          echo "<option value=".$status_option." selected='yes'>".$status_option."</option>";
+        else echo "<option value=".$status_option.">".$status_option."</option>";
+      echo "</select>";
     
-    echo "&nbsp;&nbsp;Check-out Date: <select name = 'date_out_month'>";
- 
+      echo "&nbsp;&nbsp;Check-out Date: <select name = 'date_out_month'>";
       $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
 	  echo("<option> </option>");
       for ($i = 1 ; $i <= 9 ; $i ++){
@@ -190,7 +203,7 @@ else
           else
              echo ("<option value=".$i.">".$months[$i-1]."</option>");
       }
-    echo '</select><select name = "date_out_day">';
+      echo '</select><select name = "date_out_day">';
  
       echo("<option>  </option>");
       for ($i = 1; $i <= 9 ; $i ++){
@@ -205,23 +218,11 @@ else
           else
              echo ("<option>".$i."</option>");
       }
-    echo '</select>
+      echo '</select>
     	<input type="text" size = "3" maxLength = "4" name="date_out_year" 
     	value="20'.substr($tempBooking->get_date_out(),0,2).'"/>';
-  
-  if ($tempBooking->get_status()=="active") {
-    echo '<br>Room No: '.$tempBooking->get_room_no().'  (Move family to a different room: ';
-    $rooms = retrieve_all_rooms(date('y-m-d'));
-    echo '<select name="room_no">'; 
-    echo "<option value=''></option>";
-    foreach ($rooms as $room) {
-      $room_no = substr($room,0,3);
-      $booking_id = substr($room,4);
-      if ($room_no!=$tempBooking->get_room_no() && $booking_id=="")
-         echo "<option value=".$room.">".$room_no."</option>";
-    }
-    echo "</select>)";
-  } 
+      }
+    } 
 ?>
 
 <br /><br/>

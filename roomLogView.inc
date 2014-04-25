@@ -55,10 +55,13 @@ for($i = 0; $i < 3; $i++){
 		}else if($roomStatus == "off-line"){
 			$statusColor = "blue";
 		}
-		if($date == date("y-m-d") && !$currentBooking)  {
-			echo ("<b style=\"float:right; color:".$statusColor."\">");
-			echo ($roomStatus."</b>");
-		}
+		if($date == date("y-m-d"))  
+		    if (!$currentBooking){
+			    echo ("<b style=\"float:right; color:".$statusColor."\">");
+			    echo ($roomStatus."</b>");
+		    }
+		    else if ($currentBooking->get_status()=="reserved")
+		        echo ("<b style=\"float:right; color:orange\">reserved</b>");
 		// Print the beds in the room
 		echo("<br><b>Beds: </b>".$currentRoom->get_beds());
 		// Print if there is a private bath

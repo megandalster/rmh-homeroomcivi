@@ -253,7 +253,7 @@ function retrieve_pendingDayUse_dbBookings ($date) {
 
 function retrieve_all_pending_dbBookings () {
 	connect();
-    $query = "SELECT * FROM dbBookings WHERE status = 'pending' ORDER BY date_in";
+    $query = "SELECT * FROM dbBookings WHERE status = 'pending' OR status = 'reserved' ORDER BY date_submitted";
     $result = mysql_query ($query);
     $theBookings = array();
 	while ($result_row = mysql_fetch_assoc($result)) {

@@ -191,9 +191,12 @@ function process_form($id,$referralid)	{
 }
 // build a booking from the posted data and save it
 function build_POST_booking($id,$primaryGuest,$referralid) {
-	$date_submitted = substr($_POST['date_submitted_year'],2,2).'-'.
+    if ($id=="new")
+	    $date_submitted = substr($_POST['date_submitted_year'],2,2).'-'.
                  $_POST['date_submitted_month'].'-'.
                  $_POST['date_submitted_day']; 
+    else 
+        $date_submitted = substr($referralid,0,8);
     
     if($_POST['visitOrWC'] == "Will Call" ){
        $date_in = "Will Call";
@@ -233,14 +236,17 @@ function build_POST_booking($id,$primaryGuest,$referralid) {
     
     if ($referralid && retrieve_dbBookings($referralid)) {
     	$pendingBooking = retrieve_dbBookings($referralid);
-    	$pendingBooking->set_date_submitted($date_submitted);
+    //	$pendingBooking->set_date_submitted($date_submitted);
         $pendingBooking->set_date_in($date_in);
         $pendingBooking->set_patient($primaryGuest->get_patient_name());
         $pendingBooking->set_auto($auto);
         $pendingBooking->set_payment_arrangement($payment);
         $pendingBooking->set_overnight_use($_POST['overnight']);
         $pendingBooking->set_day_use($_POST['day']);
-        $pendingBooking->set_status($_POST['status']);
+        if ($$_POST['status']!="")
+            $pendingBooking->set_status($_POST['status']);
+        else 
+            $pendingBooking->set_status("pending");
         $new_room = substr($_POST['room_no'],0,3);
         if ($new_room!="" && $new_room!=$pendingBooking->get_room_no()) {
             $pendingBooking->change_room($pendingBooking->get_room_no(),
@@ -264,7 +270,7 @@ function build_POST_booking($id,$primaryGuest,$referralid) {
                                   $health_questions, $payment, $_POST['overnight'], $_POST['day'], $day_use_date, $notes, "new");                      
     }
     if ($id=="new")
-        $pendingBooking-> add_occupant($primaryGuest->get_first_name()." ".$primaryGuest->get_last_name(),"",$primaryGuest->get_gender(),"");
+        $pendingBooking-> add_occupant($primaryGuest->get_first_name()." ".$primaryGuest->get_last_name(),$primaryGuest->get_patient_relation(),$primaryGuest->get_gender(),"");
     for($count = 1 ; $count <= 6 ; $count++){
         if($_POST['additional_guest_'.$count] != "")
            $pendingBooking->add_occupant($_POST['additional_guest_'.$count], $_POST['additional_guest_'.$count.'_relation'],

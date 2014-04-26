@@ -137,16 +137,16 @@ function process_form($id,$referralid)	{
 		$phone1 = $guest->get_phone1();
 		$patient_gender = $guest->get_patient_gender();
 		$guest_gender = $guest->get_gender();
-		$patient_relation = trim(str_replace('\\\'','\'',htmlentities($_POST['patient_relation'])));
+		$patient_relation = trim(str_replace('\\\'','',htmlentities($_POST['patient_relation'])));
    	}
    	else if ($id=="new"){ // creating a new booking from scratch -- edit everything
-        $first_name = trim(str_replace("'","\'", htmlentities(str_replace('&','and',$_POST['first_name_1']))));
-		$last_name = trim(str_replace("'","\'", htmlentities($_POST['last_name_1'])));
-		$patient_gender = trim(str_replace('\\\'','\'',htmlentities($_POST['patient_gender_1'])));
-		$guest_gender = trim(str_replace('\\\'','\'',htmlentities($_POST['gender_1'])));		
-        $patient_relation = trim(str_replace('\\\'','\'',htmlentities($_POST['patient_relation'])));		
-        $address = trim(str_replace("'","\'", htmlentities($_POST['address_1'])));
-		$city = trim(str_replace("'","\'", htmlentities($_POST['city_1'])));
+        $first_name = trim(str_replace("'","", htmlentities(str_replace('&','and',$_POST['first_name_1']))));
+		$last_name = trim(str_replace("'","", htmlentities($_POST['last_name_1'])));
+		$patient_gender = trim(str_replace('\\\'','',htmlentities($_POST['patient_gender_1'])));
+		$guest_gender = trim(str_replace('\\\'','',htmlentities($_POST['gender_1'])));		
+        $patient_relation = trim(str_replace('\\\'','',htmlentities($_POST['patient_relation'])));		
+        $address = trim(str_replace("'","", htmlentities($_POST['address_1'])));
+		$city = trim(str_replace("'","", htmlentities($_POST['city_1'])));
 		$state = $_POST['state_1'];
 		$zip = trim(htmlentities($_POST['zip_1']));
 		$phone1 = $_POST['phone1_area_1'].$_POST['phone1_middle_1'].$_POST['phone1_end_1'];
@@ -157,16 +157,16 @@ function process_form($id,$referralid)	{
     	$tempBooking = retrieve_dbBookings($referralid);
    	    $guest = retrieve_dbPersons($id);
    	    $guest_gender = $guest->get_gender();
-   	    $patient_relation = trim(str_replace('\\\'','\'',htmlentities($_POST['patient_relation'])));		
+   	    $patient_relation = trim(str_replace('\\\'','',htmlentities($_POST['patient_relation'])));		
         $first_name = $guest->get_first_name();
 		$phone1 = $guest->get_phone1();
 		$patient_gender = $guest->get_patient_gender();
     }
-    $patient_name = array(trim(str_replace("'","\'", htmlentities($_POST['patient_name0']))));
+    $patient_name = array(trim(str_replace("'","", htmlentities($_POST['patient_name0']))));
     if ($_POST['patient_name1']!="") 
-            $patient_name[] = trim(str_replace("'","\'", htmlentities($_POST['patient_name1'])));
+            $patient_name[] = trim(str_replace("'","", htmlentities($_POST['patient_name1'])));
     if ($_POST['patient_name2']!="") 
-            $patient_name[] = trim(str_replace("'","\'", htmlentities($_POST['patient_name2'])));
+            $patient_name[] = trim(str_replace("'","", htmlentities($_POST['patient_name2'])));
     $patient_birthdate = substr($_POST['patient_birth_year'], 2,2).'-'. 
                              $_POST['patient_birth_month'].'-'.
                              $_POST['patient_birth_day'];
@@ -227,7 +227,7 @@ function build_POST_booking($id,$primaryGuest,$referralid) {
             trim(str_replace("'","\'",htmlentities($_POST['auto_model']))).":".
             trim(str_replace("'","\'",htmlentities($_POST['auto_color']))).":".
             trim(str_replace("'","\'",htmlentities($_POST['auto_state'])));
-    if ($auto==":::")
+    if ($auto==":::ME")
         $auto = "";
     for ($i=1; $i<=11; $i++)
     	if ($_POST['health'] && in_array($healthvalues[$i-1],$_POST['health']))
@@ -269,9 +269,8 @@ function build_POST_booking($id,$primaryGuest,$referralid) {
                                   array(), $auto, "", "", $referred_by, $hospital, $department, 
                                   $health_questions, $payment, $_POST['overnight'], $_POST['day'], $day_use_date, $notes, "new");                      
     }
-    if ($id=="new")
-        $pendingBooking-> add_occupant($primaryGuest->get_first_name()." ".$primaryGuest->get_last_name(),$primaryGuest->get_patient_relation(),$primaryGuest->get_gender(),"");
-    for($count = 1 ; $count <= 6 ; $count++){
+    $pendingBooking-> add_occupant($primaryGuest->get_first_name()." ".$primaryGuest->get_last_name(),$primaryGuest->get_patient_relation(),$primaryGuest->get_gender(),"");
+    for($count = 2 ; $count <= 6 ; $count++){
         if($_POST['additional_guest_'.$count] != "")
            $pendingBooking->add_occupant($_POST['additional_guest_'.$count], $_POST['additional_guest_'.$count.'_relation'],
             							 $_POST['additional_guest_'.$count.'_gender'], $_POST['additional_guest_'.$count.'_present']);

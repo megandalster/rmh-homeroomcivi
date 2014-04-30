@@ -68,10 +68,10 @@ include_once(dirname(__FILE__)."/domain/OccupancyData.php");
 			$od = new OccupancyData($date, $enddate, $roomNo);
 			$formattedDate = date("F j, Y",strtotime($date));
 			$formattedEndDate = date("F j, Y",strtotime($enddate));
-	        echo("<p>The data below has been exported as a spreadsheet file.  To download and view it, <br>
-	        set your browser to rmhportland/volunteers/homeroom/dataexport.csv.");
+	    //    echo("<p>The data below has been exported as a spreadsheet file.  To download and view it, <br>
+	    //    set your browser to rmhportland/volunteers/homeroom/dataexport.csv.");
 			show_options();	    
-			export_data($od, $date, $enddate, $formattedDate, $formattedEndDate, $roomNo);	
+		//	export_data($od, $date, $enddate, $formattedDate, $formattedEndDate, $roomNo);	
 			// String of this date, including the weekday and such
 			if ($od instanceof OccupancyData){
 				include_once("dataView.inc");

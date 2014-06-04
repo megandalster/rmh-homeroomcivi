@@ -114,7 +114,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
             echo '<a href = "bookingEdit.php?id=update&referralid='.$booking->get_id().'" > (Edit this booking) </a><br>';
 			// Create the log message
 			$message = "<a href='viewPerson.php?id=".$_SESSION['_id']."'>".$user_name."</a>".
-	 		" has created a booking for <a href='viewPerson.php?id=".$primaryGuest->get_id()."'>".
+	 		" has created or edited a booking for <a href='viewPerson.php?id=".$primaryGuest->get_id()."'>".
 	 		$primaryGuest->get_first_name()." ".$primaryGuest->get_last_name()."</a>";
 	 		add_log_entry($message); 
 	 		include('bookingDetails.inc');
@@ -243,7 +243,7 @@ function build_POST_booking($id,$primaryGuest,$referralid) {
         $pendingBooking->set_payment_arrangement($payment);
         $pendingBooking->set_overnight_use($_POST['overnight']);
         $pendingBooking->set_day_use($_POST['day']);
-        if ($$_POST['status']!="")
+        if ($_POST['status']!="")
             $pendingBooking->set_status($_POST['status']);
         else 
             $pendingBooking->set_status("pending");

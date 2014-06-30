@@ -42,7 +42,7 @@
 						include('searchPeople.inc.php');
 						echo('<p><strong>Search Results: '.mysql_num_rows($result).' found...</strong>');
 						echo('<hr size="1" width="30%" align="left">');
-						if($_SESSION['access_level']>=2){
+					//	if($_SESSION['access_level']>=2){
 							echo('<p><table class="searchResults">');
 							if(mysql_num_rows($result))
 								echo('<tr><td class="searchResults"><strong>Name</strong></td><td class="searchResults"><strong>Patient Name</strong></td></tr>');
@@ -54,7 +54,7 @@
 									$thisRow['id'].">create new booking</a></td></tr>");
 							}
 							echo("</table></p>");
-						}
+					/*	}
 						else{
 							echo('<p><table class="searchResults">');
 							if(mysql_num_rows($result))
@@ -67,7 +67,7 @@
 							}
 							echo("</table></p>");
 						}
-						echo('<hr size="1" width="30%" align="left">');
+					*/	echo('<hr size="1" width="30%" align="left">');
 					}
 					else {
 						echo('<p>You may search for people using any or all of the following options.<br /><span style="font-size:x-small">A search for "an" would return D<strong>an</strong>, J<strong>an</strong>e, <strong>An</strong>n, and Sus<strong>an</strong></span>.</p>');

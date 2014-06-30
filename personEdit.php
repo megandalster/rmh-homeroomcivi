@@ -94,6 +94,7 @@ function process_form($id,$person)	{
         $clean_phone1 = preg_replace("/[^0-9]/", "", $phone1);
 		$clean_phone2 = preg_replace("/[^0-9]/", "", $phone2);
 		$email = trim(str_replace("'","\'", htmlentities($_POST['email'])));
+		$mgr_notes = trim(str_replace('\\\'','\'',htmlentities($_POST['mgr_notes'])));
         /*$patient_name = array(trim(str_replace("'","\'", htmlentities($_POST['patient_name0']))));
         if ($_POST['patient_name1']) {
             $patient_name[] = trim(str_replace("'","\'", htmlentities($_POST['patient_name1'])));
@@ -109,7 +110,7 @@ function process_form($id,$person)	{
 		$newperson = new Person($last_name, $first_name, $gender, $employer, $address, $city, $state, $zip, $clean_phone1, $clean_phone2, 
                                    $email, $type, $prior_bookings, implode(',',$person->get_patient_name()), 
                                    $person->get_patient_birthdate(),$person->get_patient_gender(),$person->get_patient_relation(),"");
-        $newperson->set_mgr_notes($person->get_mgr_notes());   
+        $newperson->set_mgr_notes($mgr_notes);   
         if(!retrieve_dbPersons($newperson->get_id())){
            insert_dbPersons($newperson);
            return $newperson;

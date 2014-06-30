@@ -83,14 +83,15 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
 					    $last_hospital = $lastBooking->get_hospital();
                         $last_department = $lastBooking->get_department();
                         $last_auto =   $lastBooking->get_auto();
+                        $last_occupants = $lastBooking->get_occupants();
                 }
                 else {
 					    $last_hospital = "";
                         $last_department = "";
                         $last_auto =  "";
-                }
-                $last_occupants = array($guest->get_first_name()." ".$guest->get_last_name().":".
+                        $last_occupants = array($guest->get_first_name()." ".$guest->get_last_name().":".
 					                    $guest->get_patient_relation().":".$guest->get_gender().":");
+                }
                 $tempBooking = new Booking(date("y-m-d"), "Will Call", $guest->get_id(), $status, "", $guest->get_patient_name(), 
            		    $last_occupants, $last_auto,  
                     "","","",$last_hospital,$last_department,"00000000000", "", "", "", "", "","new");  

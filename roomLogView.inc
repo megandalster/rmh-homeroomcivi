@@ -1,4 +1,4 @@
-<?php 
+ <?php 
 /*
  * Copyright 2011 by Alex Lucyk, Jesus Naero, and Allen Tucker.
  * This program is part of RMH Homeroom, which is free software.
@@ -9,6 +9,7 @@
 
 // Get the array of rooms
 $rooms = $roomLog->get_rooms();
+$pendingdayusecount = count(retrieve_pendingDayUse_dbBookings ($date));
 ?>
 
 <!-- THIS SECTION DISPLAYS THE 21 ROOMS AND THEIR INFORMATION -->
@@ -41,20 +42,15 @@ for($i = 0; $i < 3; $i++){
 		// The ID of the room and the status
 		echo ("<b style=\"float:left\">".$currentRoomID."</b>");
 		// Print the status of the room
-		
-		$statusColor = null;
-		// Change the color depending on the status
-		if($roomStatus == "clean"){
-			$statusColor = "green";
-		}else if($roomStatus == "reserved"){
-			$statusColor = "orange";
-		}else if($roomStatus == "dirty"){
-			$statusColor = "brown";
-		}else if($roomStatus == "booked"){
-			$statusColor = "red";
-		}else if($roomStatus == "off-line"){
-			$statusColor = "blue";
+		switch ($roomStatus) {
+			case "clean": $statusColor = "green"; break;
+			case "reserved": $statusColor = "orange"; break;
+			case "dirty": $statusColor = "brown"; break;
+			case "booked": $statusColor = "red"; break;
+			case "off-line": $statusColor = "blue"; break;
+			default: $statusColor = null;
 		}
+		
 		if($date == date("y-m-d"))  
 		    if (!$currentBooking){
 			    echo ("<b style=\"float:right; color:".$statusColor."\">");
@@ -69,7 +65,7 @@ for($i = 0; $i < 3; $i++){
 			echo (" bath");
 		}
 		if($date == date("y-m-d") && $currentRoom->get_room_notes() != "")
-		    echo "<br /><b>Notes: </b><br>".$currentRoom->get_room_notes();
+		    echo "<br /><b>Notes: </b><br><span style='font-weight:bold;color:FF0000'>".$currentRoom->get_room_notes().'</span>';
 		// Display info from the booking, such as the guests and loaners
 		if (!$currentBooking)
 		    echo "<br /><br /><br />";
@@ -86,79 +82,60 @@ for($i = 0; $i < 3; $i++){
 echo ("</tr></table>");
 
 
-echo("<br>");
+echo("<p>");
 
-echo ("<b>Day Use Bookings: </b>");
+echo ("<b>Day Use Bookings: </b><br>");
 
-$day_rooms = count($rooms) - 21;
-
-$day_rows = $day_rooms / 7;
-
+$day_rooms = count($rooms) - 21 + $pendingdayusecount;
 $counter = 0;
-echo ("<table align=\"center\">");
+echo ("<br><table align=\"center\">");
 // Use loops to construct each table row and column
-for($i = 0; $i < $day_rows; $i++){
-	// i rows
-		echo ("<tr>");
-		for($j = 0; $j < 7; $j++)
+echo ("<tr>");
+for($j = 0; $j < $day_rooms; $j++)
 		{
-			if($counter < $day_rooms)
-			{
-				//do stuff
-				$currentRoomID = substr($rooms[($i*7)+$j+21],0,3);;
-				$currentBookingID = substr($rooms[($i*7)+$j+21],4);
-				
+			$currentRoomID = substr($rooms[$counter+21],0,3);	
+			$currentBookingID = substr($rooms[$counter+21],4);
+			if ($currentRoomID!="" && $currentRoomID==$j) {
 				$currentRoom = retrieve_dbRooms($currentRoomID,$date,$currentBookingID);
-				$currentBooking = retrieve_dbBookings($currentBookingID);
+			    $currentBooking = retrieve_dbBookings($currentBookingID);
+			}
+			else {
+				$currentRoomID = "00".$j;
+				insert_dbRooms(new Room($currentRoomID, null, null, null, "clean", null, ""));  //make sure there's a room there
+				$currentBooking=null;
+			}
+			if ($currentBooking) {
+				if ($date==date('y-m-d'))
+            		$roomStatus = $currentRoom->get_status();
+        		else if (!$currentBooking)
+            		$roomStatus = "clean";
+        		else $roomStatus = "booked";
 				
-			
-				// This begins a "link" where the link is actually
-				// the entire box. It only does this if date is
-				// today or later
-				if(strcmp($date,date("y-m-d")) >=0 || !$currentBooking || $currentBooking && $currentBooking->get_status()=="active"){
-					echo ("<td id=\"nav\" onclick=\"window.location.href='room.php?room=".$currentRoomID."&day=yes"."&date=".$date."&bookingID=".$currentBookingID."&status=".$roomStatus."'\"");
-					echo ("style=\"vertical-align:text-top\">");
-				}else{
-					echo ("<td style=\"vertical-align:text-top\">");
-				}
+        		// This begins a "link" where the link is actually
+				// the entire box. 
+				echo ("<td id=\"nav\" onclick=\"window.location.href='room.php?room=".$currentRoomID."&day=yes"."&date=".$date."&bookingID=".$currentBookingID."&status=".$roomStatus."'\"");
+				echo ("style=\"vertical-align:text-top\">");
 		
 				// The ID of the room and the status
 				echo ("<b style=\"float:left\">".$currentRoomID."</b>");
-				// Print the status of the room
-				$statusColor = null;
-				// Change the color depending on the status
-				if($roomStatus == "reserved"){
-					$statusColor = "orange";
-				}else if($roomStatus == "booked"){
-					$statusColor = "red";
-				}
-				if($date == date("y-m-d"))  {
-					echo ("<b style=\"float:right; color:".$statusColor."\">");
-					echo ($roomStatus."</b>");
-					echo ("<br />");
-				}
-				
 				if($date == date("y-m-d") && $currentRoom->get_room_notes() != "")
 				    echo "<br /><b>Notes: </b><br>".$currentRoom->get_room_notes();
 				// Display info from the booking, such as the guests and loaners
-				if (!$currentBooking)
-				    echo "<br /><br /><br />";
-				else {
-					echo ("<br /><b>Guests:</b><br />");
-					print_booking_info($currentBooking);
-				}
-				// End this table item. Finish the link if it was started
+				echo ("<br /><b>Guests:</b><br />");
+				print_booking_info($currentBooking);
 				echo ("</td>");
-					$counter++;
+				$counter++;
 			}
-			else
-			{
-				break;
-			}
-		}
-	
-	echo ("</tr>");
-}
+			else {
+			    echo ("<td id=\"nav\" onclick=\"window.location.href='room.php?room=".$currentRoomID."&day=yes"."&date=".$date."&bookingID=&status=".$roomStatus."'\"");
+				echo ("style=\"vertical-align:text-top\">");
+				
+				echo ("<b style=\"float:left\">".$currentRoomID."</b>");
+				echo "<br /><br /><br />";
+				echo ("</td>");
+			}	
+		}	
+echo ("</tr>");
 
 echo ("</tr></table>");
 

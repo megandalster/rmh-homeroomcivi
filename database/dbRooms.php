@@ -83,11 +83,15 @@ function retrieve_all_rooms($date) {
 	//After getting all of the regular bookings we find the day use boookings
 	if ($date >= date('y-m-d'))
 	{
-		$day_use_pendingBookings = retrieve_pendingDayUse_dbBookings($date);		
+	//	$day_use_pendingBookings = retrieve_pendingDayUse_dbBookings($date);		
 		$day_use_activeBookings = retrieve_active_day_use_dbBookings($date);
-		$total_day_use_rooms_to_make = count($day_use_activeBookings) + count($day_use_pendingBookings);
-		$numOfActive =  count($day_use_activeBookings);
-		for($i=0; $i<($total_day_use_rooms_to_make/7); $i++)
+	//	$total_day_use_rooms_to_make = count($day_use_activeBookings) ; //+ count($day_use_pendingBookings);
+	//	$numOfActive =  count($day_use_activeBookings);
+		foreach ($day_use_activeBookings as $room_num=>$bookingId)
+		{
+			$my_rooms[] = $room_num . ":" . $bookingId;
+		}
+	/*	for($i=0; $i<($total_day_use_rooms_to_make/7); $i++)
 		{
 			for($j=0; $j<7; $j++)
 			{
@@ -115,15 +119,18 @@ function retrieve_all_rooms($date) {
 					
 				insert_dbRooms($day_use_room);
 			}
-		}
+		} */
 	}
 	
 	else
 	{
 		$day_use_past_active_bookings = retrieve_past_active_day_use_dbBookings($date);
 		$total_day_use_rooms_to_make = count($day_use_past_active_bookings);
-		
-		for($i=0; $i<$total_day_use_rooms_to_make/7; $i++)
+		foreach ($day_use_past_active_bookings as $room_num=>$bookingId)
+		{
+			$my_rooms[] = $room_num . ":" . $bookingId;
+		}
+		/*for($i=0; $i<$total_day_use_rooms_to_make/7; $i++)
 		{
 			for($j=0; $j<7; $j++)
 			{
@@ -148,7 +155,7 @@ function retrieve_all_rooms($date) {
 				}
 				insert_dbRooms($day_use_room);
 			}
-		}
+		}*/
 	}
 	return $my_rooms;
 }

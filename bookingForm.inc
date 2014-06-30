@@ -438,21 +438,20 @@ else if($last_auto_color != "") echo($last_auto_color);
 <br />
 <b>Approved Use(s): </b> <br />
 
-
-
  <input type="checkbox" name="overnight" value="yes" <?php if($tempBooking->overnight_use() == "yes") echo('checked')?>/> Overnight<br />
  <input type="checkbox" onClick="add()" name="day" value="yes" <?php if($tempBooking->day_use() == "yes") echo('checked' )?>/> Day <br />
- 
  
  <div name = "day_use_input" style = "visibility:hidden" >For Date: </div> 
  <select name = "day_use_month" style="visibility:hidden">
     <?php 
     $day_use_date = $tempBooking->get_day_use_date();
+    if ($day_use_date=="")
+    	$day_use_date = date("y-m-d");
       $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
 	  echo("<option> </option>");
       for ($i = 1 ; $i <= 9 ; $i ++){
       	if($i == substr($day_use_date,3,2))
-             echo ("<option value=".$i." selected = 'yes'>".$months[$i-1]."</option>");
+             echo ("<option value='0".$i."' selected = 'yes'>".$months[$i-1]."</option>");
         else 
              echo ("<option value='0".$i."'>".$months[$i-1]."</option>");
       }
@@ -470,27 +469,19 @@ else if($last_auto_color != "") echo($last_auto_color);
       echo("<option>  </option>");
       for ($i = 1; $i <= 9 ; $i ++){
       	if($i == substr($day_use_date,6,2))
-             echo ("<option selected = 'yes'>".$i."</option>");
+             echo ("<option value='0".$i."' selected = 'yes' >".$i."</option>");
         else
              echo ("<option value='0".$i."'>".$i."</option>");
       }
       for ($i = 10; $i <= 31 ; $i ++){
       	if($i == substr($day_use_date,6,2))
-         	echo ("<option selected = 'yes'>".$i."</option>");
+         	echo ("<option value=".$i." selected = 'yes'>".$i."</option>");
         else 
-             echo ("<option>".$i."</option>");
+             echo ("<option value=".$i.">".$i."</option>");
       }
-      
-       if($day_use_date){
-            $tempYear = (substr($day_use_date,0,2));
-            if($tempYear < 40)
-           		echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"day_use_year\" value= \"20$tempYear\"/ style=\"visibility:hidden\"><br />");
-            else
-            	echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"day_use_year\" value= \"19$tempYear\"/ style=\"visibility:hidden\"> <br />");
-            
-        }
-        else echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"day_use_year\" value= \"\"/ style=\"visibility:hidden\"><br />");
-    ?>
+      $tempYear = (substr($day_use_date,0,2));
+      echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"day_use_year\" value= \"20$tempYear\"/ style=\"visibility:hidden\"><br />");
+?>
     </select>
 
 <script>

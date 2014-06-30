@@ -119,7 +119,7 @@ else {
 	if($_SESSION['access_level'] > 1) {
     $st = implode(',',$person->get_type());
     $newpersontypes = array('guest'=>'Primary Guest');
-    $types = array('guest'=>'Primary Guest', 'volunteer'=>'Volunteer', 'socialworker'=>'Social Worker', 'manager'=>'Manager' );
+    $types = array('guest'=>'Primary Guest', 'volunteer'=>'Volunteer', 'manager'=>'Manager' );
     if ($_SESSION['access_level']==0) {
 	     echo('<p>Please check "guest" if you are requesting a room at the House:');
 	     $ts = $newpersontypes;
@@ -156,9 +156,9 @@ else {
 	  	    }
 	  	    echo "<br><a href=bookingEdit.php?id=".$id." target='_blank'>Create new booking</a>";
 	  	}
-	  	echo('<p><b>Manager\'s Notes:</b><br />');
-	  	echo('<textarea name="mgr_notes" rows="3" cols="60"');
-	  	echo('>'. $person->get_mgr_notes() . '</textarea>');
+	  	echo('<p><b>Manager\'s Notes:<br />');
+	  	echo('<textarea name="mgr_notes" rows="3" cols="60" style="color:FF0000;font-weight:bold"');
+	  	echo('>'. $person->get_mgr_notes() . '</textarea></b>');
 	  	
     }
 

@@ -63,7 +63,7 @@
 			echo($guest->get_first_name()." ".$guest->get_last_name());
 			
 			echo(" submitted on ".date_string($booking->get_date_submitted())." ");
-		//	if ($booking->get_status()!="closed" && $booking->get_status()!="closed-deceased" && $_SESSION['access_level']!=2)
+			if ($_SESSION['access_level']==3)
   	            echo '<a href = "bookingEdit.php?id=update&referralid='.$booking->get_id().'" > (Edit this booking) </a><br>';
 		//	else echo "<br>";
 			//echo "(To find other bookings, <a href='searchBookings.php'>search the database</a>!)";

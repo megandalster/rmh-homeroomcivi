@@ -113,9 +113,9 @@ function update_room_info($currentRoom,$date){
 		$currentRoom->set_capacity($newCapacity);
 		$currentRoom->set_bath($newBath);
 		$currentRoom->set_room_notes($newRoomNotes);
-		
+	}	
 		// Checkout the booking if the option was selected (or checkout deceased)
-		if($newBooking == "Checkout"){
+	if($newBooking == "Checkout"){
 			    $currentRoom->set_status("dirty");
 				//retrieve the booking and check it out
 				$newBooking = retrieve_dbBookings($currentRoom->get_booking_id());
@@ -135,7 +135,7 @@ function update_room_info($currentRoom,$date){
 				    }
 				}
 		}
-		else if($newBooking == "Checkout (Deceased)") { //closing a booking for deceased patient
+	else if($newBooking == "Checkout (Deceased)") { //closing a booking for deceased patient
 			    $currentRoom->set_status("dirty");
 				//retrieve the booking and check it out
 				$newBooking = retrieve_dbBookings($currentRoom->get_booking_id());
@@ -154,7 +154,7 @@ function update_room_info($currentRoom,$date){
 				   	}
 				}
 		}
-		else if($newBooking == "Checkin"){  // booking a previously reserved room
+	else if($newBooking == "Checkin"){  // booking a previously reserved room
 				// retrieve the booking and update it
 				$newBooking = retrieve_dbBookings($currentRoom->get_booking_id());
 				
@@ -174,7 +174,7 @@ function update_room_info($currentRoom,$date){
 				" failed to check in <a href='viewPerson.php?id=".$pGuest->get_id()."'>".
 				$guestName."</a>");
 		}
-		else{  // reserving a previously empty room
+	else{  // reserving a previously empty room
 		    $newBooking = retrieve_dbBookings($newBooking);
 			if ($newBooking) {
 				$pGuest = retrieve_dbPersons($newBooking->get_guest_id());
@@ -199,7 +199,6 @@ function update_room_info($currentRoom,$date){
 						" failed to reserve <a href='viewPerson.php?id=".$pGuest->get_id()."'>".$guestName."</a>");
 			}
 		}
-	}
 }
 ?>
 

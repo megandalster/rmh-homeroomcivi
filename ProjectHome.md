@@ -1,0 +1,1 @@
+This site supports a fall 2013 project to unify homeroom and civicrm software for the Ronald McDonald? House in Portland, ME. The project team will include Bowdoin College computer science majors, an instructor, and a representative from the Ronald McDonald? House.

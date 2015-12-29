@@ -329,8 +329,11 @@ function delete_dbBookings($id) {
  * Utility function to enerate a date display string from a given date in the form "yy-mm-dd"  
  */ 
 function date_string($date) {
-	$d = mktime(0,0,0,substr($date,3,2),substr($date,6,2),substr($date,0,2));
-	return date("M j, Y",$d);
+	if (strlen($date)==8) {
+		$d = mktime(0,0,0,substr($date,3,2),substr($date,6,2),substr($date,0,2));
+		return date("M j, Y",$d);
+	}
+	else return "";
 }
 function date_select_display($now,$when) {
     $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
@@ -366,7 +369,7 @@ function date_select_display($now,$when) {
 	}
 	echo ("</select>");
 	
-	echo (" Year <input type=\"text\" size=\"3\" maxLength=\"4\" name=\"year\" ");
+	echo (" Year <input type=\"text\" size=\"6\" maxLength=\"4\" name=\"year\" ");
 	if ($when=="now")
 	    echo 'value="20'.substr($now,0,2).'">';
 	else echo '>';  

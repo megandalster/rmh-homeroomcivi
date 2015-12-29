@@ -63,12 +63,12 @@ echo '(<span style="font-size:x-small;color:FF0000">*</span> denotes required fi
         if($patient_DOB){
             $tempYear = (substr($patient_DOB,0,2));
             if($tempYear < 40)
-           		echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value=\"20$tempYear\"/><br />");
+           		echo("<input type=\"text\" size = \"6\" maxLength = \"4\" name=\"patient_birth_year\" value=\"20$tempYear\"/><br />");
             else
-            	echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value=\"19$tempYear\"/><br />");
+            	echo("<input type=\"text\" size = \"6\" maxLength = \"4\" name=\"patient_birth_year\" value=\"19$tempYear\"/><br />");
             
         }
-        else echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"patient_birth_year\" value=\"".date('Y')."\"/><br />");
+        else echo("<input type=\"text\" size = \"6\" maxLength = \"4\" name=\"patient_birth_year\" value=\"".date('Y')."\"/><br />");
     ?>
  Gender:  
 <?php  
@@ -157,7 +157,7 @@ else
           else
              echo ("<option>".$i."</option>");
       }
-      echo '</select><input type="text" size = "3" maxLength = "4" name="date_submitted_year" value="20'.substr($tempBooking->get_date_submitted(),0,2).'"/><br />';
+      echo '</select><input type="text" size = "6" maxLength = "4" name="date_submitted_year" value="20'.substr($tempBooking->get_date_submitted(),0,2).'"/><br />';
     }
     else {
       echo date_string($tempBooking->get_date_submitted());
@@ -219,7 +219,7 @@ else
              echo ("<option>".$i."</option>");
       }
       echo '</select>
-    	<input type="text" size = "3" maxLength = "4" name="date_out_year" 
+    	<input type="text" size = "6" maxLength = "4" name="date_out_year" 
     	value="20'.substr($tempBooking->get_date_out(),0,2).'"/>';
       }
     } 
@@ -279,9 +279,9 @@ else
 		echo 'E-mail: <input type="text" size="30" name="email_1" value='.$guest->get_email().'><br />' ;
         $phone1 = $guest->get_phone1();
         $phone2 = $guest->get_phone2();
-		echo '<span style="font-size:x-small;color:FF0000">* </span>Phone: (<input type = "text" size = "2" maxLength = "3" name="phone1_area_1" value="'.substr($phone1,0,3).'" onkeyup="moveOnMax(this,\'input2\')">)';
-		echo '<input id="input2" type = "text" size = "2" maxLength = "3" name="phone1_middle_1" value="'.substr($phone1,3,3).'" onkeyup="moveOnMax(this,\'input3\')">-';
-		echo '<input id="input3" type = "text" size = "3" maxLength = "4" name="phone1_end_1" value="'.substr($phone1,6,4).'"><br>';
+		echo '<span style="font-size:x-small;color:FF0000">* </span>Phone: (<input type = "text" size = "3" maxLength = "3" name="phone1_area_1" value="'.substr($phone1,0,3).'" onkeyup="moveOnMax(this,\'input2\')">)';
+		echo '<input id="input2" type = "text" size = "3" maxLength = "3" name="phone1_middle_1" value="'.substr($phone1,3,3).'" onkeyup="moveOnMax(this,\'input3\')">-';
+		echo '<input id="input3" type = "text" size = "4" maxLength = "4" name="phone1_end_1" value="'.substr($phone1,6,4).'"><br>';
 // echo 'Alternate Phone: (<input type = "text" size = "2" maxLength = "3" name="phone2_area_1" value="'.substr($phone2,0,3).'">)';
 // echo '<input type = "text" size = "2" maxLength = "3" name="phone2_middle_1" value='.substr($phone2,3,3).'>-';
 // echo '<input type = "text" size = "3" maxLength = "4" name="phone2_end_1" value='.substr($phone2,6,4).'>';
@@ -423,7 +423,7 @@ else if($last_auto_color != "") echo($last_auto_color);
       </select>
       /
     
-    <input type="text" size = "3" maxLength = "4" name="date_in_year" value= "<?php 
+    <input type="text" size = "6" maxLength = "4" name="date_in_year" value= "<?php 
     if ($tempBooking->get_date_in() != "Will Call") 
     if(substr($date_in,0,2) < 40)
     echo ("20".substr($date_in,0,2));
@@ -480,7 +480,7 @@ else if($last_auto_color != "") echo($last_auto_color);
              echo ("<option value=".$i.">".$i."</option>");
       }
       $tempYear = (substr($day_use_date,0,2));
-      echo("<input type=\"text\" size = \"3\" maxLength = \"4\" name=\"day_use_year\" value= \"20$tempYear\"/ style=\"visibility:hidden\"><br />");
+      echo("<input type=\"text\" size = \"6\" maxLength = \"4\" name=\"day_use_year\" value= \"20$tempYear\"/ style=\"visibility:hidden\"><br />");
 ?>
     </select>
 

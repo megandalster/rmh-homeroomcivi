@@ -164,7 +164,7 @@ function show_options(){
 		}
 	}
 	echo ("</select>");
-	echo (" Year: <input type=\"text\" size=\"3\" maxLength=\"4\" name=\"year\"/>");
+	echo (" Year: <input type=\"text\" size=\"6\" maxLength=\"4\" name=\"year\"/>");
 	
 	echo ("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and/or end date ");
 	echo ("Month: <select name=\"endmonth\">");
@@ -196,7 +196,7 @@ function show_options(){
 		}
 	}
 	echo ("</select>");
-	echo (" Year: <input type=\"text\" size=\"3\" maxLength=\"4\" name=\"endyear\"/>");
+	echo (" Year: <input type=\"text\" size=\"6\" maxLength=\"4\" name=\"endyear\"/>");
 	
 	$rooms = retrieveall_rooms();
 	echo ("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and/or room number: <select name=\"roomno\">");	

@@ -101,14 +101,14 @@ else {
         $phone2 = $person->get_phone2();
         
         
-		echo '<span style="font-size:x-small;color:FF0000"> </span> (<input type = "text" size = "2" maxLength = "3" name="phone1_area_1" value="'.substr($phone1,0,3).'" onkeyup="moveOnMax(this,\'input2\')">)';
-		echo '<input id="input2" type = "text" size = "2" maxLength = "3" name="phone1_middle_1" value="'.substr($phone1,3,3).'" onkeyup="moveOnMax(this,\'input3\')">-';
-		echo '<input id="input3" type = "text" size = "3" maxLength = "4" name="phone1_end_1" value="'.substr($phone1,6,4).'"></td></tr>';
+		echo '<span style="font-size:x-small;color:FF0000"> </span> (<input type = "text" size = "3" maxLength = "3" name="phone1_area_1" value="'.substr($phone1,0,3).'" onkeyup="moveOnMax(this,\'input2\')">)';
+		echo '<input id="input2" type = "text" size = "3" maxLength = "3" name="phone1_middle_1" value="'.substr($phone1,3,3).'" onkeyup="moveOnMax(this,\'input3\')">-';
+		echo '<input id="input3" type = "text" size = "4" maxLength = "4" name="phone1_end_1" value="'.substr($phone1,6,4).'"></td></tr>';
 		
  echo "<tr><td>";
- echo 'Alternate Phone:</td><td> (<input type = "text" size = "2" maxLength = "3" name="phone2_area_1" value="'.substr($phone2,0,3).'" onkeyup="moveOnMax(this,\'input4\')">)';
- echo '<input id="input4" type = "text" size = "2" maxLength = "3" name="phone2_middle_1" value="'.substr($phone2,3,3).'" onkeyup="moveOnMax(this,\'input5\')">-';
- echo '<input id ="input5" type = "text" size = "3" maxLength = "4" name="phone2_end_1" value='.substr($phone2,6,4).'>';
+ echo 'Alternate Phone:</td><td> (<input type = "text" size = "3" maxLength = "3" name="phone2_area_1" value="'.substr($phone2,0,3).'" onkeyup="moveOnMax(this,\'input4\')">)';
+ echo '<input id="input4" type = "text" size = "3" maxLength = "3" name="phone2_middle_1" value="'.substr($phone2,3,3).'" onkeyup="moveOnMax(this,\'input5\')">-';
+ echo '<input id ="input5" type = "text" size = "4" maxLength = "4" name="phone2_end_1" value='.substr($phone2,6,4).'>';
  echo '</td></tr>'
 ?>
 		
@@ -151,7 +151,7 @@ else {
 	  	         if (!$b)
 	  	    	     $date = substr($prior_booking_id,0,8);
 	  	    	 else $date = $b->get_date_out();
-	  	    	 if ($date!="")
+	  	    	 if (strlen($date)==8)
 	  	         	echo '<a href="viewBookings.php?id=closed&bookingid='.$prior_booking_id.'" target="_blank">'.date_string($date).'</a> <br>';
 	  	    }
 	  	    echo "<br><a href=bookingEdit.php?id=".$id." target='_blank'>Create new booking</a>";

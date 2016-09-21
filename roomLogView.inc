@@ -69,10 +69,8 @@ for($i = 0; $i < 3; $i++){
 		// Display info from the booking, such as the guests and loaners
 		if (!$currentBooking)
 		    echo "<br /><br /><br />";
-		else {
-			echo ("<br /><b>Guests:</b><br />");
+		else 
 			print_booking_info($currentBooking);
-		}
 		// End this table item. Finish the link if it was started
 		echo ("</td>");
 	}
@@ -160,23 +158,18 @@ function get_booking($room){
 
 // Funtion to display the information found in a booking.
 function print_booking_info($booking){
-
+	echo ("<br><b>Guests:</b>");
 	$guests = $booking->get_occupants();
-	//$primary = retrieve_dbPersons($booking->get_guest_id());
-	//echo ($primary->get_first_name()." ".$primary->get_last_name()."<br />");
 	// Print each occupant
-	foreach($guests as $currentGuest){
+	foreach($guests as $currentGuest) {
 	    $j = strpos($currentGuest,":");
 	    if (!$j) $j = strlen($currentGuest);
-		echo (substr($currentGuest,0,$j)."<br>");
+		echo ("<br>".substr($currentGuest,0,$j));
 	}
-
 	// Print the patient associated with the booking
-	$patient = $booking->getith_patient(0);
-	echo ("<b>Patient: </b><br>".$patient);
+	echo ("<br><b>Patient: </b><br>".$booking->getith_patient(0));
 	for ($i=1; $i<3; $i++)
 	    if ($booking->getith_patient($i))
-	    {echo ("<br>");echo $booking->getith_patient($i);}
+	        echo ", ".$booking->getith_patient($i);
 }
 ?>
-<!-- END OF THE SECTION THAT PRINTS OUT THE 21 ROOMS -->

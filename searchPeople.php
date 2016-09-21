@@ -14,6 +14,7 @@
 			Search for People
 		</title>
 		<link rel="stylesheet" href="styles.css" type="text/css" />
+		<link rel="stylesheet" href="lib/jquery-ui.css" />
 	</head>
 	<body>
 		<div id="container">
@@ -38,39 +39,28 @@
 						$result = mysql_query($query);
 						if(!$result)echo mysql_error();
 						mysql_close();
-						echo('<p>You may search for people using any or all of the following options.<br /><span style="font-size:x-small">A search for "an" would return D<strong>an</strong>, J<strong>an</strong>e, <strong>An</strong>n, and Sus<strong>an</strong></span>.</p>');
+						echo('<p>You may search for people with past bookings using any of the following options.<br /><span style="font-size:x-small">A search for "an" would return D<strong>an</strong>, J<strong>an</strong>e, <strong>An</strong>n, and Sus<strong>an</strong></span>.</p>');
 						include('searchPeople.inc.php');
 						echo('<p><strong>Search Results: '.mysql_num_rows($result).' found...</strong>');
+						echo '<div id="target" style="overflow: scroll; width: variable; height: 400px;">';
 						echo('<hr size="1" width="30%" align="left">');
-					//	if($_SESSION['access_level']>=2){
-							echo('<p><table class="searchResults">');
-							if(mysql_num_rows($result))
+					    echo('<p><table class="searchResults">');
+							if(mysql_num_rows($result)) {
 								echo('<tr><td class="searchResults"><strong>Name</strong></td><td class="searchResults"><strong>Patient Name</strong></td></tr>');
-							while($thisRow = mysql_fetch_array($result, MYSQL_ASSOC)){
-								echo('<tr><td class="searchResults">'.$thisRow['last_name'].", ".
+							    while($thisRow = mysql_fetch_array($result, MYSQL_ASSOC)){
+								  echo('<tr><td class="searchResults">'.$thisRow['last_name'].", ".
 									$thisRow['first_name'].'</td><td class="searchResults">'.$thisRow['patient_name'].'</td><td class="searchResults"><a href=viewPerson.php?id='.
 									$thisRow['id'].">view</a></td><td class=searchResults><a href=personEdit.php?id=".
 									$thisRow['id'].">edit</a></td><td class=searchResults><a href=bookingEdit.php?id=".
 									$thisRow['id'].">create new booking</a></td></tr>");
+							    }
 							}
-							echo("</table></p>");
-					/*	}
-						else{
-							echo('<p><table class="searchResults">');
-							if(mysql_num_rows($result))
-								echo('<tr><td class=searchResults><strong>Name</strong></td></tr>');
-							while($thisRow = mysql_fetch_array($result, MYSQL_ASSOC)){
-								if($thisRow['id']=='admin') continue;
-								echo("<tr><td class=searchResults>".$thisRow['last_name'].", ".
-								$thisRow['first_name']."</td><td class=searchResults><a href=\"viewPerson.php?id=".
-								$thisRow['id']."\">view</td></tr>");
-							}
-							echo("</table></p>");
-						}
-					*/	echo('<hr size="1" width="30%" align="left">');
+						echo("</table></p>");
+						echo('<hr size="1" width="30%" align="left">');
+						echo "</div>";
 					}
 					else {
-						echo('<p>You may search for people using any or all of the following options.<br /><span style="font-size:x-small">A search for "an" would return D<strong>an</strong>, J<strong>an</strong>e, <strong>An</strong>n, and Sus<strong>an</strong></span>.</p>');
+						echo('<p>You may search for people with past bookings using any of the following options.<br /><span style="font-size:x-small">A search for "an" would return D<strong>an</strong>, J<strong>an</strong>e, <strong>An</strong>n, and Sus<strong>an</strong></span>.</p>');
 						include('searchPeople.inc.php');
 					}
 					

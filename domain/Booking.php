@@ -242,17 +242,39 @@ class Booking {
             update_dbBookings($this);
             return $this;
         }
-        else return false;   	  
+        else return false;
     }
-    
+    function add_linked_room($room_no, $date) {
+    	$r = retrieve_dbRooms($room_no,$date,"");
+        if ($r) {
+            $r->book_me($this->id);  
+            $this->linked_room = $r->get_room_no();
+            update_dbBookings($this);
+            return $this;
+        }
+        else return false;
+    }
+    function remove_linked_room($date) {
+    	$r = retrieve_dbRooms($this->linked_room,$date,"");
+        if ($r) {
+            $r->unbook_me($this->id);  
+            $this->linked_room = "";
+            update_dbBookings($this);
+            return $this;
+        }
+        else return false;
+    }
     /*
      *  check a client out of the room and update the client's record.
      */
     function check_out ($date, $deceased){
         $r = retrieve_dbRooms($this->room_no,$date,"");
+        $r2 = retrieve_dbRooms($this->linked_room,$date,"");
         $p = retrieve_dbPersons(substr($this->id,8));
         if ($r) { 
-            $r->unbook_me($this->id); 
+            $r->unbook_me($this->id);
+            if ($r2)
+            	$r2->unbook_me($this_id);
             if ($this->status=="active") { // changing back from active to closed
                 if($deceased) {
                     $this->status = "closed-deceased";
@@ -296,10 +318,6 @@ class Booking {
     	$this->patient[] = $name;
     	update_dbBookings($this);
     }
-    function add_linked_room($room_no) {
-    	$this->linked_room = $room_no;
-    	update_dbBookings($this);
-    }
     function add_auto ($make, $model, $color, $state) {
         $this->auto = $make.":".$model.":".$color.":".$state;
     }
@@ -314,9 +332,6 @@ class Booking {
     }
     function set_room_no($room_no) {
         $this->room_no = $room_no;
-    }
-    function set_linked_room($linked_room) {
-        $this->linked_room = $linked_room;
     }
     function set_date_submitted ($new_date_submitted) {
     	$this->date_submitted = $new_date_submitted;

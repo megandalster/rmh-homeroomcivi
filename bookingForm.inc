@@ -13,13 +13,10 @@ else {
 echo '(<span style="font-size:x-small;color:FF0000">*</span> denotes required fields):<br><br>';
 ?>
 
-
-
 <div align="left">
 <fieldset>
 <legend>Booking Information:</legend>
-<span style='font-size:x-small;color:FF0000'>* </span>Patient: <input type="text" size="25" name="patient_name0" value="<?php $patient = $tempBooking->getith_patient(0);
-															 echo($patient);?>"/>
+<span style='font-size:x-small;color:FF0000'>* </span>Patient: <input type="text" name="patient_name0" value="<?php echo($tempBooking->getith_patient(0))?>"/>
 
 <span style='font-size:x-small;color:FF0000'>* </span>Birth date:  
     <select name = "patient_birth_month">
@@ -118,44 +115,29 @@ $departments = array("BBCH", "CARDIOLOGY", "MCCP", "NEEDS", "NICU/CCN", "PRENATA
 			?>
 </select><br>
 
-<span style='font-size:x-small;color:FF0000'>* </span>Submitted by: <input type="text" size="35" name="referred_by" value="
+<span style='font-size:x-small;color:FF0000'>* </span>Submitted by (Social Worker name/phone): <input type="text" size="35" name="referred_by" value="
 <?php 
-if ($tempBooking->get_referred_by()!="")
-	echo($tempBooking->get_referred_by());
-else 
-	echo($user_name." (".substr($user_phone,0,3)."-".substr($user_phone,3,3)."-".substr($user_phone,6).")");
+echo($tempBooking->get_referred_by());
 ?>"/>
-<br>Date Submitted:    
+<br><span style='font-size:x-small;color:FF0000'>* </span>Date Submitted:    
     <?php 
     if ($id=="new") {
       echo '<select name = "date_submitted_month">';
       $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
-	  echo("<option> </option>");
+	  echo("<option selected='yes'> </option>");
       for ($i = 1 ; $i <= 9 ; $i ++){
-          if('0'.$i == substr($tempBooking->get_date_submitted(),3,2))
-             echo ("<option value='0".$i."' selected = 'yes'>".$months[$i-1]."</option>");
-          else
-             echo ("<option value='0".$i."'>".$months[$i-1]."</option>");
+ 		echo ("<option value='0".$i."'>".$months[$i-1]."</option>");
       }
       for ($i = 10 ; $i <= 12 ; $i ++){
-          if($i == substr($tempBooking->get_date_submitted(),3,2))
-             echo ("<option value=".$i." selected = 'yes' >".$months[$i-1]."</option>");
-          else
-             echo ("<option value=".$i.">".$months[$i-1]."</option>");
+ 		echo ("<option value=".$i.">".$months[$i-1]."</option>");
       } 
       echo '</select><select name = "date_submitted_day">';
-      echo("<option>  </option>");
+      echo("<option selected='yes'>  </option>");
       for ($i = 1; $i <= 9 ; $i ++){
-          if($i == substr($tempBooking->get_date_submitted(),6,2))
-             echo ("<option value='0".$i."' selected = 'yes'>".$i."</option>");
-          else
-             echo ("<option value='0".$i."'>".$i."</option>");
+  		echo ("<option value='0".$i."'>".$i."</option>");
       }
       for ($i = 10; $i <= 31 ; $i ++){
-          if($i == substr($tempBooking->get_date_submitted(),6,2))
-             echo ("<option selected = 'yes'>".$i."</option>");
-          else
-             echo ("<option>".$i."</option>");
+  		echo ("<option>".$i."</option>");
       }
       echo '</select><input type="text" size = "6" maxLength = "4" name="date_submitted_year" value="20'.substr($tempBooking->get_date_submitted(),0,2).'"/><br />';
     }
@@ -165,76 +147,97 @@ else
       if (substr($tempBooking->get_status(),0,6)!="closed") {
          echo $tempBooking->get_status();
          if ($tempBooking->get_status()!="pending") {
-          echo '<br>Room No: '.$tempBooking->get_room_no().'  (Move family to a different room: ';
+          echo '<br>Room No: '.$tempBooking->get_room_no();
           $rooms = retrieve_all_rooms(date('y-m-d'));
+          if ($tempBooking->get_linked_room()!="") {
+          	echo ", ".$tempBooking->get_linked_room();
+          	echo ' (Remove the second room for this family? ';
+          	echo '<select name="linked_room">';
+          	echo "<option value=''></option>";
+          	echo "<option value='remove'>yes</option>";
+          	echo "</select>)";
+          }
+          else {
+            echo ' (Add a second room for this family? ';
+            echo '<select name="linked_room">';
+            echo "<option value=''></option>";
+            foreach ($rooms as $room) {
+            	$room_no = substr($room,0,3);
+            	$booking_id = substr($room,4);
+            	if ($room_no!=$tempBooking->get_room_no() && $room_no!=$tempBooking->get_linked_room() && $booking_id=="")
+            		echo "<option value=".$room.">".$room_no."</option>";
+            }
+            echo "</select>)";
+          }
+          echo '<br>  (Move family to a different room? ';
           echo '<select name="room_no">'; 
           echo "<option value=''></option>";
           foreach ($rooms as $room) {
            $room_no = substr($room,0,3);
            $booking_id = substr($room,4);
-           if ($room_no!=$tempBooking->get_room_no() && $booking_id=="")
+           if ($room_no!=$tempBooking->get_room_no() && $room_no!=$tempBooking->get_linked_room() && $booking_id=="")
               echo "<option value=".$room.">".$room_no."</option>";
           }
           echo "</select>)"; 
          } 
       }
       else {
-      echo '<select name="status">';
-      $status_options = array("closed","closed-deceased","active");
-      echo("<option></option>");
-      foreach ($status_options as $status_option)
-        if ($status_option==$tempBooking->get_status())
-          echo "<option value=".$status_option." selected='yes'>".$status_option."</option>";
-        else echo "<option value=".$status_option.">".$status_option."</option>";
-      echo "</select>";
-    
-      echo "&nbsp;&nbsp;Check-out Date: <select name = 'date_out_month'>";
-      $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
-	  echo("<option> </option>");
-      for ($i = 1 ; $i <= 9 ; $i ++){
+      	echo '<select name="status">';
+      	$status_options = array("closed","closed-deceased","active");
+      	echo("<option></option>");
+      	foreach ($status_options as $status_option)
+        	if ($status_option==$tempBooking->get_status())
+          		echo "<option value=".$status_option." selected='yes'>".$status_option."</option>";
+        	else echo "<option value=".$status_option.">".$status_option."</option>";
+      	echo "</select>";
+      	echo "&nbsp;&nbsp;Check-out Date: <select name = 'date_out_month'>";
+      	$months = array("January","February","March","April","May","June","July","August","September","October","November","December");
+	  	echo("<option> </option>");
+      	for ($i = 1 ; $i <= 9 ; $i ++){
           if('0'.$i == substr($tempBooking->get_date_out(),3,2))
              echo ("<option value='0".$i."' selected = 'yes'>".$months[$i-1]."</option>");
           else
              echo ("<option value='0".$i."'>".$months[$i-1]."</option>");
-      }
-      for ($i = 10 ; $i <= 12 ; $i ++){
+      	}
+      	for ($i = 10 ; $i <= 12 ; $i ++){
           if($i == substr($tempBooking->get_date_out(),3,2))
              echo ("<option value=".$i." selected = 'yes' >".$months[$i-1]."</option>");
           else
              echo ("<option value=".$i.">".$months[$i-1]."</option>");
-      }
-      echo '</select><select name = "date_out_day">';
+      	}
+      	echo '</select><select name = "date_out_day">';
  
-      echo("<option>  </option>");
-      for ($i = 1; $i <= 9 ; $i ++){
+      	echo("<option>  </option>");
+      	for ($i = 1; $i <= 9 ; $i ++){
           if($i == substr($tempBooking->get_date_out(),6,2))
              echo ("<option value='0".$i."' selected = 'yes'>".$i."</option>");
           else
              echo ("<option value='0".$i."'>".$i."</option>");
-      }
-      for ($i = 10; $i <= 31 ; $i ++){
+      	}
+      	for ($i = 10; $i <= 31 ; $i ++){
           if($i == substr($tempBooking->get_date_out(),6,2))
              echo ("<option selected = 'yes'>".$i."</option>");
           else
              echo ("<option>".$i."</option>");
-      }
-      echo '</select>
-    	<input type="text" size = "6" maxLength = "4" name="date_out_year" 
-    	value="20'.substr($tempBooking->get_date_out(),0,2).'"/>';
+      	}
+      	echo '</select>
+    		<input type="text" size = "6" maxLength = "4" name="date_out_year" 
+    		value="20'.substr($tempBooking->get_date_out(),0,2).'"/>';
       }
     } 
 ?>
 
-<br /><br/>
-
+<br /><br />
+<b>Manager's Notes/Special Requests:</b><br />
+	<font color ="red">
+  	<textarea rows = "3" cols = "80" name = "notes" ><?php echo $tempBooking->get_mgr_notes()?></textarea>
+    </font>
+<br/>
+<br />
 <fieldset>
   <legend><b>Primary Guest:</b></legend>
 <?php    if ($id!="new") {
     echo '<a  target="_blank" href="personEdit.php?id='.$guest->get_id().'">'.$guest->get_first_name().' '.$guest->get_last_name().'</a><br>';
-    echo 'Relation to Patient: <input type="text" size="20" name="patient_relation" value='.$guest->get_patient_relation().'><br />' ;
-        echo 'Gender: '.$guest->get_gender().'<br />';
-    echo 'Address: '.$guest->get_address().', '. $guest->get_city().', '.$guest->get_state().' '.$guest->get_zip(). '<br />';
-    echo 'E-mail: '.$guest->get_email().'<br />';
     $phone1 = $guest->get_phone1();
     $phone2 = $guest->get_phone2(); 
     echo "Phone: (";
@@ -249,10 +252,22 @@ else
              substr($phone2,6,4);
         echo '<br />';
     }
+    echo 'Relation to Patient: <input type="text" size="20" name="patient_relation" value='.$guest->get_patient_relation().'><br />' ;
+    echo 'Gender: '.$guest->get_gender().'<br />';
+    echo 'Address: '.$guest->get_address().', '. $guest->get_city().', '.$guest->get_state().' '.$guest->get_zip(). '<br />';
+    echo 'E-mail: '.$guest->get_email().'<br />';
 }
     else {
         echo '<span style="font-size:x-small;color:FF0000">* </span>First Name: <input type="text" size="30" name="first_name_1" value='.$guest->get_first_name().'><br />' ;
         echo '<span style="font-size:x-small;color:FF0000">* </span>Last Name: <input type="text" size="30" name="last_name_1" value='.$guest->get_last_name().'><br />' ;
+        $phone1 = $guest->get_phone1();
+        $phone2 = $guest->get_phone2();
+		echo '<span style="font-size:x-small;color:FF0000">* </span>Phone: (<input type = "text" size = "3" maxLength = "3" name="phone1_area_1" value="'.substr($phone1,0,3).'" onkeyup="moveOnMax(this,\'input2\')">)';
+		echo '<input id="input2" type = "text" size = "3" maxLength = "3" name="phone1_middle_1" value="'.substr($phone1,3,3).'" onkeyup="moveOnMax(this,\'input3\')">-';
+		echo '<input id="input3" type = "text" size = "4" maxLength = "4" name="phone1_end_1" value="'.substr($phone1,6,4).'">';
+ 		echo '&nbsp;&nbsp;Alternate Phone: (<input type = "text" size = "3" maxLength = "3" name="phone2_area_1" value="'.substr($phone2,0,3).'">)';
+ 		echo '<input type = "text" size = "3" maxLength = "3" name="phone2_middle_1" value='.substr($phone2,3,3).'>-';
+ 		echo '<input type = "text" size = "4" maxLength = "4" name="phone2_end_1" value='.substr($phone2,6,4).'><br />';
         echo 'Relation to Patient: <input type="text" size="20" name="patient_relation" value='.$guest->get_patient_relation().'><br />' ;
         echo 'Gender: <select name = "gender_1"> <option value = " "> </option>';	 
 		 if($guest_gender == "Male") echo '<option value = "Male" selected>Male</option>';
@@ -277,21 +292,11 @@ else
         echo '</select><br />' ;
         echo 'Zip: <input type = "text" size = "5" maxLength = "5" name="zip_1" value='.$guest->get_zip().'><br />' ;
 		echo 'E-mail: <input type="text" size="30" name="email_1" value='.$guest->get_email().'><br />' ;
-        $phone1 = $guest->get_phone1();
-        $phone2 = $guest->get_phone2();
-		echo '<span style="font-size:x-small;color:FF0000">* </span>Phone: (<input type = "text" size = "3" maxLength = "3" name="phone1_area_1" value="'.substr($phone1,0,3).'" onkeyup="moveOnMax(this,\'input2\')">)';
-		echo '<input id="input2" type = "text" size = "3" maxLength = "3" name="phone1_middle_1" value="'.substr($phone1,3,3).'" onkeyup="moveOnMax(this,\'input3\')">-';
-		echo '<input id="input3" type = "text" size = "4" maxLength = "4" name="phone1_end_1" value="'.substr($phone1,6,4).'"><br>';
-// echo 'Alternate Phone: (<input type = "text" size = "2" maxLength = "3" name="phone2_area_1" value="'.substr($phone2,0,3).'">)';
-// echo '<input type = "text" size = "2" maxLength = "3" name="phone2_middle_1" value='.substr($phone2,3,3).'>-';
-// echo '<input type = "text" size = "3" maxLength = "4" name="phone2_end_1" value='.substr($phone2,6,4).'>';
-        
     }
  ?> 
 </fieldset>
 
 <br>
-
 <?php
   if ($id=="new") echo "<b>Additional </b>";
   echo  "<b>Occupants </b>(Name / Relation to Patient / Gender):<br><br />";
@@ -308,7 +313,6 @@ else
   	  		$occupants[$counter-1] .= ":";
   	  	}
   	  }
-  	
       $startingColonPosition = strpos($occupants[$counter-1],":");
       $secondColonPosition = strpos($occupants[$counter-1],":", $startingColonPosition+1);
       $thirdColonPosition = strpos($occupants[$counter-1],":", $secondColonPosition+1);
@@ -332,8 +336,10 @@ else
      	else 								echo '<option value = "Female">Female</option>';
      	echo '</select>';
      //	echo "occupant_present = ".$occupant_present;
-     	if($occupant_present == ""||$occupant_present == "Absent") echo '<input type="checkbox" name="additional_guest_'.($counter).'_present" value="Present">Present<br>';
-     	else 							   echo '<input type="checkbox" name="additional_guest_'.($counter).'_present" value="Present" checked>Present<br>';
+     	if($occupant_present == ""||$occupant_present == "Absent") 
+     		echo '<input type="checkbox" name="additional_guest_'.($counter).'_present" value="Present">Present<br>';
+     	else 
+     		echo '<input type="checkbox" name="additional_guest_'.($counter).'_present" value="Present" checked>Present<br>';
 		echo '<br />';
   }
 ?>
@@ -481,7 +487,7 @@ else if($last_auto_color != "") echo($last_auto_color);
       }
       $tempYear = (substr($day_use_date,0,2));
       echo("<input type=\"text\" size = \"6\" maxLength = \"4\" name=\"day_use_year\" value= \"20$tempYear\"/ style=\"visibility:hidden\"><br />");
-?>
+    ?>
     </select>
 
 <script>
@@ -541,13 +547,6 @@ function add(){
     <script>
     add(); 
     </script>
- 
-<br />
-<b>Additional Notes/Special Requests:</b><br />
-	<font color ="blue">
-  	<textarea rows = "3" cols = "80" name = "notes" ><?php echo $tempBooking->get_mgr_notes()?></textarea>
-    </font>
- <br />
  
 </fieldset>
 

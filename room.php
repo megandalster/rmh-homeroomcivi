@@ -134,7 +134,7 @@ function update_room_info($currentRoom,$date){
 				        add_log_entry($message);
 				    }
 				}
-		}
+	}
 	else if($newBooking == "Checkout (Deceased)") { //closing a booking for deceased patient
 			    $currentRoom->set_status("dirty");
 				//retrieve the booking and check it out
@@ -155,6 +155,7 @@ function update_room_info($currentRoom,$date){
 				}
 		}
 	else if($newBooking == "Checkin"){  // booking a previously reserved room
+				$currentRoom->set_status("booked");
 				// retrieve the booking and update it
 				$newBooking = retrieve_dbBookings($currentRoom->get_booking_id());
 				

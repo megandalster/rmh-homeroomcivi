@@ -77,7 +77,7 @@ h1 {padding-left: 0px; padding-right:165px;}
 		    if ($_SESSION['access_level']>=1)
 	    	    echo('<a href="personEdit.php?id='.'new'.'">, add</a> ');
 		}
-	    if($_SESSION['access_level']==3) { // managers 
+	    if($_SESSION['access_level']>1) { // managers 
 	        echo ('| <a href="'.$path.'log.php">log</a> | <a href="'.$path.'data.php?date='.date('y-01-01').'&enddate='.date('y-m-d').'">data</a>');
 	    }
 		if($_SESSION['access_level']>=1) { // volunteers, social workers, and managers

@@ -78,9 +78,7 @@ Room Notes: <input type="text" size="50" name="room_notes" value="<?php echo($cu
 if($booking)
 {
 	// Print booking information
-	if ($booking) 
-	    print_booking_info($booking);
-	echo "</fieldset>";
+	print_booking_info($booking);
 	// Add an option to checkout the family
 	echo ("<br />");
 	if ($_SESSION['access_level']!=2 && substr($booking->get_status(),0,6)!="closed") {
@@ -93,7 +91,7 @@ if($booking)
 	    echo ("<br />");
 	}
 }
-else if ($_SESSION['access_level']!=2) 
+else if ($_SESSION['access_level']!=2 && $roomStatus=="clean") 
 {
 	echo "</fieldset><br>";
 	// add options to assign a booking
@@ -148,26 +146,27 @@ if ($_SESSION['access_level']!=2) {
 }
 ?>
 </form>
-
+</fieldset>
 <!-- Useful funtions -->
 <?php 
 
 // Function to display information about the booking
 function print_booking_info($booking){
 	echo "<br>";
-	echo ("<tr><b>Guests:</b></tr>");
+	echo ("<tr><b>Guests Present:</b></tr>");
 	$guests = $booking->get_occupants();
 	// Print each occupant
-	foreach($guests as $currentGuest){
+	foreach($guests as $currentGuest)
+	  if (strpos($currentGuest,"Present")>0) {
 	    $i = strpos($currentGuest,":");
 	    if (!$i) $i = strlen($currentGuest);
 		echo ("<br>".substr($currentGuest,0,$i));
-	}
+	  }
 	// Print the patient(s) associated with the booking
 	echo "<br><br><b>Patient: </b><br>". $booking->getith_patient(0);
 	for ($i=1; $i<3; $i++)
 	    if ($booking->getith_patient($i))
 	        echo ", ".$booking->getith_patient($i);
-
+	echo "<br>";
 }
 ?>

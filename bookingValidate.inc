@@ -10,10 +10,8 @@ function validate_form($id,$referralid){
     if ($_POST['dept']== null) $errors[]= "Please enter a department";
     if ($_POST['patient_birth_year'] == null || strlen($_POST['patient_birth_year']) != 4 
 	    || $_POST['patient_birth_month'] == null || $_POST['patient_birth_day'] == null) $errors[] = 'Please enter a valid date of birth for the patient';
-	if($_POST['referred_by'] == null) $errors[] = "Please specify who created this booking";
-//    if($_POST['date_submitted_day']== "" || $_POST['date_submitted_month']== "" || $_POST['date_submitted_year']== "")
-//	    $errors[] = 'Please enter a Date Submitted';
-	if (strlen($_POST['room_no'])>4 && substr($_POST['room_no'],4)!=$referralid)  // check if somebody else is not in the room selected
+	if($_POST['referred_by'] == null) $errors[] = "Please name the person who submitted this booking";
+    if (strlen($_POST['room_no'])>4 && substr($_POST['room_no'],4)!=$referralid)  // check if somebody else is not in the room selected
 	    $errors[] = 'Please select an unoccupied Room';   
 	if($_POST['visitOrWC']=='visit'){
 	    if($_POST['date_in_day']== "" || $_POST['date_in_month']== "" || $_POST['date_in_year']== ""){
@@ -27,6 +25,8 @@ function validate_form($id,$referralid){
 	    }   
 	}
 	if ($id=='new') {
+	   if($_POST['date_submitted_day']== "" || $_POST['date_submitted_month']== "" || $_POST['date_submitted_year']== "")
+			$errors[] = 'Please enter a Date Submitted';
   	   if(trim($_POST['first_name_1'])==null) $errors[] = 'Please enter a first name for the primary guest ';
 	   if($_POST['last_name_1']==null || $_POST['first_name']=='volunteer') $errors[] = 'Please enter a last name for the primary guest ';   
   //     if($_POST['patient_gender_1'] == "") $errors[] = 'Please enter a patient gender ';

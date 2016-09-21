@@ -30,14 +30,18 @@
     }
     else if($booking->get_status()== "active" || $booking->get_status()== "confirmed"){
          echo('Date In: '.date_string($booking->get_date_in()).'<br>');
-         echo('Room No: '.$booking->get_room_no().'<br>');     
+         echo('Room No: '.$booking->get_room_no());
+         if ($booking->get_linked_room()!="")
+         	echo ", ".$booking->get_linked_room();
+         echo '<br>';
     } 
     else if($booking->get_status()== "closed" || $booking->get_status()== "closed-deceased")
          echo('Date In: '.date_string($booking->get_date_in()).
          	  ', Room No: '.$booking->get_room_no().
               '<br/> Date Out: '.date_string($booking->get_date_out()).'<br>');
 ?> 
-<br/>
+<br><b>Manager's Notes/Special Requests:  </b><font color="red">
+     <?php echo($booking->get_mgr_notes()."</b><br/><br/></font>"); ?>
 <b>Primary Guest: </b>
  
   <a href = <?php  echo("personEdit.php?id=".$current_id);?> ><?php echo($current_guest->get_first_name()." ".$current_guest->get_last_name())?> </a>
@@ -68,9 +72,7 @@
      if ($booking->day_use() == "yes") echo (' Day');
     echo "<br>";
      ?>
-     <br><b>Additional Notes/Special Requests:  </b><font color="red">
-     <?php echo($booking->get_mgr_notes()."</b><br/><br/></font>"); 
-     
+     <?php
       if($booking->get_status() == "pending"){
      	if ($booking->get_date_in() != "" && $booking->get_date_in() != "Will Call")
             $d = date_string($booking->get_date_in());

@@ -151,6 +151,8 @@ function retrieve_active_dbBookings ($date) {
 	while ($result_row = mysql_fetch_assoc($result)) {
 	    $theBooking = build_booking($result_row);
 	    $theBookings[$theBooking->get_room_no()] = $theBooking->get_id();
+	    if ($theBooking->get_linked_room()!='')
+	    	$theBookings[$theBooking->get_linked_room()] = $theBooking->get_id();
 	}
 	mysql_close();
 	return $theBookings;

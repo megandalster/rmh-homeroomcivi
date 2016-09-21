@@ -22,10 +22,11 @@
 			<div id="content">
 				<?PHP
 					include_once('database/dbPersons.php');
-     				include_once('domain/Person.php');
+     			    include_once('domain/Person.php');
      				include_once('database/dbBookings.php');
      				include_once('domain/Booking.php');
      				include_once('database/dbLog.php');
+     				date_default_timezone_set('America/New_York');
      				if($_SESSION['_id']!="guest"){
      				    $person = retrieve_dbPersons($_SESSION['_id']);
      					$first_name = $person->get_first_name();

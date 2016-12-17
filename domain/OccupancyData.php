@@ -60,6 +60,15 @@ class OccupancyData {
         ksort($this->hospitalcounts);
 		return true;
 	}
+	
+	function occupants_present($occupants) {
+		$op = 0;
+		foreach ($occupants as $occupant) {
+			if (strpos($occupant,"Present")>0) // comment this out if we want to count everyone, whether or not "Present"
+				$op++;
+		}
+		return $op;
+	}
     // compute room and guest counts
 	function compute_roomcounts($allBookings, $roomNo) {
 		$this->roomcounts = array();
@@ -84,7 +93,7 @@ class OccupancyData {
 			$bEnd = mktime(0,0,0,substr($aBooking->get_date_out(),3,2),substr($aBooking->get_date_out(),6,2),substr($aBooking->get_date_out(),0,2));
 			$days = round(($bEnd-$bStart) / 86400);
 			$bRoom = $aBooking->get_room_no();
-			$bGuests = sizeof($aBooking->get_occupants());
+			$bGuests = $this->occupants_present($aBooking->get_occupants());
 			if ($bRoom=="" || strlen($bRoom)!=3)
 			    $bRoom = "UNK";
 			$this->bookingcounts[$bRoom] += 1;
@@ -131,7 +140,7 @@ class OccupancyData {
 		foreach ($allBookings as $aBooking){
 			$g = $aBooking->get_guest_id();
 			$bGuest = retrieve_dbPersons($g);
-			$bGuests = sizeof($aBooking->get_occupants());
+			$bGuests = $this->occupants_present($aBooking->get_occupants());
 			// bZip means Maine county, state, or other country
 			if ($bGuest) {
 			    if ($bGuest->get_county()!="")
@@ -177,7 +186,7 @@ class OccupancyData {
 		foreach ($allBookings as $aBooking){
 			$g = $aBooking->get_guest_id();
 			$bGuest = retrieve_dbPersons($g);
-			$bGuests = sizeof($aBooking->get_occupants());
+			$bGuests = $this->occupants_present($aBooking->get_occupants());
 			if ($bGuest && $bGuest->get_patient_birthdate()!="") {
 				$bDate1 = mktime(0,0,0,substr($bGuest->get_patient_birthdate(),3,2),substr($bGuest->get_patient_birthdate(),6,2),substr($bGuest->get_patient_birthdate(),0,2));
 			    $bDate2 = mktime(0,0,0,substr($aBooking->get_date_out(),3,2),substr($aBooking->get_date_out(),6,2),substr($aBooking->get_date_out(),0,2));
@@ -224,7 +233,7 @@ class OccupancyData {
 			if ($bHospital=="")
 				$bHospital="UNK";
 			else $bHospital .= "/".$aBooking->get_department();
-			$bGuests = sizeof($aBooking->get_occupants());
+			$bGuests = $this->occupants_present($aBooking->get_occupants());
 			if (!in_array($bHospital, $hospitals))
 				array_push($hospitals, $bHospital);
 			if (!$this->hospitalcounts[$bHospital]) {

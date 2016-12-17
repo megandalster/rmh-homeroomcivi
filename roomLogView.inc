@@ -162,9 +162,11 @@ function print_booking_info($booking){
 	$guests = $booking->get_occupants();
 	// Print each occupant
 	foreach($guests as $currentGuest) {
-	    $j = strpos($currentGuest,":");
+	  if (strpos($currentGuest,"Present")>0) {
+	  	$j = strpos($currentGuest,":");
 	    if (!$j) $j = strlen($currentGuest);
 		echo ("<br>".substr($currentGuest,0,$j));
+	  }
 	}
 	// Print the patient associated with the booking
 	echo ("<br><b>Patient: </b><br>".$booking->getith_patient(0));

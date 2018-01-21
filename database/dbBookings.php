@@ -38,21 +38,6 @@ include_once(dirname(__FILE__).'/dbinfo.php');
  * health_questions: health_questions for the client staying at the house 
  * mgr_notes:  (optional) notes from the manager/social worker
  */
-function create_dbBookings() {
-    connect();
-    mysql_query("DROP TABLE IF EXISTS dbBookings");
-    $result=mysql_query("CREATE TABLE dbBookings (id TEXT NOT NULL, 
-        date_submitted TEXT, guest_id TEXT, status TEXT, date_in TEXT, room_no TEXT, auto TEXT,
-		patient TEXT, occupants TEXT, linked_room TEXT, date_out TEXT, 
-        referred_by TEXT, hospital TEXT, department TEXT, health_questions TEXT, 
-        payment_arrangement TEXT, overnight_use TEXT, day_use TEXT, day_use_date TEXT, mgr_notes TEXT, flag TEXT)");
-    mysql_close();	
-    if(!$result) {
-		echo mysql_error() . ">>>Error creating dbBookings table. <br>";
-	    return false;
-    }
-    return true;
-}
 
 /**
  * Inserts a new booking into the dbBookings table
@@ -63,12 +48,12 @@ function insert_dbBookings ($booking) {
 		echo ("Invalid argument for insert_dbBookings function call");
 		return false;
 	}
-    connect();
+    $con=connect();
     $query = "SELECT * FROM dbBookings WHERE id ='".$booking->get_id()."'";
-    $result = mysql_query ($query);
-    if (mysql_num_rows($result)!=0) {
+    $result = mysqli_query($con,$query);
+    if (mysqli_num_rows($result)!=0) {
         delete_dbBookings ($booking->get_id());
-        connect();
+        $con=connect();
     }
     $query="INSERT INTO dbBookings VALUES ('".
 				$booking->get_id()."','".
@@ -92,13 +77,13 @@ function insert_dbBookings ($booking) {
 				$booking->get_day_use_date()."','".
 				$booking->get_mgr_notes()."','".
 				$booking->get_flag()."')";
-	$result=mysql_query($query);
+	$result=mysqli_query($con,$query);
     if (!$result) {
-		echo (mysql_error()."unable to insert into dbBookings: ".$booking->get_id()."\n");
-		mysql_close();
+		echo (mysqli_error($con)."unable to insert into dbBookings: ".$booking->get_id()."\n");
+		mysqli_close($con);
     return false;
     }
-    mysql_close();
+    mysqli_close($con);
     return true;
  }
 
@@ -108,16 +93,16 @@ function insert_dbBookings ($booking) {
  * @return the Booking corresponding to id, or false if not in the table.
  */
 function retrieve_dbBookings ($id) {
-	connect();
+	$con=connect();
     $query = "SELECT * FROM dbBookings WHERE id =\"".$id."\"";
-    $result = mysql_query ($query);
-    if (mysql_num_rows($result)!=1) {
-	    mysql_close();
+    $result = mysqli_query($con,$query);
+    if (mysqli_num_rows($result)!=1) {
+	    mysqli_close($con);
 		return false;
 	}
-	$result_row = mysql_fetch_assoc($result);
+	$result_row = mysqli_fetch_assoc($result);
 	$theBooking = build_booking($result_row);
-	mysql_close();
+	mysqli_close($con);
 	return $theBooking;
 }
 /* 
@@ -143,33 +128,33 @@ function build_booking($result_row) {
  * @return array of active room_no:booking_id pairs on $date ordered by room_no
  */
 function retrieve_active_dbBookings ($date) {
-	connect();
+	$con=connect();
     $query = "SELECT * FROM dbBookings WHERE (status = 'active' AND date_in <= '".$date."') OR status = 'reserved'" . 
              " ORDER BY room_no";
-    $result = mysql_query ($query);
+    $result = mysqli_query($con,$query);
     $theBookings = array();
-	while ($result_row = mysql_fetch_assoc($result)) {
+	while ($result_row = mysqli_fetch_assoc($result)) {
 	    $theBooking = build_booking($result_row);
 	    $theBookings[$theBooking->get_room_no()] = $theBooking->get_id();
 	    if ($theBooking->get_linked_room()!='')
 	    	$theBookings[$theBooking->get_linked_room()] = $theBooking->get_id();
 	}
-	mysql_close();
+	mysqli_close($con);
 	return $theBookings;
 }
 
 function retrieve_active_day_use_dbBookings ($date)
 {
-	connect();
+	$con=connect();
     $query = "SELECT * FROM dbBookings WHERE ((status = 'active' AND date_in <= '".$date."') OR status = 'reserved') AND day_use = 'yes'" . 
              " ORDER BY room_no";
-    $result = mysql_query ($query);
+    $result = mysqli_query($con,$query);
     $theBookings = array();
-	while ($result_row = mysql_fetch_assoc($result)) {
+	while ($result_row = mysqli_fetch_assoc($result)) {
 	    $theBooking = build_booking($result_row);
 	    $theBookings[$theBooking->get_room_no()] = $theBooking->get_id();
 	}
-	mysql_close();
+	mysqli_close($con);
 	return $theBookings;
 }
 
@@ -183,33 +168,33 @@ function retrieve_active_day_use_dbBookings ($date)
  * @return array of active room_no:booking_id pairs on $date ordered by room_no
  */
 function retrieve_past_active_dbBookings ($date) {
-	connect();
+	$con=connect();
 	$query = "SELECT * FROM dbBookings WHERE (status = 'active' AND date_in <= '".$date. "')" .
     		 			" OR (status = 'closed' AND date_in <= '".$date. "' AND date_out > '" . $date . "')" . 
              			" ORDER BY room_no";
-    $result = mysql_query ($query);
+    $result = mysqli_query($con,$query);
     $theBookings = array();
-	while ($result_row = mysql_fetch_assoc($result)) {
+	while ($result_row = mysqli_fetch_assoc($result)) {
 	    $theBooking = build_booking($result_row);
 	    $theBookings[$theBooking->get_room_no()] = $theBooking->get_id();
 	}
-	mysql_close();
+	mysqli_close($con);
 	return $theBookings;
 }
 
 function retrieve_past_active_day_use_dbBookings ($date) {
-	connect();
+	$con=connect();
 	$query = "SELECT * FROM dbBookings WHERE (status = 'active' AND date_in <= '".$date. "' AND day_use = 'yes')" .
     		 			" OR (status = 'closed' AND date_in <= '".$date. "' AND date_out > '" . $date . "' AND day_use = 'yes')" .
 						" OR (status = 'pending' AND day_use_date = '".$date. "' AND day_use = 'yes')" .
              			" ORDER BY room_no";
-    $result = mysql_query ($query);
+    $result = mysqli_query($con,$query);
     $theBookings = array();
-	while ($result_row = mysql_fetch_assoc($result)) {
+	while ($result_row = mysqli_fetch_assoc($result)) {
 	    $theBooking = build_booking($result_row);
 	    $theBookings[$theBooking->get_room_no()] = $theBooking->get_id();
 	}
-	mysql_close();
+	mysqli_close($con);
 	return $theBookings;
 }
 
@@ -221,15 +206,15 @@ function retrieve_past_active_day_use_dbBookings ($date) {
  * @return array of pending bookings on $date
  */
 function retrieve_pending_dbBookings ($date) {
-	connect();
+	$con=connect();
     $query = "SELECT * FROM dbBookings WHERE status = 'pending' AND date_in <= '".$date."' ORDER BY date_in";
-    $result = mysql_query ($query);
+    $result = mysqli_query($con,$query);
     $theBookings = array();
-	while ($result_row = mysql_fetch_assoc($result)) {
+	while ($result_row = mysqli_fetch_assoc($result)) {
 	    $theBooking = build_booking($result_row);
 	    $theBookings[] = $theBooking;
 	}
-	mysql_close();
+	mysqli_close($con);
 	return $theBookings;
 }
 
@@ -241,57 +226,57 @@ function retrieve_pending_dbBookings ($date) {
  * @return array of pending day use bookings on $date
  */
 function retrieve_pendingDayUse_dbBookings ($date) {
-	connect();
+	$con=connect();
 	$query = "SELECT * FROM dbBookings WHERE status = 'pending' AND day_use = 'yes' AND day_use_date = '".$date."' ";
-	$result = mysql_query($query);
+	$result = mysqli_query($con,$query);
 	$theBookings = array();
-	while ($result_row = mysql_fetch_assoc($result)) {
+	while ($result_row = mysqli_fetch_assoc($result)) {
 	    $theBooking = build_booking($result_row);
 	    $theBookings[] = $theBooking;
 	}
-	mysql_close();
+	mysqli_close($con);
 	return $theBookings;
 }
 
 function retrieve_all_pending_dbBookings () {
-	connect();
+	$con=connect();
     $query = "SELECT * FROM dbBookings WHERE status = 'pending' OR status = 'reserved' ORDER BY date_submitted";
-    $result = mysql_query ($query);
+    $result = mysqli_query($con,$query);
     $theBookings = array();
-	while ($result_row = mysql_fetch_assoc($result)) {
+	while ($result_row = mysqli_fetch_assoc($result)) {
 	    $theBooking = build_booking($result_row);
 	    $theBookings[] = $theBooking;
 	}
-	mysql_close();
+	mysqli_close($con);
 	return $theBookings;
 }
 //retrieve all bookings that were closed between $date and $enddate, inclusive
 function retrieve_all_closed_dbBookings ($date, $enddate, $room_no) {
-	connect();
+	$con=connect();
     $query = "SELECT * FROM dbBookings WHERE status LIKE '%closed%' AND date_out >= '"
              .$date."' AND date_out <= '".$enddate."' AND room_no LIKE '%".$room_no."%' ORDER BY date_in";
-    $result = mysql_query ($query);
+    $result = mysqli_query($con,$query);
     $theBookings = array();
-	while ($result_row = mysql_fetch_assoc($result)) {
+	while ($result_row = mysqli_fetch_assoc($result)) {
 	    $theBooking = build_booking($result_row);
 	    $theBookings[] = $theBooking;
 	}
-	mysql_close();
+	mysqli_close($con);
 	return $theBookings;
 }
 
 //retrieve most recent booking that was closed for a person with id=$id
 function retrieve_persons_closed_dbBookings ($id) {
-	connect();
+	$con=connect();
     $query = "SELECT * FROM dbBookings WHERE status LIKE '%closed%' AND id LIKE '%"
              .$id."%' ORDER BY date_out DESC";
-    $result = mysql_query ($query);
+    $result = mysqli_query($con,$query);
     $theBookings = array();
-	while ($result_row = mysql_fetch_assoc($result)) {
+	while ($result_row = mysqli_fetch_assoc($result)) {
 	    $theBooking = build_booking($result_row);
 	    $theBookings[] = $theBooking;
 	}
-	mysql_close();
+	mysqli_close($con);
 	return $theBookings[0];
 }
 
@@ -307,7 +292,7 @@ function update_dbBookings ($booking) {
 	if (delete_dbBookings($booking->get_id()))
 	   return insert_dbBookings($booking);
 	else {
-	   echo (mysql_error()."unable to update dbBookings table: ".$booking->get_id());
+	   echo (mysqli_error($con)."unable to update dbBookings table: ".$booking->get_id());
 	   return false;
 	}
 }
@@ -317,12 +302,12 @@ function update_dbBookings ($booking) {
  * @param $booking the id of the booking to delete
  */
 function delete_dbBookings($id) {
-	connect();
+	$con=connect();
     $query="DELETE FROM dbBookings WHERE id=\"".$id."\"";
-	$result=mysql_query($query);
-	mysql_close();
+	$result=mysqli_query($con,$query);
+	mysqli_close($con);
 	if (!$result) {
-		echo (mysql_error()."unable to delete from dbBookings: ".$id);
+		echo (mysqli_error($con)."unable to delete from dbBookings: ".$id);
 		return false;
 	}
     return true;

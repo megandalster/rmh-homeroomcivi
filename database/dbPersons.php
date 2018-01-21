@@ -7,7 +7,7 @@
  * by the Free Software Foundation (see <http://www.gnu.org/licenses/).
 */
 /*
- * dbPersons module for RMH Homeroom
+ * dbPersons module for Homeroom
  * @author Alex Lucyk
  * @version May 1, 2011
  */
@@ -15,32 +15,17 @@
 include_once(dirname(__FILE__).'/../domain/Person.php');
 include_once(dirname(__FILE__).'/dbinfo.php');
 
-function create_dbPersons() {
-    connect();
-    mysql_query("DROP TABLE IF EXISTS dbPersons");
-    $result = mysql_query("CREATE TABLE dbPersons (id TEXT NOT NULL, first_name TEXT, last_name TEXT, gender TEXT,
-    					  employer TEXT, address TEXT, city TEXT, state TEXT, zip TEXT, phone1 VARCHAR(12) NOT NULL, 
-    					  phone2 VARCHAR(12), email TEXT, patient_name TEXT, patient_birthdate TEXT, patient_gender TEXT, 
-    					  patient_relation TEXT, prior_bookings TEXT, mgr_notes TEXT, county TEXT, type TEXT, password TEXT)");
-    mysql_close();
-    if (!$result) {
-        echo mysql_error() . "Error creating dbPersons table. <br>";
-        return false;
-    }
-    return true;
-}
-
 function insert_dbPersons ($person){
     if (! $person instanceof Person) {
         return false;
     }
-    connect();
+    $con=connect();
 
 	$query = "SELECT * FROM dbPersons WHERE id = '" . $person->get_id() . "'";
-    $result = mysql_query($query);
-    if (mysql_num_rows($result) != 0) {
+    $result = mysqli_query($con,$query);
+    if (mysqli_num_rows($result) != 0) {
         delete_dbPersons ($person->get_id());
-        connect();
+        $con=connect();
     }
 
     $query = "INSERT INTO dbPersons VALUES ('".
@@ -66,25 +51,25 @@ function insert_dbPersons ($person){
                 implode(',',$person->get_type())."','".
                 $person->get_password().
                 "');";
-    $result = mysql_query($query);
+    $result = mysqli_query($con,$query);
     if (!$result) {
-        echo (mysql_error(). " unable to insert into dbPersons: " . $person->get_id(). "\n");
-        mysql_close();
+        echo (mysqli_error($con). " unable to insert into dbPersons: " . $person->get_id(). "\n");
+        mysqli_close($con);
         return false;
     }
-    mysql_close();
+    mysqli_close($con);
     return true;
 }
                 
 function retrieve_dbPersons ($id) {
-	connect();
+	$con=connect();
     $query = "SELECT * FROM dbPersons WHERE id = '".$id."'";
-    $result = mysql_query ($query);
-    if (mysql_num_rows($result) !== 1){
-    	mysql_close();
+    $result = mysqli_query($con,$query);
+    if (mysqli_num_rows($result) !== 1){
+    	mysqli_close($con);
         return false;
     }
-    $result_row = mysql_fetch_assoc($result);
+    $result_row = mysqli_fetch_assoc($result);
     $thePerson = new Person($result_row['last_name'], $result_row['first_name'],
      	$result_row['gender'], $result_row['employer'], $result_row['address'], 
         $result_row['city'],$result_row['state'], $result_row['zip'],
@@ -94,15 +79,15 @@ function retrieve_dbPersons ($id) {
         $result_row['password']);
     $thePerson->set_mgr_notes($result_row['mgr_notes']);
     $thePerson->set_county($result_row['county']);
-//    mysql_close(); 
+//    mysqli_close($con); 
     return $thePerson;   
 }
 function getall_persons () {
-    connect();
+    $con=connect();
     $query = "SELECT * FROM dbPersons ORDER BY last_name";
-    $result = mysql_query ($query);
+    $result = mysqli_query($con,$query);
     $thePersons = array();
-    while ($result_row = mysql_fetch_assoc($result)) {
+    while ($result_row = mysqli_fetch_assoc($result)) {
         $thePerson = new Person($result_row['last_name'], $result_row['first_name'],
          	$result_row['gender'], $result_row['employer'], $result_row['address'], 
             $result_row['city'],$result_row['state'], $result_row['zip'],
@@ -114,16 +99,16 @@ function getall_persons () {
         $thePerson->set_county($result_row['county']);
         $thePersons[] = $thePerson;
     }
- //   mysql_close();
+ //   mysqli_close($con);
     return $thePersons; 
 } 
 
 function getall_type($type) {
-   connect();
+   $con=connect();
     $query = "SELECT * FROM dbPersons WHERE type like '%".$type."%' ORDER BY last_name";
-    $result = mysql_query ($query);
+    $result = mysqli_query($con,$query);
     $thePersons = array();
-    while ($result_row = mysql_fetch_assoc($result)) {
+    while ($result_row = mysqli_fetch_assoc($result)) {
         $thePerson = new Person($result_row['last_name'], $result_row['first_name'],
          	$result_row['gender'], $result_row['employer'], $result_row['address'], 
             $result_row['city'],$result_row['state'], $result_row['zip'],
@@ -135,7 +120,7 @@ function getall_type($type) {
         $thePerson->set_county($result_row['county']);
         $thePersons[] = $thePerson;
     }
- //   mysql_close();
+ //   mysqli_close($con);
     return $thePersons;  
 }
 function update_dbPersons ($person) {
@@ -146,18 +131,18 @@ if (! $person instanceof Person) {
 	if (delete_dbPersons($person->get_id()))
 	   return insert_dbPersons($person);
 	else {
-	   echo (mysql_error()."unable to update dbPersons table: ".$person->get_id());
+	   echo (mysqli_error($con)."unable to update dbPersons table: ".$person->get_id());
 	   return false;
 	}
 }
 
 function delete_dbPersons($id) {
-	connect();
+	$con=connect();
     $query="DELETE FROM dbPersons WHERE id=\"".$id."\"";
-	$result=mysql_query($query);
-	mysql_close();
+	$result=mysqli_query($con,$query);
+	mysqli_close($con);
 	if (!$result) {
-		echo (mysql_error()." unable to delete from dbPersons: ".$id);
+		echo (mysqli_error($con)." unable to delete from dbPersons: ".$id);
 		return false;
 	}
     return true;

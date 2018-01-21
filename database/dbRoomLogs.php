@@ -34,11 +34,11 @@ include_once(dirname(__FILE__).'/dbinfo.php');
  */
 function create_dbRoomLogs(){
 	//Connect to the server
-	connect();
+	$con=connect();
 	// Check if the table exists already
-	mysql_query("DROP TABLE IF EXISTS dbRoomLogs");
+	mysqli_query($con,"DROP TABLE IF EXISTS dbRoomLogs");
 	// Create the table and store the result
-	$result = mysql_query("CREATE TABLE dbRoomLogs (
+	$result = mysqli_query($con,"CREATE TABLE dbRoomLogs (
 						id VARCHAR(25) NOT NULL,
 						rooms TEXT,
 						log_notes TEXT,
@@ -47,43 +47,43 @@ function create_dbRoomLogs(){
 	// Check if the creation was successful
 	if(!$result){
 		// Print an error
-		echo mysql_error(). ">>>Error creating dbRoomLogs table <br>";
-		mysql_close();
+		echo mysqli_error($con). ">>>Error creating dbRoomLogs table <br>";
+		mysqli_close($con);
 		return false;
 	}
-	mysql_close();
+	mysqli_close($con);
 	return true;
 }
 
 function build_room_log($date){
     // Connect to the database
-    connect();
+    $con=connect();
     // Check if the room log already exists
     $query = "SELECT * FROM dbRoomLogs WHERE id = '".$date."'";
-    $result = mysql_query($query);
-    mysql_close();
+    $result = mysqli_query($con,$query);
+    mysqli_close($con);
     // If room log does not yet exist
- //   if(mysql_num_rows($result) == 0){
+ //   if(mysqli_num_rows($result) == 0){
     	// rebuild the past room log using functions in the RoomLog class
     	$new_roomLog = new RoomLog($date);
     	insert_dbRoomLog($new_roomLog);
         /*
         $query = "SELECT * FROM dbBookings WHERE room_no <> '' AND '".$date."' >= date_in AND ('".$date."' < date_out OR date_out = '')";
-        $result = mysql_query($query);
+        $result = mysqli_query($con,$query);
         var_dump($result);
         $all_rooms = array();
-        while ($result_row = mysql_fetch_assoc($result)) {
+        while ($result_row = mysqli_fetch_assoc($result)) {
             $theBooking = build_booking($result_row);
             $all_rooms[] = $theBooking->get_room_no().":".$theBooking->get_id();
         }
         
         $query = "INSERT INTO dbRoomLogs VALUES('".$date."','".implode(',',$all_rooms)."','','')";
-        $result = mysql_query($query);
+        $result = mysqli_query($con,$query);
         // Check if succesful
         if(!$result) {
             //print the error
-            echo mysql_error()." Could not insert into dbRoomLogs :".$date."\n";
-            mysql_close();
+            echo mysqli_error($con)." Could not insert into dbRoomLogs :".$date."\n";
+            mysqli_close($con);
             return false;
         }
         */
@@ -102,15 +102,15 @@ function insert_dbRoomLog($roomLog){
 		return false;
 	}
 	// Connect to the database
-	connect();
+	$con=connect();
 	// Check if the roomLog already exists
 	$query = "SELECT * FROM dbRoomLogs WHERE id ='".$roomLog->get_id()."'";
-	$result=mysql_query($query);
+	$result=mysqli_query($con,$query);
 	// If it exists, delete it, then replace it
-	if(mysql_num_rows($result) != 0){
+	if(mysqli_num_rows($result) != 0){
 		delete_dbRoomLog($roomLog->get_id());
 		// Reconnect because deleting disconnects us.
-		connect();
+		$con=connect();
 	}
 	// Now add it to the database
 	$query="INSERT INTO dbRoomLogs VALUES('".
@@ -119,16 +119,16 @@ function insert_dbRoomLog($roomLog){
 			$roomLog->get_log_notes()."','".
 			$roomLog->get_status()."')";
 			
-	$result=mysql_query($query);
+	$result=mysqli_query($con,$query);
 	// Check if succesful
 	if(!$result) {
 		//print the error
-		echo mysql_error()." Could not insert into dbRoomLogs :".$roomLog->get_id()."\n";
-		mysql_close();
+		echo mysqli_error($con)." Could not insert into dbRoomLogs :".$roomLog->get_id()."\n";
+		mysqli_close($con);
 		return false;
 	}
 	// Sucess. 
-	mysql_close();
+	mysqli_close($con);
 	return true;
 }
 
@@ -139,18 +139,18 @@ function insert_dbRoomLog($roomLog){
  */
 function retrieve_dbRoomLog($roomLogID){
 	// connect to the mysql server
-	connect();
+	$con=connect();
 	// Retrieve the entry
 	$query = "SELECT * FROM dbRoomLogs WHERE id ='".$roomLogID."'";
-	$result = mysql_query($query);
+	$result = mysqli_query($con,$query);
 	// check if successful
-	if(mysql_num_rows($result) !==1){
-		mysql_close();
+	if(mysqli_num_rows($result) !==1){
+		mysqli_close($con);
 		return false;
 	}
 	// Store the result
-	$result_row = mysql_fetch_assoc($result);
-	mysql_close();
+	$result_row = mysqli_fetch_assoc($result);
+	mysqli_close($con);
 	// Create a new room log from the information given
 	$theRoomLog = new RoomLog($result_row['id']);
 	
@@ -175,18 +175,18 @@ function retrieve_dbRoomLog($roomLogID){
  */
 function retrieve_mostrecent_dbRoomLog ($date) {
 	// connect to the mysql server
-	connect();
+	$con=connect();
 	// Retrieve the entry
 	$query = "SELECT * FROM dbRoomLogs WHERE id <='".$date."' ORDER BY id DESC";
-	$result = mysql_query($query);
+	$result = mysqli_query($con,$query);
 	// check if successful
-	if(mysql_num_rows($result) == 0){
-		mysql_close();
+	if(mysqli_num_rows($result) == 0){
+		mysqli_close($con);
 		return false;
 	}
 	// Store the first row of the result = the most recent room log
-	$result_row = mysql_fetch_assoc($result);
-	mysql_close();
+	$result_row = mysqli_fetch_assoc($result);
+	mysqli_close($con);
 	// Create a new room log from the information given
 	$theRoomLog = new RoomLog($result_row['id']);
 	
@@ -224,7 +224,7 @@ function update_dbRoomLog($roomLog){
 		return insert_dbRoomLog($roomLog);
 		// Update every room in the room log as well
 	}else{
-		echo mysql_error()." unable to update dbRoomLog :".$roomLog->get_id()."\n";
+		echo mysqli_error($con)." unable to update dbRoomLog :".$roomLog->get_id()."\n";
 		return false;
 	}
 }
@@ -235,35 +235,35 @@ function update_dbRoomLog($roomLog){
  */
 function delete_dbRoomLog($roomLogID){
 	// connect to the database
-	connect();
+	$con=connect();
 	// first grab the rooms of the room log
 	$query = "SELECT * FROM dbRoomLogs WHERE id ='".$roomLogID."'";
-	$result = mysql_query($query);
+	$result = mysqli_query($con,$query);
 	if(!$result){
 		// print an error
-		echo mysql_error()." could not delete rooms from room log: ".$roomLogID."\n";
+		echo mysqli_error($con)." could not delete rooms from room log: ".$roomLogID."\n";
 		return false;
 	}
 	// create an array from the rooms
-	$result_row = mysql_fetch_assoc($result);
+	$result_row = mysqli_fetch_assoc($result);
 	$rooms = explode(',',$result_row['rooms']);
 	// delete each room
 	foreach($rooms as $roomToDelete){
 		if(!delete_dbRooms($roomToDelete)){
 			//error
-			echo mysql_error()." could not delete a room from roomLog\n";
+			echo mysqli_error($con)." could not delete a room from roomLog\n";
 			return false;
 		}
-		connect();
+		$con=connect();
 	}
 		
 	// Delete the entry
 	$query="DELETE FROM dbRoomLogs WHERE id ='".$roomLogID."'";
-	$result = mysql_query($query);
+	$result = mysqli_query($con,$query);
 	// Check if successful
 	if(!$result){
 		//print an error
-		echo mysql_error()." Unable to delete dbRoomLog :".$roomLogID."\n";
+		echo mysqli_error($con)." Unable to delete dbRoomLog :".$roomLogID."\n";
 		return false;
 	}
 	//Success

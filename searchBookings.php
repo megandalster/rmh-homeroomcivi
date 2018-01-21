@@ -78,7 +78,7 @@ include_once("database/dbPersons.php");
       if ($month==''&&$day==''&&$year==''&&$primaryFirstName==''&&$patientFirstName==''&&$type==''&&$roomnumber==''&&$notes=='') 
 			echo "Please enter one of these: Primary Guest's First Name, Patient Name, Room No, Date Submitted, Status, or Notes.";
 	  else {
-		// generate the mysql_query
+		// generate the mysql query
 		$query = "SELECT * FROM dbBookings WHERE ".
 			"date_submitted >= '".$date."' ".
 			"AND guest_id LIKE '%".$primaryFirstName."%' ".
@@ -89,16 +89,16 @@ include_once("database/dbPersons.php");
 			"ORDER BY date_submitted DESC";
 		
 		// connect to the mysql server
-		connect();
+		$con=connect();
 		// perform the query
-		$result = mysql_query($query);
-		mysql_close();
+		$result = mysqli_query($con, $query);
+		mysqli_close($con);
 		}
 		
       if($result){
 		// filter by last name
 		$foundcount = 0;
-		while($thisRow = mysql_fetch_array($result, MYSQL_ASSOC)){
+		while($thisRow = mysqli_fetch_array($result, MYSQLI_ASSOC)){
 			$primaryGuest = retrieve_dbPersons($thisRow['guest_id']);
 			if($primaryGuest){
 				$pLastName = $primaryGuest->get_last_name();

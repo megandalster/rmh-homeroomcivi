@@ -18,10 +18,10 @@
 	$user = "rmhhomeroomdb";
 	$password = "foodyWr1";
 
- 	$connected = mysql_connect($host,$user,$password);
- 	if (!$connected) return mysql_error();
-    $selected = mysql_select_db($database, $connected);
-    if (!$selected) return mysql_error();
-    else return true;
+	$connected = mysqli_connect($host,$user,$password);
+	if (!$connected) { echo "not connected"; return mysqli_error($connected);}
+	$selected = mysqli_select_db($connected,$database);
+	if (!$selected) { echo "not selected"; return mysqli_error($connected); }
+	else return $connected;
  }
 ?>

@@ -12,9 +12,10 @@
 // global variables are $date, $dateEnd, and $od ( = new OccupancyData($date, $dateEnd))
 
 echo ("<h3>");
-echo ("Summary of bookings closed between ".$formattedDate." and ".$formattedEndDate);
-if ($roomNo=="") { 
-    echo "<br>(all rooms)"."</h3>";
+echo ("Summary of bookings closed between ".date("F j, Y", strtotime($start_date))." and ".date("F j, Y", strtotime($end_date)));
+if ($roomNo=="") 
+    echo " (all rooms)</h3>";
+else echo " (room ".$roomNo." only)</h3>";
     echo ("<table>");
     $rc = $od->get_room_counts();
     $fc = $od->get_family_counts();
@@ -22,7 +23,8 @@ if ($roomNo=="") {
     $gc = $od->get_guest_counts();
     $tr = $tf = $tb = $tg = 0;
     echo "<th>Room #</th> <th>Families</th> <th>Bookings</th> <th>Nights</th> <th>Guests</th>";
-    foreach($rc as $room_no => $days){
+    foreach($rc as $room_no => $days)
+        if ($roomNo=="" || $roomNo==$room_no){
     	echo ("<tr>");
     	echo ("<td align='center';>". $room_no . "</td>" . 
 	    "<td align='center';>". $fc[$room_no] . "</td>". 
@@ -35,11 +37,12 @@ if ($roomNo=="") {
 	    $tr += $days;
 	    $tg += $gc[$room_no];
     }
-    echo "<tr> <td align='center';><strong>Totals:</strong></td><td align='center';>".
-      $tf."</td><td align='center';>".
-      $tb."</td><td align='center';>".
-      $tr."</td><td align='center';>".
-      $tg."</td></tr>";
+    if ($roomNo=="")
+        echo "<tr> <td align='center';><strong>Totals:</strong></td><td align='center';>".
+            $tf."</td><td align='center';>".
+            $tb."</td><td align='center';>".
+            $tr."</td><td align='center';>".
+            $tg."</td></tr>";
     echo ("</table>");
 echo ("<table>");
 $ac = $od->get_address_counts();
@@ -99,9 +102,9 @@ foreach($ac as $hospital => $bookings){
 echo "<tr> <td align='center';><strong>Total:</strong></td><td align='center';>".$ta."</td>".
 		"<td align='center';>".$tg."</td></tr>";
 echo ("</table>");
-}
-else {
-    echo "<br>(room ".$roomNo." only)"."</h3>";	
+
+if ($roomNo!="") {
+    echo "<h3> Booking details for room ".$roomNo."</h3>";	
     echo ("<table>");
     echo "<th>Date In</th><th>Date Out</th><th>Booking</th><th>Nights</th><th>Guests</th>";
     $ft = $od->get_family_tags($roomNo);

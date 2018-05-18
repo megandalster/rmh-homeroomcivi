@@ -21,6 +21,15 @@ include_once(dirname(__FILE__)."/domain/OccupancyData.php");
 <!--  Choose a style sheet -->
 <link rel="stylesheet" href="styles.css" type="text/css" />
 <link rel="stylesheet" href="calendar.css" type="text/css" />
+<link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script>
+$(function() {
+$( "#range_Start_DatePicker" ).datepicker();
+$( "#range_End_DatePicker" ).datepicker();
+});
+</script>
 </head>
 <!-- Body portion starts here -->
 <body>
@@ -31,53 +40,35 @@ include_once(dirname(__FILE__)."/domain/OccupancyData.php");
 			<!-- content goes here -->
 			<?php 
 			// Get start and end dates for reporting
-			// Filter the date for any nasty characters that will break SQL or html
-			//$enddate = trim(str_replace('\\\'','',htmlentities(str_replace('&','and',$_GET['date']))));
+			$start_date = $_GET['date'];
+			$end_date = $_GET['enddate'];
+			$roomNo = "";
 			// Check if a custom date was submitted
 			if($_POST['submit'] == "Submit"){
 			    $roomNo = $_POST['roomno'];
-			    $endDay = $_POST['endday'];
-				$endMonth = $_POST['endmonth'];
-				$endYear = substr($_POST['endyear'],2,2);
-				
-				if($endDay && $endMonth && $endYear){
-					// construct a date string
-					$enddate = $endYear."-".$endMonth."-".$endDay;
-					//sanitize it again just in case
-					$enddate = trim(str_replace('\\\'','',htmlentities(str_replace('&','and',$enddate))));
-				}
-				else $enddate = $_GET['enddate'];
-				$dateDay = $_POST['day'];
-				$dateMonth = $_POST['month'];
-				$dateYear = substr($_POST['year'],2,2);
-				
-				if($dateDay && $dateMonth && $dateYear){
-					// construct a date string
-					$date = $dateYear."-".$dateMonth."-".$dateDay;
-					//sanitize it again just in case
-					$date = trim(str_replace('\\\'','',htmlentities(str_replace('&','and',$date))));
-				}
-				else $date = $_GET['date'];   
-			}
-			else{
-				// no date submitted, so set $date and $enddate to today
-				$date = $_GET['date'];
-				$enddate = $_GET['enddate'];
-				$roomNo = "";
+			    if ($_POST['range_Start_DatePicker']) {
+			        $time = strtotime($_POST['range_Start_DatePicker']);
+			        $start_date = date('y-m-d', $time);
+			    }
+			    if ($_POST['range_End_DatePicker']) {
+			        $endTime = strtotime($_POST['range_End_DatePicker']);
+			        $end_date = date('y-m-d', $endTime);
+			    }
 			}		
-			$od = new OccupancyData($date, $enddate, $roomNo);
-			$formattedDate = date("F j, Y",strtotime($date));
-			$formattedEndDate = date("F j, Y",strtotime($enddate));
+			
+			$od = new OccupancyData($start_date, $end_date, $roomNo);
+			
 	    //    echo("<p>The data below has been exported as a spreadsheet file.  To download and view it, <br>
 	    //    set your browser to rmhportland/volunteers/homeroom/dataexport.csv.");
-			show_options();	    
+			show_options($start_date,$end_date);	    
 		//	export_data($od, $date, $enddate, $formattedDate, $formattedEndDate, $roomNo);	
 			// String of this date, including the weekday and such
 			if ($od instanceof OccupancyData){
 				include_once("dataView.inc");
 			}
-			else
-				echo ("<h3>Occupancy Data for ".$formattedDate." to ".$formattedEndDate." not found</h3><br>");
+			else {
+			    echo ("<h3>Occupancy Data for ".$start_date." to ".$end_date." not found</h3><br>");
+			}
 			?>
 			<!--  the footer goes here now -->
 			
@@ -87,6 +78,40 @@ include_once(dirname(__FILE__)."/domain/OccupancyData.php");
 </html>
 
 <?php 
+// Function that displays date range for statistics
+function show_options($start_date,$end_date){
+    echo ("<br />"); // new line break
+    echo ("<form name=\"chooseDate\" method=\"post\">");
+    echo ("<p style=\"text-align:left\">");
+    $formattedDate = date("F j, Y",strtotime($start_date));
+    $formattedEndDate = date("F j, Y",strtotime($end_date));
+
+    echo ("<p>To view data for a different time period or a certain room number, choose a different
+			<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start date ");
+    echo '<input type="text" id="range_Start_DatePicker" name="range_Start_DatePicker" value="'. $formattedDate.'" size="15" />';
+    echo ("&nbsp;&nbsp;&nbsp;&nbsp;and/or end date ");
+    echo '<input type="text" id="range_End_DatePicker" name="range_End_DatePicker" value="'.$formattedEndDate.'" size="15" />';
+    
+    $rooms = retrieveall_rooms();
+    echo ("&nbsp;&nbsp;&nbsp;&nbsp;and/or room number: <select name=\"roomno\">");
+    echo ("<option value=''>--all--</option>");
+    foreach ($rooms as $aRoom) {
+        echo ("<option value='");
+        echo($aRoom->get_room_no());
+        if ($aRoom->get_room_no()==$_POST['roomno'])
+            echo "' SELECTED>";
+        else echo "'>";
+        echo $aRoom->get_room_no()."</option>";
+    }
+    echo ("</select>");
+    
+    echo ("<br><br> and hit ");
+    echo ("<input type=\"submit\" name=\"submit\" value=\"Submit\"/>".".");
+    
+    echo ("</form>");
+}
+
 function export_data ($od, $date, $enddate, $formattedDate, $formattedEndDate, $roomNo) {
 	// download the data to the desktop
 	$filename = "dataexport.csv";
@@ -128,88 +153,5 @@ function export_data ($od, $date, $enddate, $formattedDate, $formattedEndDate, $
 	}
 	fclose($handle);
 }
-// Function that displays date range for statistics
-function show_options(){
-	echo ("<br />"); // new line break
-	echo ("<form name=\"chooseDate\" method=\"post\">");
-	echo ("<p style=\"text-align:left\">");
-	echo ("To view data for a different time period or a certain room number, choose a different
-			<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start date ");
-	echo ("Month: <select name=\"month\">");
-      $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
-	  echo("<option> </option>");
-      for ($i = 1 ; $i <= 9 ; $i ++){
-          if('0'.$i == substr($patient_DOB,3,2))
-             echo ("<option value='0".$i."' selected = 'yes'>".$months[$i-1]."</option>");
-          else
-             echo ("<option value='0".$i."'>".$months[$i-1]."</option>");
-      }
-      for ($i = 10 ; $i <= 12 ; $i ++){
-          if($i == substr($patient_DOB,3,2))
-             echo ("<option value=".$i." selected = 'yes' >".$months[$i-1]."</option>");
-          else
-             echo ("<option value=".$i.">".$months[$i-1]."</option>");
-      }
-    echo("</select>");
-	
-	echo (" Day: <select name=\"day\">");
-	echo ("<option value=''></option>");
-	for($i = 1; $i<=31; $i++){
-		echo ("<option value=\"");
-		if($i < 10){
-			echo ("0".$i."\">".$i."</option>");
-		}else{
-			echo($i."\">".$i."</option>");
-		}
-	}
-	echo ("</select>");
-	echo (" Year: <input type=\"text\" size=\"6\" maxLength=\"4\" name=\"year\"/>");
-	
-	echo ("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and/or end date ");
-	echo ("Month: <select name=\"endmonth\">");
-	echo ("<option value=''></option>");
-      $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
-	  echo("<option> </option>");
-      for ($i = 1 ; $i <= 9 ; $i ++){
-          if('0'.$i == substr($patient_DOB,3,2))
-             echo ("<option value='0".$i."' selected = 'yes'>".$months[$i-1]."</option>");
-          else
-             echo ("<option value='0".$i."'>".$months[$i-1]."</option>");
-      }
-      for ($i = 10 ; $i <= 12 ; $i ++){
-          if($i == substr($patient_DOB,3,2))
-             echo ("<option value=".$i." selected = 'yes' >".$months[$i-1]."</option>");
-          else
-             echo ("<option value=".$i.">".$months[$i-1]."</option>");
-      }
-    echo("</select>");
-	
-	echo (" Day: <select name=\"endday\">");
-	echo ("<option value=''></option>");
-	for($i = 1; $i<=31; $i++){
-		echo ("<option value=\"");
-		if($i < 10){
-			echo ("0".$i."\">".$i."</option>");
-		}else{
-			echo($i."\">".$i."</option>");
-		}
-	}
-	echo ("</select>");
-	echo (" Year: <input type=\"text\" size=\"6\" maxLength=\"4\" name=\"endyear\"/>");
-	
-	$rooms = retrieveall_rooms();
-	echo ("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and/or room number: <select name=\"roomno\">");	
-	echo ("<option value=''></option>");
-	foreach ($rooms as $aRoom) {
-		echo ("<option value=\"");
-		echo($aRoom->get_room_no()."\">".$aRoom->get_room_no()."</option>");
-	}
-	echo ("</select>");
-	
-	echo ("<br> and hit ");
-	echo ("<input type=\"submit\" name=\"submit\" value=\"Submit\"/>".".");
-	
-	echo ("</form>");
-}
+
 ?>

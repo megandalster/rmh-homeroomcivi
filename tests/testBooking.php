@@ -1,9 +1,9 @@
 <?php
-include_once(dirname(__FILE__).'/../domain/Booking.php');
+require_once(dirname(__FILE__).'../domain/Booking.php');
 class testBooking extends UnitTestCase {
       function testBookingModule() {
          $today = date('y-m-d');
-        $b = new Booking($today,"","Meghan2075551234","pending","",array("Tiny"),
+         $b = new Booking($today,"","Meghan2075551234","pending","",array("Tiny"),
                   array("Meghan:mother", "Jean:father", "Teeny:sibling"),
                   "", "", "", "Millie2073631234","Maine Med", "SCU", "00000000000",
                    "$10 per night", "","","","new");

@@ -90,7 +90,7 @@ function insert_dbBookings ($booking) {
 /**
  * Retrieves a Booking from the dbBookings table
  * @param $id booking id
- * @return the Booking corresponding to id, or false if not in the table.
+ * @return Booking corresponding to id, or false if not in the table.
  */
 function retrieve_dbBookings ($id) {
 	$con=connect();
@@ -282,7 +282,7 @@ function retrieve_persons_closed_dbBookings ($id) {
 
 /**
  * Updates a Booking in the dbBookings table by deleting it and re-inserting it
- * @param $booking the Booking to update
+ * @param Booking to update
  */
 function update_dbBookings ($booking) {
 	if (! $booking instanceof Booking) {
@@ -299,7 +299,7 @@ function update_dbBookings ($booking) {
 
 /**
  * Deletes a booking from the dbBookings table
- * @param $booking the id of the booking to delete
+ * @param id of the booking to delete
  */
 function delete_dbBookings($id) {
 	$con=connect();

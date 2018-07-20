@@ -13,7 +13,7 @@
  * @version updated 2/12/08
  */
  function connect() {
-    $host = "localhost";
+    $host = "127.0.0.1";  // this is needed for unit testing; change to "localhost" for production
 	$database = "rmhhomeroomdb";
 	$user = "rmhhomeroomdb";
 	$password = "foodyWr1";

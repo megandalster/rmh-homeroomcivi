@@ -1,13 +1,11 @@
 <?php
-include_once(dirname(__FILE__).'/../domain/Person.php');
-class testPerson extends UnitTestCase {
-    function testPersonModule() {
-        $this->assertEqual(true,true);
-        $this->assertTrue(true);
-        $this->assertFalse(false);
-             
+use PHPUnit\Framework\TestCase;
+require_once('/Applications/MAMP/htdocs/rmh-homeroomcivi/domain/Person.php');
+class PersonTest extends TestCase {
+    function testPerson() {    
+        
         //fake person to test
-        $test_person = new Person("Smith", "John", "male", "123 College Street","Brunswick", "ME", "04011", "(207)555-1234", "", 
+        $test_person = new Person("Smith", "John", "male", "", "123 College Street","Brunswick", "ME", "04011", "(207)555-1234", "", 
     				"email@bowdoin.edu", "guest", "","Jane Smith", "98-01-01", "Female" , "","");
                  
         //testing getter functions
@@ -20,7 +18,7 @@ class testPerson extends UnitTestCase {
         $this->assertTrue($test_person->get_phone1() == "(207)555-1234");
         $this->assertTrue($test_person->get_phone2() == "");
         $this->assertTrue($test_person->get_email() == "email@bowdoin.edu");
-        $this->assertEqual($test_person->getith_patient_name(0), "Jane Smith");
+        $this->assertEquals($test_person->getith_patient_name(0), "Jane Smith");
         $this->assertTrue($test_person->get_patient_birthdate() == "98-01-01");
         $this->assertTrue($test_person->get_patient_gender() == "Female");
                  
@@ -40,11 +38,11 @@ class testPerson extends UnitTestCase {
         $this->assertTrue($test_person->check_type("social worker"));
                  
         //checks the manager notes getter and setter
-        $this->assertFalse($test_person->get_mgr_notes(), "note");
+        $this->assertFalse($test_person->get_mgr_notes() == "note");
         $test_person->set_mgr_notes("here is a note");
-        $this->assertEqual($test_person->get_mgr_notes(), "here is a note");
+        $this->assertEquals($test_person->get_mgr_notes(), "here is a note");
                  
-        echo ("testPerson complete");
+        echo ("testPerson complete\n");
     }
 }
 

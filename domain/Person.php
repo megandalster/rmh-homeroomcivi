@@ -62,7 +62,7 @@ class Person {
         
         $this->prior_bookings = explode(',',$prior_bookings);
         $this->mgr_notes = "";
-        $this->county = $this->compute_county();
+        $this->county = ""; // $this->compute_county();
         $this->type = explode(',',$type);
         
         if ($password=="")

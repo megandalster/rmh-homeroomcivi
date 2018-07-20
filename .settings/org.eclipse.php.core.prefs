@@ -1,5 +1,2 @@
-#Mon Jul 22 13:40:20 EDT 2013
 eclipse.preferences.version=1
-include_path=0;/rmh-homeroomcivi
-phpVersion=php5
-useShortTags=false
+include_path=0;/rmh-homeroomcivi\u00051;/Applications/MAMP/htdocs/phpunit.phar

@@ -202,7 +202,7 @@
 * update_booking retrieves and sanitizes $_POST data, and uses it to update
 * the booking with $b_id, then updates the databse
 * @param   string    $b_id the id of the booking to update
-* @return the updated booking or false if unsuccessful
+* @return booking updated, or false if unsuccessful
 */
 function update_booking($b_id){
   

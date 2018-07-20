@@ -151,8 +151,8 @@ function insert_dbRooms($room){
 
 /**
  * Retrieves a Room from the dbRooms database
- * @param $room_no the room number to retrieve
- * @return mysql entry for the room number, or false
+ * @param room number to retrieve
+ * @return room for that room number, or false
  */
 function retrieve_dbRooms($room_no,$date,$currentBookingID){
 	// connect to the database
@@ -219,7 +219,7 @@ function retrieveall_rooms() {
 }
 /**
  * Updates a room in the dbRooms table by deleting it and reinserting it.
- * @param $room the room to update
+ * @param room to update
  */
 function update_dbRooms($room){
 	// Make sure the room is actually a room
@@ -241,7 +241,7 @@ function update_dbRooms($room){
 
 /**
  * Deletes a room from the dbRooms table
- * @param $room_no the room number of the room to delete
+ * @param room number of the room to delete
  */
 function delete_dbRooms($room_no){
 	// Connect to the databse

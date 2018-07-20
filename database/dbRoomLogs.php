@@ -134,8 +134,8 @@ function insert_dbRoomLog($roomLog){
 
 /**
  * Function to retrieve a roomlog from the dbRoomlogs database
- * @param $id the room log id
- * @return mysql entry that corresponds to the room log, or else false
+ * @param room log id
+ * @return room log with that id, or else false
  */
 function retrieve_dbRoomLog($roomLogID){
 	// connect to the mysql server
@@ -209,7 +209,7 @@ function retrieve_mostrecent_dbRoomLog ($date) {
 
 /**
  * function to update an entry in the dbRoomLogs database
- * @param $roomLog the room log to update
+ * @param room log to update
  */
 function update_dbRoomLog($roomLog){
 	// check if the room log is a room log
@@ -231,7 +231,7 @@ function update_dbRoomLog($roomLog){
 
 /**
  * function to delete a dbRoomLog entry from the database
- * @param $roomLogID the id of the room log
+ * @param id of the room log to delete
  */
 function delete_dbRoomLog($roomLogID){
 	// connect to the database

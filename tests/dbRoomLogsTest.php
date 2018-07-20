@@ -1,7 +1,8 @@
 <?php
+use PHPUnit\Framework\TestCase;
 include_once(dirname(__FILE__).'/../domain/RoomLog.php');
 include_once(dirname(__FILE__).'/../database/dbRoomLogs.php');
-class testdbRoomLogs extends UnitTestCase{
+class dbRoomLogsTest extends TestCase{
 	function testdbRoomLogsModule(){
 		// Creates some room logs to add to the database
 		$today = date('y-m-d');
@@ -16,19 +17,19 @@ class testdbRoomLogs extends UnitTestCase{
 		$this->assertTrue(insert_dbRoomLog($roomLog2));
 		
 		// test the retrieve function
-		$this->assertEqual(retrieve_dbRoomLog($roomLog1->get_id())->get_status(),"unpublished");
-		$this->assertEqual(retrieve_dbRoomLog($roomLog2->get_id())->get_status(),"archived");
+		$this->assertEquals(retrieve_dbRoomLog($roomLog1->get_id())->get_status(),"unpublished");
+		$this->assertEquals(retrieve_dbRoomLog($roomLog2->get_id())->get_status(),"archived");
 		
 		// test the update function
 		$roomLog1->set_log_notes("Room Log 1 notes");
 		$this->assertTrue(update_dbRoomLog($roomLog1));
-		$this->assertEqual(retrieve_dbRoomLog($roomLog1->get_id())->get_log_notes(),"Room Log 1 notes");
+		$this->assertEquals(retrieve_dbRoomLog($roomLog1->get_id())->get_log_notes(),"Room Log 1 notes");
 		
 		// test the delete function
 		$this->assertTrue(delete_dbRoomLog($roomLog1->get_id()));
 		$this->assertFalse(retrieve_dbRoomLog($roomLog1->get_id()));
 		$this->assertTrue(delete_dbRoomLog($roomLog2->get_id()));
 	
-		echo ("testdbRoomLogs complete");
+		echo ("testdbRoomLogs complete\n");
 	}
 }

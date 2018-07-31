@@ -30,6 +30,5 @@ class dbRoomLogsTest extends TestCase{
 		$this->assertFalse(retrieve_dbRoomLog($roomLog1->get_id()));
 		$this->assertTrue(delete_dbRoomLog($roomLog2->get_id()));
 	
-		echo ("testdbRoomLogs complete\n");
 	}
 }

@@ -28,7 +28,5 @@ class dbRoomsTest extends TestCase{
 		// Restore the rooms in the database
 		$this->assertTrue(insert_dbRooms(new Room("126", "2T", "3", "y", "clean", null, "")));
 		$this->assertTrue(insert_dbRooms(new Room("223", "Q", "2", "n", "clean", null, "")));
-		
-		echo ("testdbRooms complete\n");
 	}
 }

@@ -17,8 +17,6 @@ class Person {
     private $id;               // id (unique key) = first_name . phone1
     private $last_name;        // last name - string
     private $first_name;       // first name - string
-    private $gender;			//gender of person - string
-    private $employer;			//employer of the person - string
     private $address;              // address - string
     private $city;                 // city - string
     private $state;                // state - string
@@ -26,16 +24,18 @@ class Person {
     private $phone1;               // primary phone
     private $phone2;               // alternate phone
     private $email;             // email address
+    private $password;         // password for secure access: default = $id
     
+    private $type;             // 'guest', 'socialworker', or 'manager' 
+    private $gender;			//gender of person - string
+    private $employer;			//employer of the person - string
     private $patient_name;      // array of up to 3 patients for this person
     private $patient_birthdate; // format: 11-03-12 for the first patient only
-    private $patient_gender;    // "Male" "Female" or "Unknown" for the first patient only.
+    private $patient_gender;    // "Male" "Female" or "Unknown"
     private $patient_relation;  // relationship of person to the patient, eg "mother"
-    private $prior_bookings;    // array of booking ids; e.g., '11-02-08John2077291234'
+    private $prior_bookings;    // array of ids; e.g., '11-02-08John2077291234'
     private $mgr_notes;         // manager's notes
     private $county;           // county in Maine; otherwise blank
-    private $type;             // array of 'manager', 'socialworker', 'guest', 'volunteer'
-    private $password;         // password for database access: default = $id
 
         /**
          * constructor for a Person

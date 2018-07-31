@@ -19,7 +19,7 @@ include_once(dirname(__FILE__).'/../database/dbBookings.php');
 include_once(dirname(__FILE__).'/../database/dbPersons.php');
 
 class Booking {
-    private $id;            // unique identifier of the form $current_date."guest_id"
+    private $id;            // unique identifier:  "current_date"."guest_id"
     private $date_submitted;// date that the boooking information was submitted, in the form "yy-mm-dd"
     private $date_in;       // check-in date, in the form "yy-mm-dd"
 	private $guest_id;      // id of the primary guest e.g., "John2077291234"

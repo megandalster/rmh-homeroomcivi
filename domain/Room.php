@@ -65,7 +65,6 @@ class Room {
 		$r = retrieve_dbRooms($this->room_no,"","");
         if ($r) {
         	$r->status = "reserved";
-        //    $r->booking = $booking_id;
             update_dbRooms($r);   
             return $r;
         }
@@ -76,7 +75,6 @@ class Room {
 		$r = retrieve_dbRooms($this->room_no,"","");
         if ($r) {
         	$r->status = "booked";
-        //    $r->booking = $booking_id;
             update_dbRooms($r);   
             return $r;
         }
@@ -86,14 +84,11 @@ class Room {
 		$r = retrieve_dbRooms($this->room_no,"","");
         if ($r) {
         	$r->status = "dirty";
-        //    $r->booking = null;
             update_dbRooms($r);   
             return $r;
         }
         else return false;  // can't unbook if not booked
 	}
-	// use this only for changing status to "clean", "dirty", or "off-line" 
-	// and its not currently booked (there's nobody in it)
 	function set_status ($new_status) {
 	    $r = retrieve_dbRooms($this->room_no,"","");
 		if ($r->status!="booked" && $new_status!="booked" && $new_status!="reserved") {

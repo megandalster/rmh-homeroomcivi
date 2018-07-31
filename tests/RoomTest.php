@@ -15,8 +15,7 @@ class RoomTest extends TestCase {
     $this->assertTrue($r->get_status() == "reserved");
     $this->assertTrue($r->get_booking_id() == null);
     $this->assertEquals(($r->set_status("clean"))->get_status(),"clean");
-    echo ("testRoom complete\n");
-  	}
+    }
 }
 
 ?>

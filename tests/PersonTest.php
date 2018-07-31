@@ -41,8 +41,6 @@ class PersonTest extends TestCase {
         $this->assertFalse($test_person->get_mgr_notes() == "note");
         $test_person->set_mgr_notes("here is a note");
         $this->assertEquals($test_person->get_mgr_notes(), "here is a note");
-                 
-        echo ("testPerson complete\n");
     }
 }
 

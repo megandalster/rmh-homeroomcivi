@@ -25,8 +25,6 @@ class RoomLogTest extends TestCase {
 		// Set some log notes
 		$rl->set_log_notes("Some notes");
 		$this->assertTrue(strcmp($rl->get_log_notes(), "Some notes") == 0);
-		 
- 		echo ("testRoomLog complete\n");
   	}
 }
 

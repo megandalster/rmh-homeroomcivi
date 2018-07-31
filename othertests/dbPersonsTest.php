@@ -64,8 +64,6 @@ class dbPersonsTest extends TestCase {
         $this->assertTrue(delete_dbPersons($person2->get_id()));
         $this->assertTrue(delete_dbPersons($person3->get_id()));
         $this->assertFalse(retrieve_dbPersons($person3->get_id()));
-                 
-        echo ("testdbPersons complete\n");
     }
 }
 

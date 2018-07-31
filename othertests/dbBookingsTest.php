@@ -47,8 +47,6 @@ class dbBookingsTest extends TestCase {
         //tests the delete function
         $this->assertTrue(delete_dbBookings($b->get_id()));
         $this->assertFalse(retrieve_dbBookings($b->get_id()));
-     
-        echo ("testdbBookings complete\n");
     }
 }
 

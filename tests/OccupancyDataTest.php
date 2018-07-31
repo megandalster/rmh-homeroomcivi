@@ -10,7 +10,6 @@ class OccupancyDataTest extends TestCase {
         $rc = $d->get_room_counts();
         $this->assertEquals($rc["223"], 1.0);
 		$this->assertEquals($rc["125"], 0);		 
- 		echo ("testOccupancyData complete\n");
   	}
 }
 

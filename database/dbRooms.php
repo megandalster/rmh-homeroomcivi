@@ -58,35 +58,6 @@ function retrieve_all_rooms($date) {
 		{
 			$my_rooms[] = $room_num . ":" . $bookingId;
 		}
-	/*	for($i=0; $i<($total_day_use_rooms_to_make/7); $i++)
-		{
-			for($j=0; $j<7; $j++)
-			{
-				$room_num = "0".$i.$j;
-				if( (7*$i+$j) == ($total_day_use_rooms_to_make))
-				{
-					break;
-				}
-				
-				if(isset($day_use_activeBookings[$room_num]))
-				{					
-					$my_rooms[] = $room_num . ":" . $day_use_activeBookings[$room_num];
-					//since its an active booking retrieve its room's status.
-					$currentRoom = retrieve_dbRooms($room_num,$date,$day_use_activeBookings[$room_num]);
-					$currentStatus = $currentRoom->get_status();
-					$currentBookingID = $currentRoom->get_booking_id();
-					
-					$day_use_room = new Room($room_num, null, null, null, $currentStatus, $currentBookingID, "");
-				}
-				else
-				{
-					$my_rooms[] =  $room_num . ":";
-					$day_use_room = new Room($room_num, null, null, null, "clean", null, "");
-				}
-					
-				insert_dbRooms($day_use_room);
-			}
-		} */
 	}
 	
 	else
@@ -164,7 +135,7 @@ function retrieve_dbRooms($room_no,$date,$currentBookingID){
 	// check if it was found
 	if(mysqli_num_rows($result) !==1){
 		// It wasnt found. 
-		echo ("Room ".$room_no." was not found in the database.");
+//		echo ("Room ".$room_no." was not found in the database.");
 		mysqli_close($con);
 		return false;
 	}

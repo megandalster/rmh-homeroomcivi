@@ -144,14 +144,14 @@ class OccupancyData {
 			// bZip means Maine county, state, or other country
 			if ($bGuest) {
 			    if ($bGuest->get_county()!="")
-			        $bZip = "ME/".$bGuest->get_county();
+			        $bZip = "VA/".$bGuest->get_county();
 			    else if ($bGuest->get_state()!="")
 			        $bZip = $bGuest->get_state(); 
 			}
-			else $bZip = "UNK";   
-			if (!in_array($bZip, $addresses))
+			else $bZip = "UNK"; 			
+			if (!array_search($bZip, $addresses))
 				array_push($addresses, $bZip);
-			if (!$this->addresscounts[$bZip]) {
+			if (!array_key_exists($bZip, $this->addresscounts)) {
 			    $this->addresscounts[$bZip] = 1;
 			    $this->addresscounts_d[$bZip] = 0;
 			    $this->addressguestcounts[$bZip] = $bGuests;   
@@ -190,12 +190,12 @@ class OccupancyData {
 			if ($bGuest && $bGuest->get_patient_birthdate()!="") {
 				$bDate1 = mktime(0,0,0,substr($bGuest->get_patient_birthdate(),3,2),substr($bGuest->get_patient_birthdate(),6,2),substr($bGuest->get_patient_birthdate(),0,2));
 			    $bDate2 = mktime(0,0,0,substr($aBooking->get_date_out(),3,2),substr($aBooking->get_date_out(),6,2),substr($aBooking->get_date_out(),0,2));
-			    $bAge = ($bDate2 - $bDate1)/31536000; // years = 365*60*60*24 seconds (approximately)
+			    $bAge = (int)(($bDate2 - $bDate1)/31536000); // years = 365*60*60*24 seconds (approximately)
 			}
 			else $bAge = "UNK";
-			if (!in_array($bAge, $ages))
+			if (!array_search($bAge, $ages))
 				array_push($ages, $bAge); //$this->ages[] = $bAge;
-			if (!$this->agecounts[$bAge]) {
+			if (!array_key_exists($bAge, $this->agecounts)) {
 			    $this->agecounts[$bAge] = 1;
 			    $this->agecounts_d[$bAge] = 0;
 			    $this->ageguestcounts[$bAge] = $bGuests;
@@ -222,21 +222,21 @@ class OccupancyData {
 	// compute hospital counts
 	function compute_hospitalcounts($allBookings) {
 		$this->hospitalcounts = array();
-		$this->hospitalcounts["other"] = 0;
+		$this->hospitalcounts["UNK"] = 0;
 		$this->hospitalcounts_d = array();
-		$this->hospitalcounts_d["other"]=0;
+		$this->hospitalcounts_d["UNK"]=0;
 		$this->hospitalguestcounts = array();
-		$this->hospitalguestcounts["other"] = 0;
+		$this->hospitalguestcounts["UNK"] = 0;
 		$hospitals = array();
 		foreach ($allBookings as $aBooking){
 			$bHospital = $aBooking->get_hospital();
 			if ($bHospital=="")
-				$bHospital="UNK";
+				$bHospital="other";
 			else $bHospital .= "/".$aBooking->get_department();
 			$bGuests = $this->occupants_present($aBooking->get_occupants());
-			if (!in_array($bHospital, $hospitals))
+			if (!array_search($bHospital, $hospitals))
 				array_push($hospitals, $bHospital);
-			if (!$this->hospitalcounts[$bHospital]) {
+			if (!array_key_exists($bHospital, $this->hospitalcounts)) {
 				$this->hospitalcounts[$bHospital] = 1;
 			    $this->hospitalcounts_d[$bHospital] = 0;
 			    $this->hospitalguestcounts[$bHospital] = $bGuests; 

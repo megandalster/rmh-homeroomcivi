@@ -18,27 +18,24 @@ class dbPersonsTest extends TestCase {
     function testdbPersonsModule() {
         
         //creates some people to add to the database
-        $person1 = new Person("Smith", "John", "male", "", "123 College Street","Brunswick", "ME", "04011", 2075551234, "", 
+        $person1 = new Person("Smith", "John", "male", "", "123 College Street","Ashburn", "VA", "20147", 7035551234, "", 
     				           "email@bowdoin.edu", "guest", "", "Jane Smith", "98-01-01", "Female", "", "");
-        $person2 = new Person("Jones", "Bob", "male", "", "100 Union Street","Bangor", "ME", "04401", 2075555678, null, 
-    				           "bjones@gmail.com", "guest", "", "Dan Jones", "95-07-15", "Male", "", "" );
-        $person3 = new Person("Adams", "Will", "male", "", "12 River Road","Augusta", "ME", "04330", 207551212, 2075553434, 
+        $person2 = new Person("Adams", "Will", "male", "", "12 River Road","Ashburn", "VA", "20147", 703551212, 7035553434, 
     				           "wadams@yahoo.com", "socialworker", "", null, null, null, "", "" );
         
-        // tests the insert function
+        // Setup -- test the insert function
         $this->assertTrue(insert_dbPersons($person1));
-        $this->assertTrue(insert_dbPersons($person2));
-        $this->assertTrue(insert_dbPersons($person3));              
+   //     $this->assertTrue(insert_dbPersons($person2));              
         
-        //tests the retrieve function
-        $this->assertEquals(retrieve_dbPersons($person1->get_id())->get_id (), "John2075551234");
+        // Test -- test the retrieve and update functions
+        $this->assertEquals(retrieve_dbPersons($person1->get_id())->get_id (), "John7035551234");
         $this->assertEquals(retrieve_dbPersons($person1->get_id())->get_first_name (), "John");
         $this->assertEquals(retrieve_dbPersons($person1->get_id())->get_last_name (), "Smith");    
         $this->assertEquals(retrieve_dbPersons($person1->get_id())->get_address(), "123 College Street");
-        $this->assertEquals(retrieve_dbPersons($person1->get_id())->get_city (), "Brunswick");
-        $this->assertEquals(retrieve_dbPersons($person1->get_id())->get_state (), "ME");    
-        $this->assertEquals(retrieve_dbPersons($person1->get_id())->get_zip(), "04011");
-        $this->assertEquals(retrieve_dbPersons($person1->get_id())->get_phone1 (), 2075551234);
+        $this->assertEquals(retrieve_dbPersons($person1->get_id())->get_city (), "Ashburn");
+        $this->assertEquals(retrieve_dbPersons($person1->get_id())->get_state (), "VA");    
+        $this->assertEquals(retrieve_dbPersons($person1->get_id())->get_zip(), "20147");
+        $this->assertEquals(retrieve_dbPersons($person1->get_id())->get_phone1 (), 7035551234);
         $this->assertEquals(retrieve_dbPersons($person1->get_id())->get_phone2 (), null);    
         $this->assertEquals(retrieve_dbPersons($person1->get_id())->get_email(), "email@bowdoin.edu");
         $this->assertEquals(retrieve_dbPersons($person1->get_id())->getith_patient_name (0), "Jane Smith");
@@ -46,24 +43,20 @@ class dbPersonsTest extends TestCase {
         $this->assertEquals(retrieve_dbPersons($person1->get_id())->get_patient_gender(), "Female");
         $this->assertTrue(retrieve_dbPersons($person1->get_id())->check_type("guest"));
                  
-        //tests the update function
-        $person2->set_address("5 Maine Street");
+        $person1->set_address("5 Maine Street");
+        $this->assertTrue(update_dbPersons($person1));
+        $this->assertEquals(retrieve_dbPersons($person1->get_id())->get_address (), "5 Maine Street");   
+   /*      
+        $this->assertFalse(retrieve_dbPersons($person2->get_id())->check_type("guest"));
+        $person2->add_type("guest");
         $this->assertTrue(update_dbPersons($person2));
-        $this->assertEquals(retrieve_dbPersons($person2->get_id())->get_address (), "5 Maine Street");   
-         
-        $this->assertFalse(retrieve_dbPersons($person3->get_id())->check_type("guest"));
-        $person3->add_type("guest");
-        $this->assertTrue(update_dbPersons($person3));
-        $p3 = retrieve_dbPersons($person3->get_id());
-        $a = $p3->get_type();
-        $this->assertTrue(retrieve_dbPersons($person3->get_id())->check_type("guest"));
-        $this->assertTrue(retrieve_dbPersons($person3->get_id())->check_type("socialworker"));
-                 
-        //tests the delete function
+        $this->assertTrue(retrieve_dbPersons($person2->get_id())->check_type("guest"));
+        $this->assertTrue(retrieve_dbPersons($person2->get_id())->check_type("socialworker"));
+   */              
+        // Teardown -- tests the delete function
         $this->assertTrue(delete_dbPersons($person1->get_id()));
-        $this->assertTrue(delete_dbPersons($person2->get_id()));
-        $this->assertTrue(delete_dbPersons($person3->get_id()));
-        $this->assertFalse(retrieve_dbPersons($person3->get_id()));
+   //     $this->assertTrue(delete_dbPersons($person2->get_id()));
+        $this->assertFalse(retrieve_dbPersons($person2->get_id()));
     }
 }
 

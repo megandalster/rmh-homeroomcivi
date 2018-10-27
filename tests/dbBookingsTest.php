@@ -28,8 +28,8 @@ class dbBookingsTest extends TestCase {
         $n = sizeof($pending_bookings);
         $this->assertEquals($pending_bookings[$n-1]->get_id(), $b->get_id());
         
-        $this->assertEquals(($b->reserve_room("126",$today))->get_date_submitted(),$today);
-        $this->assertEquals(($b->book_room("126",$today))->get_date_in(),$today); 
+        $this->assertEquals(($b->reserve_room("126",$today)->get_date_submitted()),$today);
+        $this->assertEquals(($b->book_room("126",$today)->get_date_in()),$today); 
         $b->add_occupant("Jordan","brother","","");
         $bretrieved = retrieve_dbBookings($b->get_id());
         $this->assertTrue(in_array("Jordan:brother::", $bretrieved->get_occupants()));

@@ -16,7 +16,7 @@ class dbRoomsTest extends TestCase{
 		$this->assertEquals(retrieve_dbRooms($room2->get_room_no(),"","")->get_room_no(),"999");
 		$this->assertEquals(retrieve_dbRooms($room2->get_room_no(),"","")->get_status(),"clean");
 		$this->assertEquals($room2->reserve_me("13-07-26Alison2076942604"),$room2);
-		$this->assertEquals(($room2->unbook_me("13-07-26Alison2076942604"))->get_status(),"dirty");
+		$this->assertEquals(($room2->unbook_me("13-07-26Alison2076942604")->get_status()),"dirty");
 		
 		// Teardown --test the delete functions
 		$this->assertTrue(delete_dbRooms($room1->get_room_no()));

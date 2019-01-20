@@ -1,0 +1,16 @@
+Homeroom is a web-based application that provides database and room scheduling support
+for the Ronald McDonald Houses in Portland and Bangor, Maine.
+
+Installation: Homeroom runs on an Apache/MySQL/PHP server.  To install it, visit the
+project Wiki at https://github.com/megandalster/rmh-homeroomcivi/wiki/installation-and-reuse/.
+
+For more details on using Homeroom as a project for a CO-FOSS course, visit this site:
+ https://github.com/megandalster/rmh-homeroomcivi/wiki/project-resources/.
+
+Usage: Homeroom can run stand-alone or it can be embedded within a web browser.
+
+Credits: Homeroom was developed in 2011 and 2013 by Felix Emiliano, Luis Rojas, David Phipps, 
+Ruben Martinez, Alex Lucyk, Jesus Navarro, and Allen Tucker.  Since then, it has been 
+significantly upgraded and is currently maintained by NPFI (https://npfi.org).
+
+License: GNU General Public License v3.0 (https://www.gnu.org/licenses/gpl.txt)

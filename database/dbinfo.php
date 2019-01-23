@@ -13,10 +13,10 @@
  * @version updated 2/12/08
  */
  function connect() {
-    $host = "127.0.0.1";  // this is needed for unit testing; change to "localhost" for production
+    $host = "localhost"; 
 	$database = "rmhhomeroomdb";
 	$user = "rmhhomeroomdb";
-	$password = "foodyWr1";
+	$password = "rmhhomeroomdb";
 
 	$connected = mysqli_connect($host,$user,$password);
 	if (!$connected) { echo "not connected"; return mysqli_error($connected);}

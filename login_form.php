@@ -22,7 +22,7 @@
 					echo('<ul><li>You must be a Ronald McDonald House <i>staff member, volunteer, or social worker</i> to access this system.
 					<li> Your Username is your first name followed by your phone number. ' .
 							'');
-					echo(' If you do not remember your Password, please contact the <a href="mailto:housemngr@rmhportland.org">House Manager</a>.</ul>');
+					echo(' If you do not remember your Password, please contact the House Manager>.</ul>');
 					echo('<p><table><form method="post"><input type="hidden" name="_submit_check" value="true"><tr><td>Username:</td><td><input type="text" name="user" tabindex="1"></td></tr><tr><td>Password:</td><td><input type="password" name="pass" tabindex="2"></td></tr><tr><td colspan="2" align="center"><input type="submit" name="Login" value="Login"></td></tr></table>');
 				}
 				else{
@@ -61,7 +61,7 @@
 								echo('<p>If you are a volunteer, social worker, or manager, your Username is your first name followed by your phone number with no spaces. ' .
 									'For instance, if your first name were John and your phone number were (207)-123-4567, ' .
 									'then your Username would be <strong>John2071234567</strong>.  ');
-								echo('<br /><br />if you cannot remember your password, ask the <a href="mailto:housemngr@rmhportland.org">House Manager</a> to reset it for you.</p>');
+								echo('<br /><br />if you cannot remember your password, ask the House Manager to reset it for you.</p>');
 								echo('<p><table><form method="post"><input type="hidden" name="_submit_check" value="true"><tr><td>Username:</td><td><input type="text" name="user" tabindex="1"></td></tr><tr><td>Password:</td><td><input type="password" name="pass" tabindex="2"></td></tr><tr><td colspan="2" align="center"><input type="submit" name="Login" value="Login"></td></tr></table>');
 							}
 						}
@@ -72,7 +72,7 @@
 								echo('<p>If you are a volunteer, social worker, or manager, your Username is your first name followed by your phone number with no spaces. ' .
 									'For instance, if your first name were John and your phone number were (207)-123-4567, ' .
 									'then your Username would be <strong>John2071234567</strong>.  ');
-								echo('<br /><br />if you cannot remember your password, ask the <a href="mailto:housemngr@rmhportland.org">House Manager</a> to reset it for you.</p>');
+								echo('<br /><br />if you cannot remember your password, ask the House Manager to reset it for you.</p>');
 								echo('<p><table><form method="post"><input type="hidden" name="_submit_check" value="true"><tr><td>Username:</td><td><input type="text" name="user" tabindex="1"></td></tr><tr><td>Password:</td><td><input type="password" name="pass" tabindex="2"></td></tr><tr><td colspan="2" align="center"><input type="submit" name="Login" value="Login"></td></tr></table>');
 							}
 					}

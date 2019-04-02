@@ -36,28 +36,30 @@ h1 {padding-left: 0px; padding-right:165px;}
 		 * permission level, they will be sent back to the home page.
 		 */
 		//pages clients can view
-		$permission_array['index.php']=0;
-		$permission_array['about.php']=0;
 		//pages volunteers can view
-		$permission_array['searchPeople.php']=1;
-		$permission_array['roomLog.php']=1;
-		$permission_array['room.php']=1;
 		//additional pages social workers can view
-		$permission_array['bookingEdit.php']=2;
-		$permission_array['personEdit.php']=2;
 		//additional pages managers can view
+		$permission_array['index.php']=3;
+	    $permission_array['about.php']=3;
+	    $permission_array['searchPeople.php']=3;
+		$permission_array['roomLog.php']=3;
+		$permission_array['room.php']=3;
+		$permission_array['bookingEdit.php']=3;
+		$permission_array['personEdit.php']=3;
 		$permission_array['log.php']=3;
 		$permission_array['data.php']=3;
 
 		//Check if they're at a valid page for their access level.
-		$current_page = substr($_SERVER['PHP_SELF'],1);
+		$current_page = strtolower(substr($_SERVER['PHP_SELF'], strpos($_SERVER['PHP_SELF'],"/")+1));
+		$current_page = substr($current_page, strpos($current_page,"/")+1);
+		
 		if($permission_array[$current_page]>$_SESSION['access_level']){
-			//in this case, the user doesn't have permission to view this page.
-			//we redirect them to the index page.
-			echo "<script type=\"text/javascript\">window.location = \"index.php\";</script>";
-			//note: if javascript is disabled for a user's browser, it would still show the page.
-			//so we die().
-			die();
+		    //in this case, the user doesn't have permission to view this page.
+		    //we redirect them to the index page.
+		    echo "<script type=\"text/javascript\">window.location = \"index.php\";</script>";
+		    //note: if javascript is disabled for a user's browser, it would still show the page.
+		    //so we die().
+		    die();
 		}
 
 		//This line gives us the path to the html pages in question, useful if the server isn't installed @ root.

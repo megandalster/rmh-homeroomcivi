@@ -16,8 +16,8 @@ session_cache_expire(30);
 			<div id="content">
 				<p><strong>Background</strong><br /><br />
 				<i>Homeroom</i> is a web-based room scheduling system developed at <a href="https://www.bowdoin.edu/computer-science/" TARGET="_BLANK">Bowdoin College</a> for the Ronald McDonald Houses in Portland and Bangor, Maine.   
-				It was designed and implemented in 2011 and 2013 by two teams of Bowdoin Students (Alex Lucyk, Jesus Navarro, Felix Emiliano, Luis Rojas, 
-				David Phipps, and Ruben Martinez), a Bowdoin Professor (<a href="mailto:allen@npfi.org">Allen Tucker</a>), and RMH staff members Gabrielle Booth and Karla Prouty.
+				It was designed and implemented in 2011 and 2013 by Alex Lucyk, Jesus Navarro, Felix Emiliano, Luis Rojas, 
+				David Phipps, Ruben Martinez, and Allen Tucker.  <i>Homeroom</i> is  supported by <a href="https://@npfi.org" target="_blank">NPFI</a>.
 				<p><strong>System Access</strong><br /><br />
 Because <i>Homeroom</i> must protect the privacy of individual clients at the Ronald McDonald House, access to the system is
 limited.  If you have system access and have forgotten your Username or Password, please contact the House Manager.

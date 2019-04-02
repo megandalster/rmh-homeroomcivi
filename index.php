@@ -35,18 +35,6 @@
      				else
      				    echo "<p>Welcome to RMH Homeroom!";
 
-     			?>
-				<p>
-			    <?PHP
-					if($_SESSION['access_level']==0) 
-					    echo('<p> To request a room at the Ronald McDonald House, go <a href="'.$path.
-					         'newBooking.php?id='.'new'.'">here</a>.');
-				?>
-
-				<br>If you want to learn about this software, select <a href="<?php echo($path);?>about.php">about</a>.
-				<p>	When you are finished, please remember to <a href="<?php echo($path);?>logout.php">logout</a>.</p>
-
-				<?PHP
 				if ($person){
 					/*
 					 * Check type of person, and display home page based on that.

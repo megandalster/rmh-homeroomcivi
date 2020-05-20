@@ -1,6 +1,6 @@
  <?php 
 /*
- * Copyright 2011 by Alex Lucyk, Jesus Naero, and Allen Tucker.
+ * Copyright 2020 by Alex Lucyk, Jesus Naero, and Allen Tucker.
  * This program is part of RMH Homeroom, which is free software.
  * It comes with absolutely no warranty.  You can redistribute and/or
  * modify it under the terms of the GNU Public License as published
@@ -12,12 +12,12 @@ $rooms = $roomLog->get_rooms();
 $pendingdayusecount = count(retrieve_pendingDayUse_dbBookings ($date));
 ?>
 
-<!-- THIS SECTION DISPLAYS THE 21 ROOMS AND THEIR INFORMATION -->
+<!-- THIS SECTION DISPLAYS THE 34 ROOMS AND THEIR INFORMATION -->
 <?php 
 echo ("<table align=\"center\">");
 
 // Use loops to construct each table row and column
-for($i = 0; $i < 3; $i++){
+for($i = 0; $i < 5; $i++){
 	// Three rows
 	echo ("<tr>");
 	for($j = 0; $j < 7; $j++){

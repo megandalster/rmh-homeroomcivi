@@ -144,7 +144,7 @@ class OccupancyData {
 			// bZip means Maine county, state, or other country
 			if ($bGuest) {
 			    if ($bGuest->get_county()!="")
-			        $bZip = "VA/".$bGuest->get_county();
+			        $bZip = "ME/".$bGuest->get_county();
 			    else if ($bGuest->get_state()!="")
 			        $bZip = $bGuest->get_state(); 
 			}

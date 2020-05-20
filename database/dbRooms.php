@@ -31,9 +31,12 @@ include_once(dirname(__FILE__).'/dbBookings.php');
  * retrieve all room_no:booking_id pairs for a given date
  */
 function retrieve_all_rooms($date) {
-    $room_data = array ("125y2T"=>2,"126yQ/3T"=>4,"151y2T"=>2,"152y2T"=>2,"214nQ"=>2,"215n2T"=>2,"218yQ"=>2,
-	"223nQ"=>2,"224n3T"=>3,"231y2T"=>2,"232n2T"=>2,"233n3T"=>3,"243yQ/3T"=>4,"244nQ"=>2,
-	"245nQ"=>2,"250y2T"=>2,"251y2T"=>2,"252yQ"=>2,"253yQ"=>2,"254y2T"=>2,"255y2T"=>2);
+    $room_data = array ("105yQ"=>2,"106yQ"=>2,"108yQ"=>2, "125y2T"=>2,"126yQ/3T"=>4,"151y2T"=>2,"152y2T"=>2,
+        "202yQ/T"=>3,"203yQ/T"=>3,"204yQ"=>2,"205yQ"=>2, "206yQ"=>2, "214nQ"=>2,"215n2T"=>2,
+        "218yQ"=>2, "223nQ"=>2,"224n3T"=>3,"231y2T"=>2,"232n2T"=>2,"233n3T"=>3,"243yQ/3T"=>4,
+        "244nQ"=>2, "245nQ"=>2,"250y2T"=>2,"251y2T"=>2,"252yQ"=>2,"253yQ"=>2,"254y2T"=>2,
+        "255y2T"=>2, "301yQ"=>2,"302yQ"=>2,"304yQ"=>2,"305yQ"=>2,"306yQ"=>2     
+    );
     if ($date >= date('y-m-d'))
     	$active_bookings = retrieve_active_dbBookings($date);
     else 

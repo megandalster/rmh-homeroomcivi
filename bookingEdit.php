@@ -44,7 +44,7 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
             $room_no = "";
             $flag = "new";
             $guest = new Person("","","","","","","","","","","","","","","","", "", "");
-            $tempBooking = new Booking(date("y-m-d"),"Will Call","","pending","","","","","","","","","","00000000000", "", "", "", "", "","new"); 
+            $tempBooking = new Booking(date("y-m-d"),"Will Call","","pending","","",array(),"","","","","","","00000000000", "", "", "", "", "","new"); 
 	  }
 	  else if ($id=="update") {
 	        $tempBooking = retrieve_dbBookings($referralid);

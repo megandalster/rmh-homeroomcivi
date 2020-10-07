@@ -78,25 +78,27 @@ include_once(dirname(__FILE__).'/database/dbLog.php');
            		$patient_DOB = $guest->get_patient_birthdate();
            		$patient_gender = $guest->get_patient_gender();
            		$patient_relation = $guest->get_patient_relation();
-                $lastBooking = retrieve_persons_closed_dbBookings($id);
-                if($lastBooking) {
+           }
+           $lastBooking = retrieve_persons_closed_dbBookings($id);
+           if($lastBooking) {
 					    $last_hospital = $lastBooking->get_hospital();
                         $last_department = $lastBooking->get_department();
                         $last_auto =   $lastBooking->get_auto();
                         $last_occupants = $lastBooking->get_occupants();
-                }
-                else {
+           }
+           else {
 					    $last_hospital = "";
                         $last_department = "";
                         $last_auto =  "";
                         $last_occupants = array($guest->get_first_name()." ".$guest->get_last_name().":".
 					                    $guest->get_patient_relation().":".$guest->get_gender().":");
-                }
-                $tempBooking = new Booking(date("y-m-d"), "Will Call", $guest->get_id(), $status, "", $guest->get_patient_name(), 
+           }
+           $tempBooking = new Booking(date("y-m-d"), "Will Call", $guest->get_id(), $status, "", $guest->get_patient_name(), 
            		    $last_occupants, $last_auto,  
-                    "","","",$last_hospital,$last_department,"00000000000", "", "", "", "", "","new");  
-           }                          
+                    "","","",$last_hospital,$last_department,"00000000000", "", "", "", "", "","new");                           
 	  }
+echo "booking = ";var_dump($temp_booking);
+echo "\n occupants = ";var_dump($last_occupants);
 	  include('bookingForm.inc'); 
 	}
 	// now process the form that has been submitted

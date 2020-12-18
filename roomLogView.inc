@@ -1,4 +1,5 @@
- <?php 
+
+\ <?php 
 /*
  * Copyright 2020 by Alex Lucyk, Jesus Naero, and Allen Tucker.
  * This program is part of RMH Homeroom, which is free software.
@@ -18,9 +19,9 @@ echo ("<table align=\"center\">");
 
 // Use loops to construct each table row and column
 for($i = 0; $i < 5; $i++){
-	// Three rows
-	echo ("<tr>");
-	for($j = 0; $j < 7; $j++){
+    // Three rows
+    echo ("<tr>");
+    for($j = 0; $j < 7; $j++){
 		// Retrieve the current room
 		$currentRoomID = substr($rooms[($i*7)+$j],0,3);
 		$currentBookingID = substr($rooms[($i*7)+$j],4);

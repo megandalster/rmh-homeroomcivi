@@ -244,19 +244,7 @@ function delete_dbRoomLog($roomLogID){
 		echo mysqli_error($con)." could not delete rooms from room log: ".$roomLogID."\n";
 		return false;
 	}
-	// create an array from the rooms
-	$result_row = mysqli_fetch_assoc($result);
-	$rooms = explode(',',$result_row['rooms']);
-	// delete each room
-	foreach($rooms as $roomToDelete){
-		if(!delete_dbRooms($roomToDelete)){
-			//error
-			echo mysqli_error($con)." could not delete a room from roomLog\n";
-			return false;
-		}
-		$con=connect();
-	}
-		
+			
 	// Delete the entry
 	$query="DELETE FROM dbRoomLogs WHERE id ='".$roomLogID."'";
 	$result = mysqli_query($con,$query);

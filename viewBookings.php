@@ -174,9 +174,9 @@
 			  //prints links for viewing and editing		
 			  //confirms on click if user wants to delete the guest    
 			  
-		  $guestName = $current_guest->get_first_name()." ".$current_guest->get_last_name();
+		      $patientName = $current_booking->getith_patient(0);
 			  echo('<td> <a href="viewBookings.php?id=update&bookingid='.$current_booking->get_id().'">view</a>
-						 <a href="viewBookings.php?id=delete&bookingid='.$current_booking->get_id().'" onclick= " if (!confirm(\'Are you sure you want to delete '.$guestName.'?\')) return false;">delete</a></td>');	
+						 <a href="viewBookings.php?id=delete&bookingid='.$current_booking->get_id().'" onclick= " if (!confirm(\'Are you sure you want to delete this booking for '.$patientName.'?\')) return false;">delete</a></td>');	
 			  
 			  echo("</tr>");
 			  echo("\n");

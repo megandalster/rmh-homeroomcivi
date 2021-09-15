@@ -48,28 +48,29 @@ for($i = 0; $i < 5; $i++){
         else if (!$currentBooking)
             $roomStatus = "clean";
         else $roomStatus = "booked";
-		
+        $statusmsg = $roomStatus;
+        switch ($roomStatus) {
+            case "clean": $statusColor = "green"; $statusbg="PaleGreen"; break;
+            case "reserved": $statusColor = "orange"; $statusbg="White"; break;
+            case "dirty": $statusColor = "red"; $statusmsg = "to be cleaned"; $statusbg="Pink"; break;
+            case "booked": $statusColor = "brown"; $statusbg="White"; break;
+            case "off-line": $statusColor = "blue"; $statusbg="Gainsboro"; break;
+            default: $statusColor = null; $statusbg="White"; 
+        }
+        
 		// This begins a "link" where the link is actually
 		// the entire box. 
 			echo ("<td id=\"nav\" onclick=\"window.location.href='room.php?room=".$currentRoomID."&date=".$date."&bookingID=".$currentBookingID."&status=".$roomStatus."'\"");
-			echo ("style=\"vertical-align:text-top\">");
+			echo ("style='vertical-align:text-top; background-color:".$statusbg."'>");
 
 		// The ID of the room and the status
 		echo ("<b style=\"float:left\">".$currentRoomID."</b>");
 		// Print the status of the room
-		switch ($roomStatus) {
-			case "clean": $statusColor = "green"; break;
-			case "reserved": $statusColor = "orange"; break;
-			case "dirty": $statusColor = "brown"; break;
-			case "booked": $statusColor = "red"; break;
-			case "off-line": $statusColor = "blue"; break;
-			default: $statusColor = null;
-		}
 		
 		if($date == date("y-m-d"))  
 		    if (!$currentBooking){
 			    echo ("<b style=\"float:right; color:".$statusColor."\">");
-			    echo ($roomStatus."</b>");
+			    echo ($statusmsg."</b>");
 		    }
 		    else if ($currentBooking->get_status()=="reserved")
 		        echo ("<b style=\"float:right; color:orange\">reserved</b>");

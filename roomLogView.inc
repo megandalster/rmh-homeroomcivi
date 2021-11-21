@@ -43,8 +43,11 @@ for($i = 0; $i < 5; $i++){
 		    insert_dbRooms(new Room($currentRoomID, $beds, $capacity, $bath, "clean", $currentBookingID, ""));
 		}
 		$currentBooking = retrieve_dbBookings($currentBookingID);
-		if ($date==date('y-m-d'))
+		if ($date==date('y-m-d')){
             $roomStatus = $currentRoom->get_status();
+            if ($currentBooking)
+                $roomStatus = "booked";
+		}
         else if (!$currentBooking)
             $roomStatus = "clean";
         else $roomStatus = "booked";

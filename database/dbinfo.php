@@ -14,9 +14,9 @@
  */
  function connect() {
     $host = "localhost"; 
-	$database = "rmhport_homeroom";
-	$user = "rmhport_homeroom";
-	$password = "foodyWr1!";
+	$database = "rmhcme_homeroom_p2";
+	$user = "rmhcme_homeroom_p2";
+	$password = "foodyWr1";
 
 	$connected = mysqli_connect($host,$user,$password);
 	if (!$connected) { echo "not connected"; return mysqli_error($connected);}

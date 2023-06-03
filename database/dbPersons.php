@@ -13,6 +13,8 @@
  */
 
 include_once(dirname(__FILE__).'/../domain/Person.php');
+include_once(dirname(__FILE__).'/../domain/Booking.php');
+include_once(dirname(__FILE__).'/dbBookings.php');
 include_once(dirname(__FILE__).'/dbinfo.php');
 
 function insert_dbPersons ($person){
@@ -128,7 +130,7 @@ if (! $person instanceof Person) {
 		echo ("Invalid argument for update_dbPersons function call");
 		return false;
 	}
-	if (delete_dbPersons($person->get_id()))
+	if (delete_dbPersons($person->get_id(),true))
 	   return insert_dbPersons($person);
 	else {
 	   echo (mysqli_error($con)."unable to update dbPersons table: ".$person->get_id());
@@ -136,16 +138,31 @@ if (! $person instanceof Person) {
 	}
 }
 
-function delete_dbPersons($id) {
-	$con=connect();
-    $query="DELETE FROM dbPersons WHERE id=\"".$id."\"";
-	$result=mysqli_query($con,$query);
-	mysqli_close($con);
-	if (!$result) {
-		echo (mysqli_error($con)." unable to delete from dbPersons: ".$id);
-		return false;
-	}
-    return true;
+function delete_dbPersons($id,$whileupdating) {
+    if ($whileupdating || !($id)) {
+        $con=connect();
+        $query="DELETE FROM dbPersons WHERE id=\"".$id."\"";
+	    $result=mysqli_query($con,$query);
+	    mysqli_close($con);
+	    if (!$result) {
+		  echo (mysqli_error($con)." unable to delete from dbPersons: ".$id);
+		  return false;
+	    }
+        return true;
+    }
+    else {
+        echo (mysqli_error($con)." unable to delete from dbPersons: ".$id);
+        return false;
+    }
+}
+function hasBookings($id) {
+    $con=connect();
+    $query="SELECT FROM dbBookings WHERE id LIKE \"".$id."\"";
+    $result=mysqli_query($con,$query);
+    mysqli_close($con);
+    if (!$result) 
+        return false;
+    else return true;
 }
 
     

@@ -79,7 +79,7 @@ function process_form($id,$person)	{
 	 $name = $user->get_first_name()." ".$user->get_last_name();
 	 if ($id=='new')
 	    $first_name = trim(str_replace("'","\'", htmlentities(str_replace('&','and',$_POST['first_name']))));
-	 else $first_name = $person->get_first_name();
+	 else $first_name = trim(str_replace("'","\'", htmlentities(str_replace('"','\'',$person->get_first_name()))));
 	
 		$last_name = trim(str_replace("'","\'", htmlentities($_POST['last_name'])));
 		$gender = $_POST['gender'];

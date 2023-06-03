@@ -299,7 +299,7 @@ echo($tempBooking->get_referred_by());
 <br>
 <?php
   if ($id=="new") echo "<b>Additional </b>";
-  echo  "<b>Occupants </b>(Name / Relation to Patient / Gender):<br><br />";
+  echo  "<b>Room Occupants </b>(Name / Relation to Patient / Gender):<br><br />";
   if(empty($last_occupants)) $occupants = $tempBooking->get_occupants();
   else $occupants = $last_occupants;
   for ($counter = 1; $counter <= 6; $counter++){

@@ -2,7 +2,7 @@
 	echo('<form method="post"><p><strong>Search for People</strong>');
 	echo('<table><tr><td>Primary Guest\'s First Name:</td><td><input type="text" name="s_first_name" value="'.$_POST['s_first_name'].'"></td></tr>');
 	echo('<tr><td>Primary Guest\'s Last Name:</td><td><input type="text" name="s_last_name" value="'.$_POST['s_last_name'].'"></td></tr>');
-//	echo('<tr><td>E-mail:</td><td><input type="text" name="s_email" value="'.$_POST['s_email'].'"></td></tr>');
+	echo('<tr><td>Primary Guest\'s Phone:</td><td><input type="text" name="s_phone" value="'.$_POST['s_phone'].'"></td></tr>');
 	echo('<tr><td>Patient\'s Name:</td><td><input type="text" name="s_patient_name" value="'.$_POST['s_patient_name'].'"></td></tr>');
     echo('<tr><td>Manager Notes:</td><td><input type="text" name="s_mgr_notes" value="'.$_POST['s_mgr_notes'].'"></td></tr>');
     echo('<tr><td>Type:</td><td><select name="s_type">' .

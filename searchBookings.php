@@ -124,7 +124,7 @@ include_once("database/dbPersons.php");
 			echo ("<td class=searchResults><strong>Status</strong></td>");
 			echo ("<td class=searchResults><strong>Date Submitted</strong></td>");
 			echo ("<td class=searchResults><strong>Room</strong></td>");
-		    echo ("<td class=searchResults><strong>Action</strong></td></tr>");
+		    echo ("<td class=searchResults><strong>Actions</strong></td></tr>");
 		    for ($i=0; $i<$foundcount; $i++) {
 			    echo ("<tr><td class=searchResults>");
 				echo "<tr><td class=searchResults>".$pName[$i]."</td>".
@@ -133,9 +133,9 @@ include_once("database/dbPersons.php");
 					"<td class=searchResults>".nice_date($pDateIn[$i])."</td>".
 					"<td class=searchResults>".$pRoomNo[$i]."</td>".
 					"<td class=searchResults><a href=\"viewBookings.php?id=update&bookingid=".$pId[$i].
-					"\">view booking</td>";
-				if ($pStatus[$i]=="pending")
-					echo "<td class=searchResults><a href=viewBookings.php?id=delete&bookingid=".$pId[$i].">DELETE pending booking</a></td>";
+					"\">view</td>";
+				if ($pStatus[$i]=="pending" || $pStatus[$i]=="active" || $pStatus[$i]=="reserved")
+				    echo "<td class=searchResults><a href=viewBookings.php?id=delete&bookingid=".$pId[$i].">delete</a></td>";
 				echo "</tr>";
 			}
 			echo("</table></p>");

@@ -24,12 +24,12 @@
 					if($_POST['s_submitted']){
 						$fns = trim(str_replace('\'','&#39;',htmlentities($_POST['s_first_name'])));
 						$lns = trim(str_replace('\'','&#39;',htmlentities($_POST['s_last_name'])));
-					//	$ems = trim(str_replace('\'','&#39;',htmlentities($_POST['s_email'])));
+						$phs = trim(str_replace('\'','&#39;',htmlentities($_POST['s_phone'])));
                         $pns = trim(str_replace('\'','&#39;',htmlentities($_POST['s_patient_name'])));
                         $mns = trim(str_replace('\'','&#39;',htmlentities($_POST['s_mgr_notes'])));
 						$query = "SELECT * FROM dbPersons WHERE first_name LIKE '%".$fns."%' " .
 								"AND last_name LIKE '%".$lns."%' " .
-						//		"AND email LIKE '%".$ems."%' " .
+								"AND phone1 LIKE '%".$phs."%' " .
 								"AND patient_name LIKE '%".$pns."%' " .
 						        "AND mgr_notes LIKE '%".$mns."%' " ;		
 						if ($_POST['s_type']!=="") $query .= "AND type LIKE '%".$_POST['s_type']."%' ";
@@ -46,10 +46,12 @@
 						echo('<hr size="1" width="30%" align="left">');
 					    echo('<p><table class="searchResults">');
 							if(mysqli_num_rows($result)) {
-								echo('<tr><td class="searchResults"><strong>Name</strong></td><td class="searchResults"><strong>Patient Name</strong></td></tr>');
+								echo('<tr><td class="searchResults"><strong>Name</strong></td><td class="searchResults"></td><td class="searchResults"><strong>Patient Name</strong></td></tr>');
 							    while($thisRow = mysqli_fetch_array($result, MYSQLI_ASSOC)){
 								  echo('<tr><td class="searchResults">'.$thisRow['last_name'].", ".
-									$thisRow['first_name'].'</td><td class="searchResults">'.$thisRow['patient_name'].'</td><td class="searchResults"><a href=viewPerson.php?id='.
+									$thisRow['first_name'].'</td><td class="searchResults">'.
+								    $thisRow['phone1'].'</td><td class="searchResults">'.
+								    $thisRow['patient_name'].'</td><td class="searchResults"><a href=viewPerson.php?id='.
 									$thisRow['id'].">view</a></td><td class=searchResults><a href=personEdit.php?id=".
 									$thisRow['id'].">edit</a></td><td class=searchResults><a href=bookingEdit.php?id=".
 									$thisRow['id'].">create new booking</a></td></tr>");
